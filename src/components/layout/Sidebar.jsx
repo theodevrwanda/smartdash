@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, ShoppingBag, PieChart, Settings, ArrowRight, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { LayoutDashboard, Users, ShoppingBag, PieChart, Settings, ArrowRight, ChevronLeft, ChevronRight, X, Building2, CreditCard, MapPin, FileText } from 'lucide-react';
 import clsx from 'clsx';
 
 const Sidebar = ({ isDesktopOpen, setIsDesktopOpen, isMobileOpen, setIsMobileOpen }) => {
@@ -104,7 +104,7 @@ const Sidebar = ({ isDesktopOpen, setIsDesktopOpen, isMobileOpen, setIsMobileOpe
 
                 {/* Footer "Down By" */}
                 <div className="mt-auto px-4">
-                    <div className={clsx(
+                    <NavLink to="/profile" className={clsx(
                         "bg-slate-900 rounded-full flex items-center group cursor-pointer hover:bg-slate-800 transition-all overflow-hidden",
                         isDesktopOpen ? "p-2 pl-4 justify-between" : "p-2 justify-center w-12 h-12 mx-auto"
                     )}>
@@ -124,17 +124,19 @@ const Sidebar = ({ isDesktopOpen, setIsDesktopOpen, isMobileOpen, setIsMobileOpe
                                 <ArrowRight size={14} />
                             </div>
                         )}
-                    </div>
                 </div>
             </div>
+        </div >
 
-            {/* Overlay for mobile */}
-            {isMobileOpen && (
-                <div
-                    className="fixed inset-0 bg-black/20 z-30 lg:hidden backdrop-blur-sm"
-                    onClick={() => setIsMobileOpen(false)}
-                ></div>
-            )}
+            {/* Overlay for mobile */ }
+    {
+        isMobileOpen && (
+            <div
+                className="fixed inset-0 bg-black/20 z-30 lg:hidden backdrop-blur-sm"
+                onClick={() => setIsMobileOpen(false)}
+            ></div>
+        )
+    }
         </>
     );
 };
