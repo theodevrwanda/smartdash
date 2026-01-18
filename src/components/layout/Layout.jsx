@@ -9,7 +9,7 @@ const Layout = () => {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
     return (
-        <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans">
+        <div className="flex h-screen bg-[#f8fafc] dark:bg-slate-950 overflow-hidden font-sans transition-colors duration-300">
             <Sidebar
                 isDesktopOpen={isDesktopOpen}
                 setIsDesktopOpen={setIsDesktopOpen}
@@ -17,7 +17,7 @@ const Layout = () => {
                 setIsMobileOpen={setIsMobileOpen}
             />
             <div className={clsx(
-                "flex-1 flex flex-col relative z-10 h-full transition-all duration-300",
+                "flex-1 flex flex-col relative z-20 h-full transition-all duration-300",
                 isDesktopOpen ? "lg:ml-72" : "lg:ml-20"
             )}>
                 <Header
