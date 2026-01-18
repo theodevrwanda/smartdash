@@ -3,6 +3,18 @@ import { db } from '../firebase/config';
 import { collection, getDocs, doc, updateDoc, query, where, orderBy, getDoc } from 'firebase/firestore';
 
 export const adminService = {
+    // Fetch Audit Logs (Transactions collection)
+    async fetchAuditLogs() {
+        try {
+            const q = query(collection(db, 'transactions'), orderBy('createdAt', 'desc'));
+            const snapshot = await getDocs(q);
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        } catch (error) {
+            console.error("Error fetching audit logs", error);
+            return [];
+        }
+    },
+
     // Fetch dashboard statistics
     // Fetch dashboard statistics
     async fetchDashboardStats() {
