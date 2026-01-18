@@ -27,10 +27,21 @@ const EmployeesPage = () => {
     }
 
     return (
-        <div className="flex flex-col h-full -mt-2 animate-fade-in">
-            <div className="flex items-center justify-between mb-4">
-                <h2 className="font-bold text-xl text-slate-800 dark:text-slate-100">Team Members</h2>
-                <div className="text-sm text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 px-3 py-1 rounded border border-slate-200 dark:border-slate-800 shadow-sm">Showing {employees.length} employees</div>
+        <div className="flex flex-col h-full animate-fade-in">
+            <div className="flex flex-col gap-1 mb-6">
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                    <span>Pages</span>
+                    <span className="text-[10px]">/</span>
+                    <span className="text-slate-900 dark:text-slate-200">Users</span>
+                </div>
+                <div className="flex items-center justify-between">
+                    <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                        Team Members
+                    </h1>
+                    <div className="text-sm text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 px-3 py-1 rounded border border-slate-200 dark:border-slate-800 shadow-sm font-medium">
+                        {employees.length} users registered
+                    </div>
+                </div>
             </div>
 
             <div className="flex-1 overflow-x-auto overflow-y-auto max-h-[calc(100vh-200px)] relative border border-slate-200 dark:border-slate-800 rounded-sm shadow-sm bg-white dark:bg-slate-900">

@@ -43,12 +43,21 @@ const LogsPage = ({ limit }) => {
     if (loading) return <div className="p-4 text-center dark:text-slate-400">Loading activity...</div>;
 
     return (
-        <div className={`flex flex-col h-full ${limit ? '' : '-mt-2'} animate-fade-in`}>
+        <div className={`flex flex-col h-full ${limit ? '' : 'animate-fade-in'}`}>
             {!limit && (
-                <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">Audit Logs</h1>
-                    <div className="text-sm text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 px-3 py-1 rounded border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-2">
-                        <Clock size={16} /> Real-time tracking
+                <div className="flex flex-col gap-1 mb-6">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                        <span>Pages</span>
+                        <span className="text-[10px]">/</span>
+                        <span className="text-slate-900 dark:text-slate-200">Audit Logs</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                            Platform Activity Log
+                        </h1>
+                        <div className="text-sm text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 px-3 py-1 rounded border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-2 font-medium">
+                            <Clock size={16} /> Monitoring live events
+                        </div>
                     </div>
                 </div>
             )}
