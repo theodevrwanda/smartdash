@@ -43,77 +43,71 @@ const LogsPage = ({ limit }) => {
     if (loading) return <div className="p-4 text-center">Loading activity...</div>;
 
     return (
-        <div className="space-y-6">
+        <div className={`flex flex-col h-full ${limit ? '' : '-mt-2'}`}>
             {!limit && (
-                <div className="flex justify-between items-center">
-                    <h1 className="text-2xl font-bold text-slate-800">Audit Logs</h1>
-                    <p className="text-slate-500">System-wide activity tracking</p>
+                <div className="flex justify-between items-center mb-4">
+                    <h1 className="text-xl font-bold text-slate-800">Audit Logs</h1>
+                    <div className="text-sm text-slate-500 bg-white px-3 py-1 rounded border border-slate-200 shadow-sm flex items-center gap-2">
+                        <Clock size={16} /> Real-time tracking
+                    </div>
                 </div>
             )}
 
-            <Card className="p-0 overflow-hidden">
-                {!limit && (
-                    <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                        <h2 className="font-bold text-lg text-slate-800">System Activity</h2>
-                        <div className="text-sm text-slate-500 flex items-center gap-2">
-                            <Clock size={16} /> Real-time
-                        </div>
-                    </div>
-                )}
-                <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-280px)] relative border rounded-lg">
-                    <table className="w-full min-w-[1000px] text-left border-separate border-spacing-0 text-sm">
-                        <thead className="sticky top-0 z-20">
-                            <tr className="bg-slate-50 whitespace-nowrap">
-                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Icon</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Action Type</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100 text-left">Details</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">User</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Timestamp</th>
+            <div className={`flex-1 overflow-x-auto overflow-y-auto ${limit ? 'max-h-[400px]' : 'max-h-[calc(100vh-200px)]'} relative border border-slate-200 rounded-sm shadow-sm bg-white`}>
+                <table className="w-full min-w-[1000px] text-left border-separate border-spacing-0 text-sm">
+                    <thead className="sticky top-0 z-20">
+                        <tr className="bg-slate-50 font-semibold text-slate-600">
+                            <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Icon</th>
+                            <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Action Type</th>
+                            <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200 text-left">Details</th>
+                            <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200 text-center">User</th>
+                            <th className="px-4 py-3 bg-slate-100/80 border-b border-slate-200 text-center">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                        {logs.map((log) => (
+                            <tr key={log.id} className="hover:bg-blue-50/30 transition-colors group">
+                                <td className="px-4 py-2 border-b border-r border-slate-100">
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center border border-slate-200/50 ${getColor(log.transactionType)}`}>
+                                        {React.cloneElement(getIcon(log.transactionType), { size: 14 })}
+                                    </div>
+                                </td>
+                                <td className="px-4 py-2 font-bold text-slate-800 capitalize border-b border-r border-slate-100">
+                                    {log.transactionType?.replace(/_/g, ' ') || 'Action'}
+                                </td>
+                                <td className="px-4 py-2 text-slate-600 border-b border-r border-slate-100 text-left">
+                                    {log.actionDetails || 'No details provided'}
+                                </td>
+                                <td className="px-4 py-2 border-b border-r border-slate-100 text-center">
+                                    {log.userName && (
+                                        <span className="text-[10px] font-bold text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded uppercase">
+                                            {log.userName}
+                                        </span>
+                                    )}
+                                </td>
+                                <td className="px-4 py-2 text-xs text-slate-400 font-mono border-b border-slate-100 text-center">
+                                    {log.createdAt ? (log.createdAt.toDate ? log.createdAt.toDate().toLocaleString() : new Date(log.createdAt).toLocaleString()) : '-'}
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100">
-                            {logs.map((log) => (
-                                <tr key={log.id} className="hover:bg-slate-50 transition-colors whitespace-nowrap">
-                                    <td className="px-4 py-3 border-b border-slate-50">
-                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${getColor(log.transactionType)}`}>
-                                            {getIcon(log.transactionType)}
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-3 font-bold text-slate-800 capitalize border-b border-slate-50">
-                                        {log.transactionType?.replace(/_/g, ' ') || 'Action'}
-                                    </td>
-                                    <td className="px-4 py-3 text-slate-600 border-b border-slate-50 text-left max-w-xs truncate">
-                                        {log.actionDetails || 'No details provided'}
-                                    </td>
-                                    <td className="px-4 py-3 border-b border-slate-50">
-                                        {log.userName && (
-                                            <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                                                {log.userName}
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className="px-4 py-3 text-xs text-slate-400 font-mono border-b border-slate-50">
-                                        {log.createdAt ? (log.createdAt.toDate ? log.createdAt.toDate().toLocaleString() : new Date(log.createdAt).toLocaleString()) : '-'}
-                                    </td>
-                                </tr>
-                            ))}
-                            {logs.length === 0 && (
-                                <tr>
-                                    <td colSpan="5" className="p-8 text-center text-slate-500">No activity logs found.</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                        ))}
+                        {logs.length === 0 && (
+                            <tr>
+                                <td colSpan="20" className="px-6 py-12 text-center text-slate-500">
+                                    No activity logs found.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
 
-                {limit && logs.length > 0 && (
-                    <div className="p-4 bg-slate-50 border-t border-slate-100 text-center">
-                        <button onClick={() => window.location.href = '/logs'} className="text-blue-600 text-sm font-semibold hover:underline">
-                            View All Logs
-                        </button>
-                    </div>
-                )}
-            </Card>
+            {limit && logs.length > 0 && (
+                <div className="p-3 bg-white border border-t-0 border-slate-200 rounded-b-sm text-center shadow-sm">
+                    <button onClick={() => window.location.href = '/logs'} className="text-blue-600 text-xs font-bold hover:underline uppercase tracking-wider">
+                        View All Activity Reports
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

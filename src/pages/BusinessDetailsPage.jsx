@@ -127,104 +127,110 @@ const BusinessDetailsPage = () => {
                 )}
 
                 {activeTab === 'users' && (
-                    <Card className="p-0 overflow-hidden">
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm text-left">
-                                <thead className="bg-slate-50 border-b whitespace-nowrap">
-                                    <tr>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Name</th>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Role</th>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Phone</th>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Branch</th>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Status</th>
+                    <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-320px)] relative border border-slate-200 rounded-sm shadow-sm bg-white">
+                        <table className="w-full text-sm text-left border-separate border-spacing-0">
+                            <thead className="sticky top-0 z-20">
+                                <tr className="bg-slate-50 font-semibold text-slate-600">
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Name</th>
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Role</th>
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Phone</th>
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Branch ID</th>
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-slate-200">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {tabData.users.map(u => (
+                                    <tr key={u.id} className="hover:bg-blue-50/30 transition-colors">
+                                        <td className="px-4 py-2 border-b border-r border-slate-100 font-medium text-slate-800">{u.fullName || u.firstName + ' ' + u.lastName}</td>
+                                        <td className="px-4 py-2 border-b border-r border-slate-100 capitalize text-slate-600">{u.role}</td>
+                                        <td className="px-4 py-2 border-b border-r border-slate-100 text-slate-600">{u.phone}</td>
+                                        <td className="px-4 py-2 border-b border-r border-slate-100 font-mono text-[11px] text-slate-400">{u.branch?.substring(0, 12) || '-'}</td>
+                                        <td className="px-4 py-2 border-b border-slate-100">
+                                            <Badge variant={u.isActive ? 'success' : 'error'}>{u.isActive ? 'Active' : 'Inactive'}</Badge>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody className="divide-y whitespace-nowrap">
-                                    {tabData.users.map(u => (
-                                        <tr key={u.id} className="hover:bg-slate-50/50 transition-colors">
-                                            <td className="px-4 py-3 font-medium">{u.fullName || u.firstName + ' ' + u.lastName}</td>
-                                            <td className="px-4 py-3 capitalize">{u.role}</td>
-                                            <td className="px-4 py-3">{u.phone}</td>
-                                            <td className="px-4 py-3 font-mono text-xs">{u.branch?.substring(0, 8) || '-'}</td>
-                                            <td className="px-4 py-3"><Badge variant={u.isActive ? 'success' : 'error'}>{u.isActive ? 'Active' : 'Inactive'}</Badge></td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </Card>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
 
                 {activeTab === 'branches' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {tabData.branches.map(b => (
-                            <Card key={b.id} className="p-4 border border-slate-200">
+                            <div key={b.id} className="p-4 bg-white border border-slate-200 rounded shadow-sm hover:border-blue-300 transition-colors">
                                 <div className="flex items-start justify-between mb-2">
-                                    <h4 className="font-bold text-slate-700">{b.branchName || 'Unnamed Branch'}</h4>
-                                    <Badge variant="default">ID: {b.id.substring(0, 4)}</Badge>
+                                    <h4 className="font-bold text-slate-800">{b.branchName || 'Unnamed Branch'}</h4>
+                                    <span className="text-[10px] font-mono text-slate-400">ID: {b.id.substring(0, 8)}</span>
                                 </div>
                                 <div className="text-sm text-slate-500 flex items-center gap-1">
-                                    <MapPin size={14} /> {b.sector}, {b.district}
+                                    <MapPin size={14} className="text-slate-400" /> {b.sector}, {b.district}
                                 </div>
-                            </Card>
+                                <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
+                                    <span className="text-[11px] text-slate-400">Status</span>
+                                    <Badge variant="success">Active</Badge>
+                                </div>
+                            </div>
                         ))}
                     </div>
                 )}
 
                 {activeTab === 'products' && (
-                    <Card className="p-0 overflow-hidden">
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm text-left">
-                                <thead className="bg-slate-50 border-b whitespace-nowrap">
-                                    <tr>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Product Name</th>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Category</th>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Qty</th>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Price</th>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Status</th>
+                    <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-320px)] relative border border-slate-200 rounded-sm shadow-sm bg-white">
+                        <table className="w-full text-sm text-left border-separate border-spacing-0">
+                            <thead className="sticky top-0 z-20">
+                                <tr className="bg-slate-50 font-semibold text-slate-600">
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Product Name</th>
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Category</th>
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Qty</th>
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Price</th>
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-slate-200">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {tabData.products.slice(0, 50).map(p => (
+                                    <tr key={p.id} className="hover:bg-blue-50/30 transition-colors">
+                                        <td className="px-4 py-2 border-b border-r border-slate-100 font-medium text-slate-800">{p.productName}</td>
+                                        <td className="px-4 py-2 border-b border-r border-slate-100 capitalize text-slate-600">{p.category}</td>
+                                        <td className="px-4 py-2 border-b border-r border-slate-100 text-slate-600">{p.quantity} {p.unit}</td>
+                                        <td className="px-4 py-2 border-b border-r border-slate-100 font-bold text-slate-800">{p.sellingPrice?.toLocaleString()}</td>
+                                        <td className="px-4 py-2 border-b border-slate-100 capitalize">
+                                            <Badge variant={p.status === 'out_of_stock' ? 'error' : p.status === 'low_stock' ? 'warning' : 'success'}>
+                                                {p.status?.replace('_', ' ')}
+                                            </Badge>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody className="divide-y whitespace-nowrap">
-                                    {tabData.products.slice(0, 50).map(p => (
-                                        <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
-                                            <td className="px-4 py-3 font-medium">{p.productName}</td>
-                                            <td className="px-4 py-3 capitalize">{p.category}</td>
-                                            <td className="px-4 py-3">{p.quantity} {p.unit}</td>
-                                            <td className="px-4 py-3">{p.sellingPrice}</td>
-                                            <td className="px-4 py-3 capitalize">{p.status}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </Card>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
 
                 {activeTab === 'history' && (
-                    <Card className="p-0 overflow-hidden">
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm text-left">
-                                <thead className="bg-slate-50 border-b whitespace-nowrap">
-                                    <tr>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Date</th>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Type</th>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Amount</th>
-                                        <th className="px-4 py-3 font-medium text-slate-500">Status</th>
+                    <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-320px)] relative border border-slate-200 rounded-sm shadow-sm bg-white">
+                        <table className="w-full text-sm text-left border-separate border-spacing-0">
+                            <thead className="sticky top-0 z-20">
+                                <tr className="bg-slate-50 font-semibold text-slate-600">
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Date</th>
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200">Type</th>
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-r border-slate-200 text-center">Amount</th>
+                                    <th className="px-4 py-3 bg-slate-100/80 border-b border-slate-200 text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {tabData.transactions.map(t => (
+                                    <tr key={t.id} className="hover:bg-blue-50/30 transition-colors">
+                                        <td className="px-4 py-2 border-b border-r border-slate-100 text-slate-500 font-mono text-xs">
+                                            {t.createdAt ? (typeof t.createdAt === 'object' && t.createdAt.toDate ? t.createdAt.toDate().toLocaleDateString() : new Date(t.createdAt).toLocaleDateString()) : '-'}
+                                        </td>
+                                        <td className="px-4 py-2 border-b border-r border-slate-100 capitalize text-slate-600 font-medium">{t.type}</td>
+                                        <td className="px-4 py-2 border-b border-r border-slate-100 font-bold text-slate-800 text-center">{t.amount?.toLocaleString()} {t.currency}</td>
+                                        <td className="px-4 py-2 border-b border-slate-100 text-center"><Badge variant={t.status === 'approved' ? 'success' : 'warning'}>{t.status}</Badge></td>
                                     </tr>
-                                </thead>
-                                <tbody className="divide-y whitespace-nowrap">
-                                    {tabData.transactions.map(t => (
-                                        <tr key={t.id} className="hover:bg-slate-50/50 transition-colors">
-                                            <td className="px-4 py-3 text-slate-500">{t.createdAt ? new Date(t.createdAt).toLocaleDateString() : '-'}</td>
-                                            <td className="px-4 py-3 capitalize">{t.type}</td>
-                                            <td className="px-4 py-3 font-mono">{t.amount} {t.currency}</td>
-                                            <td className="px-4 py-3"><Badge variant={t.status === 'approved' ? 'success' : 'warning'}>{t.status}</Badge></td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </Card>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
             </div>
         </div>
