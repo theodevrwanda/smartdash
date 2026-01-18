@@ -32,8 +32,8 @@ const BranchesPage = () => {
                     <h2 className="font-bold text-lg text-slate-800">All Branches</h2>
                     <div className="text-sm text-slate-500">Showing {branches.length} branches</div>
                 </div>
-                <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-280px)] relative">
-                    <table className="w-full text-left border-separate border-spacing-0 text-sm">
+                <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-280px)] relative border rounded-lg">
+                    <table className="w-full min-w-[1000px] text-left border-separate border-spacing-0 text-sm">
                         <thead className="sticky top-0 z-20">
                             <tr className="bg-slate-50 whitespace-nowrap">
                                 <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Branch Name</th>

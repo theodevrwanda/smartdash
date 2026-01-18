@@ -71,8 +71,8 @@ const AccountsPage = () => {
                         <button onClick={loadBusinesses} className="px-4 py-2 border border-slate-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors">Refresh</button>
                     </div>
                 </div>
-                <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-280px)] relative">
-                    <table className="w-full text-left border-separate border-spacing-0 text-sm">
+                <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-280px)] relative border rounded-lg">
+                    <table className="w-full min-w-[1200px] text-left border-separate border-spacing-0 text-sm">
                         <thead className="sticky top-0 z-20">
                             <tr className="bg-slate-50 whitespace-nowrap">
                                 <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Business Name</th>
