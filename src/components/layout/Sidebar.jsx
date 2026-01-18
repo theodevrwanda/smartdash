@@ -124,19 +124,19 @@ const Sidebar = ({ isDesktopOpen, setIsDesktopOpen, isMobileOpen, setIsMobileOpe
                                 <ArrowRight size={14} />
                             </div>
                         )}
+                    </NavLink>
                 </div>
-            </div>
-        </div >
+            </div >
 
-            {/* Overlay for mobile */ }
-    {
-        isMobileOpen && (
-            <div
-                className="fixed inset-0 bg-black/20 z-30 lg:hidden backdrop-blur-sm"
-                onClick={() => setIsMobileOpen(false)}
-            ></div>
-        )
-    }
+            {/* Overlay for mobile */}
+            {
+                isMobileOpen && (
+                    <div
+                        className="fixed inset-0 bg-black/20 z-30 lg:hidden backdrop-blur-sm"
+                        onClick={() => setIsMobileOpen(false)}
+                    ></div>
+                )
+            }
         </>
     );
 };
