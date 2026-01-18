@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../components/ui/Card';
+import { Badge } from '../components/ui/Badge';
 import { Mail, Briefcase, MapPin, Building2, User } from 'lucide-react';
 import { adminService } from '../services/adminService';
 
