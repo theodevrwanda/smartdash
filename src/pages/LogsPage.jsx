@@ -60,34 +60,50 @@ const LogsPage = ({ limit }) => {
                         </div>
                     </div>
                 )}
-
-                <div className="divide-y divide-slate-100">
-                    {logs.map((log) => (
-                        <div key={log.id} className="p-4 hover:bg-slate-50 transition-colors flex flex-col sm:flex-row sm:items-center gap-4">
-                            <div className="min-w-[40px]">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${getColor(log.transactionType)}`}>
-                                    {getIcon(log.transactionType)}
-                                </div>
-                            </div>
-                            <div className="flex-1">
-                                <div className="flex items-center justify-between mb-1">
-                                    <h4 className="font-semibold text-slate-800 capitalize">{log.transactionType?.replace(/_/g, ' ') || 'Action'}</h4>
-                                    <span className="text-xs text-slate-400 font-mono">
+                <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-280px)] relative">
+                    <table className="w-full text-left border-separate border-spacing-0 text-sm">
+                        <thead className="sticky top-0 z-20">
+                            <tr className="bg-slate-50 whitespace-nowrap">
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Icon</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Action Type</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100 text-left">Details</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">User</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {logs.map((log) => (
+                                <tr key={log.id} className="hover:bg-slate-50 transition-colors whitespace-nowrap">
+                                    <td className="px-4 py-3 border-b border-slate-50">
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${getColor(log.transactionType)}`}>
+                                            {getIcon(log.transactionType)}
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-3 font-bold text-slate-800 capitalize border-b border-slate-50">
+                                        {log.transactionType?.replace(/_/g, ' ') || 'Action'}
+                                    </td>
+                                    <td className="px-4 py-3 text-slate-600 border-b border-slate-50 text-left max-w-xs truncate">
+                                        {log.actionDetails || 'No details provided'}
+                                    </td>
+                                    <td className="px-4 py-3 border-b border-slate-50">
+                                        {log.userName && (
+                                            <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+                                                {log.userName}
+                                            </span>
+                                        )}
+                                    </td>
+                                    <td className="px-4 py-3 text-xs text-slate-400 font-mono border-b border-slate-50">
                                         {log.createdAt ? (log.createdAt.toDate ? log.createdAt.toDate().toLocaleString() : new Date(log.createdAt).toLocaleString()) : '-'}
-                                    </span>
-                                </div>
-                                <p className="text-sm text-slate-600">{log.actionDetails || 'No details provided'}</p>
-                            </div>
-                            {log.userName && (
-                                <div className="flex items-center gap-2 text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full w-fit">
-                                    User: {log.userName}
-                                </div>
+                                    </td>
+                                </tr>
+                            ))}
+                            {logs.length === 0 && (
+                                <tr>
+                                    <td colSpan="5" className="p-8 text-center text-slate-500">No activity logs found.</td>
+                                </tr>
                             )}
-                        </div>
-                    ))}
-                    {logs.length === 0 && (
-                        <div className="p-8 text-center text-slate-500">No logs found.</div>
-                    )}
+                        </tbody>
+                    </table>
                 </div>
 
                 {limit && logs.length > 0 && (

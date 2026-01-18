@@ -71,53 +71,49 @@ const PaymentsPage = () => {
                         </button>
                     </div>
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-sm">
-                        <thead>
-                            <tr className="bg-slate-50 border-b border-slate-100 whitespace-nowrap">
-                                <th className="px-4 py-3 font-semibold text-slate-500">Transaction ID</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Amount</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Business ID</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Business Name</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Method</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Plan</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Status</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Type</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">User ID</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Payer Name</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Email</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Phone</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Manual Verification</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Created At</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500 text-right">Actions</th>
+                <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-280px)] relative">
+                    <table className="w-full text-left border-separate border-spacing-0 text-sm">
+                        <thead className="sticky top-0 z-20">
+                            <tr className="bg-slate-50 whitespace-nowrap">
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Transaction ID</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Amount</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Business Name</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Method</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Plan</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Status</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Type</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Payer Name</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Email</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Phone</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Manual</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Created At</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {transactions.map((txn) => (
                                 <tr key={txn.id} className="hover:bg-slate-50/50 transition-colors whitespace-nowrap">
-                                    <td className="px-4 py-3 text-slate-500 font-mono text-xs">{txn.id.substring(0, 8)}...</td>
-                                    <td className="px-4 py-3 font-bold text-slate-800">
+                                    <td className="px-4 py-3 text-slate-500 font-mono text-xs border-b border-slate-50">{txn.id.substring(0, 8)}...</td>
+                                    <td className="px-4 py-3 font-bold text-slate-800 border-b border-slate-50">
                                         {new Intl.NumberFormat('en-RW', { style: 'currency', currency: txn.currency || 'RWF' }).format(txn.amount || 0)}
                                     </td>
-                                    <td className="px-4 py-3 text-slate-500 font-mono text-xs">{txn.businessId || '-'}</td>
-                                    <td className="px-4 py-3 text-slate-800 font-medium">{txn.businessName || '-'}</td>
-                                    <td className="px-4 py-3 text-slate-600 capitalize">{txn.method || '-'}</td>
-                                    <td className="px-4 py-3 text-slate-600 capitalize">{txn.plan || 'Standard'}</td>
-                                    <td className="px-4 py-3">
+                                    <td className="px-4 py-3 text-slate-800 font-medium border-b border-slate-50">{txn.businessName || '-'}</td>
+                                    <td className="px-4 py-3 text-slate-600 capitalize border-b border-slate-50">{txn.method || '-'}</td>
+                                    <td className="px-4 py-3 text-slate-600 capitalize border-b border-slate-50">{txn.plan || 'Standard'}</td>
+                                    <td className="px-4 py-3 border-b border-slate-50">
                                         <Badge variant={txn.status === 'approved' ? 'success' : txn.status === 'pending' ? 'warning' : 'default'}>
                                             {txn.status || 'pending'}
                                         </Badge>
                                     </td>
-                                    <td className="px-4 py-3 text-slate-600 capitalize">{txn.type || '-'}</td>
-                                    <td className="px-4 py-3 text-slate-500 font-mono text-xs">{txn.userId || '-'}</td>
-                                    <td className="px-4 py-3 text-slate-600 capitalize">{txn.ownerName || '-'}</td>
-                                    <td className="px-4 py-3 text-slate-600">{txn.email || '-'}</td>
-                                    <td className="px-4 py-3 text-slate-600">{txn.phoneNumber || '-'}</td>
-                                    <td className="px-4 py-3 text-slate-600">{txn.isManualVerification ? 'Yes' : 'No'}</td>
-                                    <td className="px-4 py-3 text-slate-600 text-xs">
-                                        {txn.createdAt && (typeof txn.createdAt === 'string' ? new Date(txn.createdAt).toLocaleString() : 'N/A')}
+                                    <td className="px-4 py-3 text-slate-600 capitalize border-b border-slate-50">{txn.type || '-'}</td>
+                                    <td className="px-4 py-3 text-slate-600 capitalize border-b border-slate-50">{txn.ownerName || '-'}</td>
+                                    <td className="px-4 py-3 text-slate-600 border-b border-slate-50">{txn.email || '-'}</td>
+                                    <td className="px-4 py-3 text-slate-600 border-b border-slate-50">{txn.phoneNumber || '-'}</td>
+                                    <td className="px-4 py-3 text-slate-600 border-b border-slate-50">{txn.isManualVerification ? 'Yes' : 'No'}</td>
+                                    <td className="px-4 py-3 text-slate-600 text-xs border-b border-slate-50">
+                                        {txn.createdAt ? (typeof txn.createdAt === 'object' && txn.createdAt.toDate ? txn.createdAt.toDate().toLocaleString() : new Date(txn.createdAt).toLocaleString()) : '-'}
                                     </td>
-                                    <td className="px-4 py-3 text-right">
+                                    <td className="px-4 py-3 text-right border-b border-slate-50">
                                         {txn.status !== 'approved' && (
                                             <button
                                                 title="Approve"

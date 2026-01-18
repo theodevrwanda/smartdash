@@ -71,37 +71,37 @@ const AccountsPage = () => {
                         <button onClick={loadBusinesses} className="px-4 py-2 border border-slate-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors">Refresh</button>
                     </div>
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-sm">
-                        <thead>
-                            <tr className="bg-slate-50 border-b border-slate-100 whitespace-nowrap">
-                                <th className="px-4 py-3 font-semibold text-slate-500">Business Name</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Owner</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Plan</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Sub. Status</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Active</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Start Date</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">End Date</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500">Location</th>
-                                <th className="px-4 py-3 font-semibold text-slate-500 text-right">Actions</th>
+                <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-280px)] relative">
+                    <table className="w-full text-left border-separate border-spacing-0 text-sm">
+                        <thead className="sticky top-0 z-20">
+                            <tr className="bg-slate-50 whitespace-nowrap">
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Business Name</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Owner</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Plan</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Sub. Status</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Active</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Start Date</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">End Date</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100">Location</th>
+                                <th className="px-4 py-3 font-semibold text-slate-500 bg-slate-50 border-b border-slate-100 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {businesses.map((business) => (
                                 <tr key={business.id} className="hover:bg-slate-50/50 transition-colors whitespace-nowrap">
-                                    <td className="px-4 py-3 font-bold text-slate-800">
+                                    <td className="px-4 py-3 font-bold text-slate-800 border-b border-slate-50">
                                         <div className="flex flex-col">
                                             <span>{business.businessName || 'Unnamed'}</span>
                                             <span className="text-[10px] text-slate-400 font-mono">ID: {business.id.substring(0, 8)}...</span>
                                         </div>
                                     </td>
-                                    <td className="px-4 py-3 text-slate-600">
+                                    <td className="px-4 py-3 text-slate-600 border-b border-slate-50">
                                         <div className="flex flex-col">
                                             <span className="font-medium text-slate-700">{business.ownerName || '-'}</span>
                                             <span className="text-xs text-slate-400">{business.email || business.ownerEmail}</span>
                                         </div>
                                     </td>
-                                    <td className="px-4 py-3 text-sm text-slate-600">
+                                    <td className="px-4 py-3 text-sm text-slate-600 border-b border-slate-50">
                                         {editingId === business.id ? (
                                             <div className="flex items-center gap-2">
                                                 <select
@@ -127,27 +127,27 @@ const AccountsPage = () => {
                                             </span>
                                         )}
                                     </td>
-                                    <td className="px-4 py-3">
+                                    <td className="px-4 py-3 border-b border-slate-50">
                                         <Badge variant={business.subscription?.status === 'active' ? 'success' : 'warning'}>
                                             {business.subscription?.status || 'Inactive'}
                                         </Badge>
                                     </td>
-                                    <td className="px-4 py-3">
+                                    <td className="px-4 py-3 border-b border-slate-50">
                                         <Badge variant={business.isActive ? 'success' : 'error'}>
                                             {business.isActive ? 'Yes' : 'No'}
                                         </Badge>
                                     </td>
-                                    <td className="px-4 py-3 text-slate-500 text-xs">
+                                    <td className="px-4 py-3 text-slate-500 text-xs border-b border-slate-50">
                                         {business.subscription?.startDate ? new Date(business.subscription.startDate).toLocaleDateString() : '-'}
                                     </td>
-                                    <td className="px-4 py-3 text-slate-500 text-xs">
+                                    <td className="px-4 py-3 text-slate-500 text-xs border-b border-slate-50">
                                         {business.subscription?.endDate ? new Date(business.subscription.endDate).toLocaleDateString() : '-'}
                                     </td>
-                                    <td className="px-4 py-3 text-slate-600 text-xs">
+                                    <td className="px-4 py-3 text-slate-600 text-xs border-b border-slate-50">
                                         {[business.district, business.sector].filter(Boolean).join(', ') || '-'}
                                     </td>
 
-                                    <td className="px-4 py-3 text-right">
+                                    <td className="px-4 py-3 text-right border-b border-slate-50">
                                         <div className="flex items-center justify-end gap-2">
                                             <button
                                                 title="View Details"
