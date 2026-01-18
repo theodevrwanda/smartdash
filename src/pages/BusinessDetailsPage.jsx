@@ -128,28 +128,30 @@ const BusinessDetailsPage = () => {
 
                 {activeTab === 'users' && (
                     <Card className="p-0 overflow-hidden">
-                        <table className="w-full text-sm text-left">
-                            <thead className="bg-slate-50 border-b">
-                                <tr>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Name</th>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Role</th>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Phone</th>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Branch</th>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y">
-                                {tabData.users.map(u => (
-                                    <tr key={u.id}>
-                                        <td className="px-4 py-3 font-medium">{u.fullName || u.firstName + ' ' + u.lastName}</td>
-                                        <td className="px-4 py-3 capitalize">{u.role}</td>
-                                        <td className="px-4 py-3">{u.phone}</td>
-                                        <td className="px-4 py-3 font-mono text-xs">{u.branch?.substring(0, 8) || '-'}</td>
-                                        <td className="px-4 py-3"><Badge variant={u.isActive ? 'success' : 'error'}>{u.isActive ? 'Active' : 'Inactive'}</Badge></td>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm text-left">
+                                <thead className="bg-slate-50 border-b whitespace-nowrap">
+                                    <tr>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Name</th>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Role</th>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Phone</th>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Branch</th>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Status</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="divide-y whitespace-nowrap">
+                                    {tabData.users.map(u => (
+                                        <tr key={u.id} className="hover:bg-slate-50/50 transition-colors">
+                                            <td className="px-4 py-3 font-medium">{u.fullName || u.firstName + ' ' + u.lastName}</td>
+                                            <td className="px-4 py-3 capitalize">{u.role}</td>
+                                            <td className="px-4 py-3">{u.phone}</td>
+                                            <td className="px-4 py-3 font-mono text-xs">{u.branch?.substring(0, 8) || '-'}</td>
+                                            <td className="px-4 py-3"><Badge variant={u.isActive ? 'success' : 'error'}>{u.isActive ? 'Active' : 'Inactive'}</Badge></td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </Card>
                 )}
 
@@ -171,53 +173,57 @@ const BusinessDetailsPage = () => {
 
                 {activeTab === 'products' && (
                     <Card className="p-0 overflow-hidden">
-                        <table className="w-full text-sm text-left">
-                            <thead className="bg-slate-50 border-b">
-                                <tr>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Product Name</th>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Category</th>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Qty</th>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Price</th>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y">
-                                {tabData.products.slice(0, 50).map(p => (
-                                    <tr key={p.id}>
-                                        <td className="px-4 py-3 font-medium">{p.productName}</td>
-                                        <td className="px-4 py-3 capitalize">{p.category}</td>
-                                        <td className="px-4 py-3">{p.quantity} {p.unit}</td>
-                                        <td className="px-4 py-3">{p.sellingPrice}</td>
-                                        <td className="px-4 py-3 capitalize">{p.status}</td>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm text-left">
+                                <thead className="bg-slate-50 border-b whitespace-nowrap">
+                                    <tr>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Product Name</th>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Category</th>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Qty</th>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Price</th>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Status</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="divide-y whitespace-nowrap">
+                                    {tabData.products.slice(0, 50).map(p => (
+                                        <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
+                                            <td className="px-4 py-3 font-medium">{p.productName}</td>
+                                            <td className="px-4 py-3 capitalize">{p.category}</td>
+                                            <td className="px-4 py-3">{p.quantity} {p.unit}</td>
+                                            <td className="px-4 py-3">{p.sellingPrice}</td>
+                                            <td className="px-4 py-3 capitalize">{p.status}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </Card>
                 )}
 
                 {activeTab === 'history' && (
                     <Card className="p-0 overflow-hidden">
-                        <table className="w-full text-sm text-left">
-                            <thead className="bg-slate-50 border-b">
-                                <tr>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Date</th>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Type</th>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Amount</th>
-                                    <th className="px-4 py-3 font-medium text-slate-500">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y">
-                                {tabData.transactions.map(t => (
-                                    <tr key={t.id}>
-                                        <td className="px-4 py-3 text-slate-500">{t.createdAt ? new Date(t.createdAt).toLocaleDateString() : '-'}</td>
-                                        <td className="px-4 py-3 capitalize">{t.type}</td>
-                                        <td className="px-4 py-3 font-mono">{t.amount} {t.currency}</td>
-                                        <td className="px-4 py-3"><Badge variant={t.status === 'approved' ? 'success' : 'warning'}>{t.status}</Badge></td>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm text-left">
+                                <thead className="bg-slate-50 border-b whitespace-nowrap">
+                                    <tr>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Date</th>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Type</th>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Amount</th>
+                                        <th className="px-4 py-3 font-medium text-slate-500">Status</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="divide-y whitespace-nowrap">
+                                    {tabData.transactions.map(t => (
+                                        <tr key={t.id} className="hover:bg-slate-50/50 transition-colors">
+                                            <td className="px-4 py-3 text-slate-500">{t.createdAt ? new Date(t.createdAt).toLocaleDateString() : '-'}</td>
+                                            <td className="px-4 py-3 capitalize">{t.type}</td>
+                                            <td className="px-4 py-3 font-mono">{t.amount} {t.currency}</td>
+                                            <td className="px-4 py-3"><Badge variant={t.status === 'approved' ? 'success' : 'warning'}>{t.status}</Badge></td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </Card>
                 )}
             </div>
