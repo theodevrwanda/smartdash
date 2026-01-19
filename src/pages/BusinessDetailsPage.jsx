@@ -294,33 +294,70 @@ const BusinessDetailsPage = () => {
                             <table className="w-full text-sm text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-100 dark:bg-slate-900">
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Name</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Role</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Phone</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Identity</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Contact</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Role & Branch</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Location Context</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Timeline</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
-                                    {tabData.users.map(u => (
-                                        <tr key={u.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10">
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{u.fullName || `${u.firstName} ${u.lastName}`}</td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                                <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 text-[10px] font-black uppercase rounded-none">{u.role}</span>
-                                            </td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 font-bold text-xs">{u.phone}</td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
-                                                <Badge variant={u.isActive ? 'success' : 'error'} className="rounded-none uppercase text-[9px]">{u.isActive ? 'Active' : 'Banned'}</Badge>
-                                            </td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
-                                                <div className="flex justify-end gap-1">
-                                                    <button onClick={() => openModal('users', u, 'details')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-600 transition-colors"><Eye size={14} /></button>
-                                                    <button onClick={() => openModal('users', u, 'edit')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-600 transition-colors"><Edit size={14} /></button>
-                                                    <button onClick={() => openModal('users', u, 'delete')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {tabData.users.map(u => {
+                                        const branchName = tabData.branches.find(b => b.id === u.branch)?.branchName || 'Alpha Node';
+                                        return (
+                                            <tr key={u.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 bg-slate-100 flex-shrink-0 border border-slate-200 overflow-hidden">
+                                                            {(u.profileImage || u.imagephoto) ? (
+                                                                <img src={u.profileImage || u.imagephoto} alt="" className="w-full h-full object-cover" />
+                                                            ) : (
+                                                                <User className="w-full h-full p-1.5 text-slate-400" />
+                                                            )}
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <span className="font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{u.fullName || `${u.firstName} ${u.lastName}`}</span>
+                                                            <span className="text-[9px] font-bold text-slate-400">@{u.username || 'unknown'}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{u.email}</span>
+                                                        <span className="text-[9px] font-black text-slate-400">{u.phone}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 text-[9px] font-black uppercase rounded-none w-fit border border-blue-100 dark:border-blue-800/50">{u.role}</span>
+                                                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-tighter italic">{branchName}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-500 uppercase leading-tight">
+                                                    {u.village}, {u.cell},<br />
+                                                    {u.sector}, {u.district}
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
+                                                    <div className="flex flex-col items-center">
+                                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Registered</span>
+                                                        <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
+                                                    <Badge variant={u.isActive ? 'success' : 'error'} className="rounded-none uppercase text-[9px] font-black">{u.isActive ? 'Active' : 'Banned'}</Badge>
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
+                                                    <div className="flex justify-end gap-1">
+                                                        <button onClick={() => openModal('users', u, 'details')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-600 transition-colors"><Eye size={14} /></button>
+                                                        <button onClick={() => openModal('users', u, 'edit')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-600 transition-colors"><Edit size={14} /></button>
+                                                        <button onClick={() => openModal('users', u, 'delete')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </div>
@@ -503,7 +540,7 @@ const BusinessDetailsPage = () => {
                     {selectedItem && Object.keys(selectedItem).filter(k => k !== 'id' && k !== 'createdAt' && k !== 'businessId').map(key => (
                         <div key={key} className="space-y-1.5">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{key.replace(/([A-Z])/g, ' $1')}</label>
-                            {itemType === 'products' && key === 'branch' ? (
+                            {((itemType === 'products' || itemType === 'users') && key === 'branch') ? (
                                 <select
                                     value={formData[key] || ''}
                                     onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
