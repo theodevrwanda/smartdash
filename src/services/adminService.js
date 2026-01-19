@@ -415,5 +415,43 @@ export const adminService = {
             console.error(`Error deleting document in ${collectionName}:`, error);
             throw error;
         }
+    },
+
+    // Specific Branch Actions
+    async deleteBranch(id) {
+        return this.deleteDocument('branches', id);
+    },
+
+    async updateBranch(id, data) {
+        return this.updateDocument('branches', id, {
+            ...data,
+            updatedAt: new Date().toISOString()
+        });
+    },
+
+    async fetchUsersByBusiness(businessId) {
+        try {
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('businessId', '==', businessId));
+            const snapshot = await getDocs(q);
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        } catch (error) {
+            console.error("Error fetching users by business:", error);
+            throw error;
+        }
+    },
+
+    async assignUserToBranch(userId, branchId) {
+        try {
+            const userRef = doc(db, 'users', userId);
+            await updateDoc(userRef, {
+                branch: branchId,
+                updatedAt: new Date().toISOString()
+            });
+            return true;
+        } catch (error) {
+            console.error("Error assigning user to branch:", error);
+            throw error;
+        }
     }
 };
