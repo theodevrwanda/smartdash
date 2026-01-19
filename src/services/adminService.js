@@ -227,7 +227,7 @@ export const adminService = {
     },
 
     // Fetch all employees (users with businessId)
-    async fetchEmployees() {
+    async fetchAllEmployees() {
         try {
             const usersSnapshot = await getDocs(collection(db, 'users'));
 

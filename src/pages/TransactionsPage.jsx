@@ -96,17 +96,22 @@ const PaymentsPage = () => {
                 </div>
             </div>
 
-            <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden flex flex-col">
+            <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col">
                 <div className="overflow-x-auto">
-                    <table className="w-full min-w-[1000px] border-collapse">
+                    <table className="w-full min-w-[2000px] border-collapse">
                         <thead>
                             <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 uppercase tracking-widest text-left whitespace-nowrap">
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">No</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Business Context</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">User Identity</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Financial Data</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Connectivity</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Meta Params</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Business Name</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Business ID</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Owner Name</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Owner Email</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Owner Phone</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Amount</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Currency</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Method</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">Plan</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">Type</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">Execution Date</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">Status</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">Actions</th>
@@ -119,94 +124,86 @@ const PaymentsPage = () => {
                                         <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex flex-col">
-                                            <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{txn.businessName}</span>
-                                            <span className="text-[10px] font-bold text-slate-400 font-mono tracking-tighter">ID: {txn.businessId}</span>
-                                        </div>
+                                        <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{txn.businessName || '-'}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex flex-col">
-                                            <div className="flex items-center gap-2">
-                                                <User size={12} className="text-blue-600" />
-                                                <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{txn.ownerName}</span>
-                                            </div>
-                                            <span className="text-[10px] font-bold text-slate-400 font-mono tracking-tighter">UID: {txn.userId}</span>
-                                        </div>
+                                        <span className="text-[10px] font-mono font-bold text-slate-400">{txn.businessId || '-'}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex flex-col">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-sm font-black text-emerald-600">{txn.amount?.toLocaleString()}</span>
-                                                <span className="text-[10px] font-black text-slate-400">{txn.currency}</span>
-                                            </div>
-                                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{txn.method} GATEWAY</span>
-                                        </div>
+                                        <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{txn.ownerName || '-'}</span>
                                     </td>
-                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex flex-col">
-                                            <span className="text-[11px] font-black text-slate-700 dark:text-slate-300 lowercase">{txn.email}</span>
-                                            <span className="text-[11px] font-bold text-slate-500 tracking-widest">{txn.phoneNumber}</span>
-                                        </div>
+                                    <td className="px-4 py-4 border border-slate-200 dark:border-slate-800">
+                                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300 lowercase">{txn.email || '-'}</span>
                                     </td>
-                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex flex-col gap-1">
-                                            <div className="flex items-center gap-2">
-                                                <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none bg-purple-50 text-purple-600 border-purple-100">
-                                                    {(() => {
-                                                        const p = (txn.plan || '').toLowerCase();
-                                                        if (['monthly', 'month'].includes(p)) return 'monthly';
-                                                        if (['annually', 'yearly', 'year'].includes(p)) return 'annually';
-                                                        return p || 'free';
-                                                    })()}
-                                                </Badge>
-                                                <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none bg-blue-50 text-blue-600 border-blue-100">{txn.type}</Badge>
-                                            </div>
-                                            {txn.isManualVerification && (
-                                                <div className="flex items-center gap-1 text-[9px] font-black text-amber-600">
-                                                    <ShieldCheck size={10} /> MANUAL OVERRIDE
-                                                </div>
-                                            )}
-                                        </div>
+                                    <td className="px-4 py-4 border border-slate-200 dark:border-slate-800">
+                                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{txn.phoneNumber || '-'}</span>
+                                    </td>
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-right">
+                                        <span className="text-sm font-black text-emerald-600 font-mono tracking-tight">{txn.amount?.toLocaleString()}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
-                                        <div className="flex flex-col items-center">
-                                            <span className="text-[10px] font-black text-slate-700 dark:text-slate-300 uppercase">
-                                                {txn.createdAt ? (typeof txn.createdAt === 'object' && txn.createdAt.toDate ? txn.createdAt.toDate().toLocaleDateString() : new Date(txn.createdAt).toLocaleDateString()) : '-'}
-                                            </span>
-                                            <span className="text-[9px] font-bold text-slate-400">
-                                                {txn.createdAt ? (typeof txn.createdAt === 'object' && txn.createdAt.toDate ? txn.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : new Date(txn.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) : '-'}
-                                            </span>
-                                        </div>
+                                        <span className="text-[10px] font-black text-slate-400">{txn.currency || 'RWF'}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
-                                        <Badge variant={txn.status === 'approved' ? 'success' : txn.status === 'pending' ? 'warning' : 'error'} className="rounded-none uppercase text-[9px] font-black w-24 flex justify-center py-1">
-                                            {txn.status}
+                                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{txn.method || 'MOMO'}</span>
+                                    </td>
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
+                                        <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none bg-purple-50 text-purple-600 border-purple-100">
+                                            {(() => {
+                                                const p = (txn.plan || '').toLowerCase();
+                                                if (['monthly', 'month'].includes(p)) return 'monthly';
+                                                if (['annually', 'yearly', 'year'].includes(p)) return 'annually';
+                                                return p || 'free';
+                                            })()}
                                         </Badge>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
-                                        <div className="flex items-center justify-center gap-2">
-                                            {txn.status === 'pending' ? (
+                                        <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none bg-blue-50 text-blue-600 border-blue-100">{txn.type || 'PAYMENT'}</Badge>
+                                    </td>
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
+                                        <div className="flex flex-col items-center">
+                                            <span className="text-[10px] font-black text-slate-700 dark:text-slate-300">
+                                                {txn.timestamp ? (typeof txn.timestamp === 'object' && txn.timestamp.toDate ? txn.timestamp.toDate().toLocaleDateString() : new Date(txn.timestamp).toLocaleDateString()) : '-'}
+                                            </span>
+                                            <span className="text-[8px] font-bold text-slate-400">
+                                                {txn.timestamp ? (typeof txn.timestamp === 'object' && txn.timestamp.toDate ? txn.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : new Date(txn.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) : '-'}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
+                                        <Badge
+                                            variant={txn.status === 'success' || txn.status === 'completed' || txn.status === 'approved' ? 'success' : txn.status === 'pending' ? 'warning' : 'error'}
+                                            className="rounded-none uppercase text-[9px] font-black px-3 py-1"
+                                        >
+                                            {txn.status || 'PENDING'}
+                                        </Badge>
+                                    </td>
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
+                                        <div className="flex items-center justify-center gap-1">
+                                            <button
+                                                onClick={() => navigate(`/transactions/${txn.id}`)}
+                                                className="p-1.5 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800"
+                                                title="View Ledger Detail"
+                                            >
+                                                <Eye size={12} />
+                                            </button>
+                                            {txn.status === 'pending' && (
                                                 <>
                                                     <button
-                                                        onClick={() => handleApprove(txn)}
-                                                        className="px-4 py-1.5 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all flex items-center gap-2 rounded-none"
+                                                        onClick={() => adminService.approveTransaction(txn.id, txn.businessId, txn.plan).then(loadTransactions)}
+                                                        className="p-1.5 text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-600 hover:text-white transition-all border border-emerald-100 dark:border-emerald-800"
+                                                        title="Approve Settlement"
                                                     >
-                                                        <CheckCircle size={12} /> Confirm
+                                                        <ShieldCheck size={12} />
                                                     </button>
                                                     <button
-                                                        onClick={() => handleReject(txn)}
-                                                        className="px-4 py-1.5 bg-rose-600 text-white text-[10px] font-black uppercase tracking-widest hover:bg-rose-700 transition-all flex items-center gap-2 rounded-none"
+                                                        onClick={() => adminService.rejectTransaction(txn.id).then(loadTransactions)}
+                                                        className="p-1.5 text-rose-600 bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-600 hover:text-white transition-all border border-rose-100 dark:border-rose-800"
+                                                        title="Reject Request"
                                                     >
-                                                        <XCircle size={12} /> Reject
+                                                        <Power size={12} />
                                                     </button>
                                                 </>
-                                            ) : (
-                                                <button
-                                                    onClick={() => navigate(`/transactions/${txn.id}`)}
-                                                    className="p-1.5 text-blue-600 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800"
-                                                >
-                                                    <Eye size={12} />
-                                                </button>
                                             )}
                                         </div>
                                     </td>

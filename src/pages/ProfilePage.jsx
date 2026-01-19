@@ -95,9 +95,9 @@ const ProfilePage = () => {
                         <div className="flex justify-end">
                             <button
                                 type="submit"
-                                className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors font-medium text-sm"
+                                className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-2.5 rounded-none hover:bg-slate-800 transition-colors font-black uppercase text-xs tracking-widest"
                             >
-                                Update Password
+                                Update Security Matrix
                             </button>
                         </div>
                     </form>

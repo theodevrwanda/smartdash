@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
-import { Users, Search, Download, Trash2, Eye, Power, Building2, MapPin, Mail, Phone, Calendar, Clock, ShieldCheck } from 'lucide-react';
+import { Users, Search, Download, Trash2, Eye, Power, Building2, MapPin, Mail, Phone, Calendar, Clock, ShieldCheck, Hash, Info, User as UserIcon } from 'lucide-react';
 import { adminService } from '../services/adminService';
 
 const EmployeesPage = () => {
+    const navigate = useNavigate();
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -38,6 +40,16 @@ const EmployeesPage = () => {
         );
     }
 
+    const columns = [
+        { label: "#", sticky: 'left-0', zIndex: 'z-30' },
+        { label: "Identity", sticky: 'left-[3.5rem]', zIndex: 'z-30' },
+        { label: "Contact Info" },
+        { label: "Role Profile" },
+        { label: "Business Node" },
+        { label: "Operational Status" },
+        { label: "Actions", sticky: 'right-0', zIndex: 'z-30' }
+    ];
+
     return (
         <div className="flex flex-col h-full animate-fade-in py-6">
             <div className="flex items-center justify-between mb-8">
@@ -51,82 +63,93 @@ const EmployeesPage = () => {
                     </h1>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="bg-slate-100 dark:bg-slate-800 p-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-all">
+                    <button className="bg-slate-900 dark:bg-white p-3 rounded-none text-white dark:text-slate-900 hover:bg-slate-800 transition-all border-none">
                         <Download size={20} />
                     </button>
                     <button
                         onClick={loadEmployees}
-                        className="bg-slate-900 dark:bg-white px-6 py-3 rounded-xl text-white dark:text-slate-900 font-black uppercase text-xs tracking-wider hover:scale-105 transition-all shadow-xl active:scale-95"
+                        className="bg-slate-900 dark:bg-white px-6 py-3 rounded-none text-white dark:text-slate-900 font-black uppercase text-xs tracking-wider hover:scale-105 transition-all active:scale-95 shadow-none"
                     >
                         Refresh Network
                     </button>
                 </div>
             </div>
 
-            <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden flex flex-col">
+            <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col">
                 <div className="overflow-x-auto">
                     <table className="w-full min-w-[1200px] border-collapse">
                         <thead>
-                            <tr className="bg-slate-100 dark:bg-slate-900">
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">#</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Team Member</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Assigned Node</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Functional Role</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Contact Info</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
+                            <tr className="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+                                {columns.map((col, idx) => (
+                                    <th
+                                        key={idx}
+                                        className={`${col.sticky ? `sticky ${col.sticky} bg-slate-100 dark:bg-slate-900 ${col.zIndex || 'z-20'}` : ''} px-4 py-4 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left whitespace-nowrap`}
+                                    >
+                                        {col.label}
+                                    </th>
+                                ))}
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
                             {employees.map((employee, index) => (
-                                <tr key={employee.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10">
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                <tr key={employee.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
+                                    <td className="sticky left-0 bg-white dark:bg-slate-950 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/40 px-4 py-4 border border-slate-200 dark:border-slate-800 z-10 transition-colors">
                                         <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
                                     </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                    <td className="sticky left-[3.5rem] bg-white dark:bg-slate-950 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/40 px-4 py-4 border border-slate-200 dark:border-slate-800 z-10 transition-colors">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 bg-blue-50 dark:bg-blue-900/20 rounded-none flex items-center justify-center text-blue-600 font-black text-[10px]">
-                                                {employee.firstName?.charAt(0)}{employee.lastName?.charAt(0)}
+                                            <div className="w-10 h-10 bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 overflow-hidden">
+                                                {(employee.profileImage || employee.imagephoto) ? (
+                                                    <img src={employee.profileImage || employee.imagephoto} alt="" className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-black text-xs">
+                                                        {employee.firstName?.charAt(0)}{employee.lastName?.charAt(0)}
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{employee.firstName} {employee.lastName}</span>
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ID: {employee.id.substring(0, 8)}</span>
+                                                <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                                    {employee.fullName || `${employee.firstName} ${employee.lastName}`}
+                                                </span>
+                                                <span className="text-[10px] font-mono font-bold text-slate-400">{employee.id}</span>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                    <td className="px-4 py-4 border border-slate-200 dark:border-slate-800">
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-tight">{employee.branchName}</span>
-                                            <span className="text-[10px] font-bold text-slate-400 capitalize">{employee.businessName}</span>
+                                            <span className="text-xs font-bold text-slate-700 dark:text-slate-300 italic">{employee.email || '-'}</span>
+                                            <span className="text-[10px] font-black text-slate-400">{employee.phone || '-'}</span>
                                         </div>
                                     </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                        <span className={`px-2 py-1 text-[10px] font-black uppercase tracking-tighter ${employee.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
-                                            {employee.role}
+                                    <td className="px-4 py-4 border border-slate-200 dark:border-slate-800">
+                                        <span className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest ${employee.role === 'super_admin' ? 'bg-rose-100 text-rose-700' : employee.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
+                                            {employee.role?.replace('_', ' ')}
                                         </span>
                                     </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex flex-col gap-0.5">
-                                            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-300">
-                                                <Mail size={10} className="text-slate-400" />
-                                                <span>{employee.email || '-'}</span>
-                                            </div>
-                                            <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-500">
-                                                <Phone size={10} className="text-slate-400" />
-                                                <span>{employee.phone || '-'}</span>
-                                            </div>
+                                    <td className="px-4 py-4 border border-slate-200 dark:border-slate-800">
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight italic">{employee.businessName || 'N/A'}</span>
+                                            <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">{employee.branchName || 'Primary Node'}</span>
                                         </div>
                                     </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
-                                        <div className={`flex items-center justify-center gap-1.5 px-3 py-0.5 rounded-none w-fit mx-auto ${employee.isActive ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'}`}>
-                                            <div className={`w-1 h-1 rounded-full ${employee.isActive ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
-                                            <span className="text-[9px] font-black uppercase">{employee.isActive ? 'Active' : 'Offline'}</span>
+                                    <td className="px-4 py-4 border border-slate-200 dark:border-slate-800">
+                                        <div className={`flex items-center justify-center gap-1.5 px-3 py-1 border ${employee.isActive ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-rose-100 text-rose-700 border-rose-200'}`}>
+                                            <div className={`w-1.5 h-1.5 rounded-full ${employee.isActive ? 'bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.5)]' : 'bg-rose-500 shadow-[0_0_5px_rgba(244,63,94,0.5)]'}`}></div>
+                                            <span className="text-[9px] font-black uppercase tracking-widest">{employee.isActive ? 'Active' : 'Offline'}</span>
                                         </div>
                                     </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
+                                    <td className="sticky right-0 bg-white dark:bg-slate-950 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/40 px-4 py-4 border border-slate-200 dark:border-slate-800 z-10 transition-colors text-right">
                                         <div className="flex items-center justify-end gap-1">
-                                            <button className="p-1.5 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800 shadow-sm"><Eye size={12} /></button>
-                                            <button className="p-1.5 text-rose-600 bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-600 hover:text-white transition-all border border-rose-100 dark:border-rose-800 shadow-sm"><Power size={12} /></button>
+                                            <button
+                                                onClick={() => navigate(`/user/${employee.id}`)}
+                                                className="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800"
+                                                title="Open Personnel Archive"
+                                            >
+                                                <Eye size={14} />
+                                            </button>
+                                            <button className="p-2 text-rose-600 bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-600 hover:text-white transition-all border border-rose-100 dark:border-rose-800" title="Restrict Access">
+                                                <Power size={14} />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>

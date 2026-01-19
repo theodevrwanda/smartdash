@@ -69,9 +69,9 @@ const LogsPage = ({ limit }) => {
                     </div>
                     <button
                         onClick={loadLogs}
-                        className="group bg-slate-900 dark:bg-white p-1 pr-6 rounded-2xl flex items-center gap-3 hover:scale-105 transition-all shadow-2xl active:scale-95"
+                        className="group bg-slate-900 dark:bg-white p-1 pr-6 rounded-none flex items-center gap-3 hover:scale-105 transition-all active:scale-95"
                     >
-                        <div className="w-10 h-10 bg-slate-800 dark:bg-slate-100 rounded-xl flex items-center justify-center">
+                        <div className="w-10 h-10 bg-slate-800 dark:bg-slate-100 rounded-none flex items-center justify-center">
                             <Clock className="w-5 h-5 text-white dark:text-slate-900" />
                         </div>
                         <span className="text-white dark:text-slate-900 text-sm font-black uppercase tracking-wider">Refresh Buffer</span>
@@ -79,7 +79,7 @@ const LogsPage = ({ limit }) => {
                 </div>
             )}
 
-            <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden flex flex-col">
+            <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col">
                 <div className="overflow-x-auto">
                     <table className="w-full min-w-[1200px] border-collapse">
                         <thead>

@@ -187,7 +187,8 @@ const AccountsPage = () => {
                             <tr className="bg-slate-100 dark:bg-slate-900">
                                 <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">#</th>
                                 <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Entity Name</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Identified Owner</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Owner Name</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Owner Email</th>
                                 <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">District</th>
                                 <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Sector</th>
                                 <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px) font-black text-slate-500 uppercase tracking-widest text-left">Plan</th>
@@ -211,10 +212,10 @@ const AccountsPage = () => {
                                             <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{business.businessName || 'Unnamed'}</span>
                                         </td>
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                            <div className="flex flex-col">
-                                                <span className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-tighter leading-tight">{business.ownerName || '-'}</span>
-                                                <span className="text-[10px] font-bold text-slate-400 leading-tight">{business.email || business.ownerEmail || '-'}</span>
-                                            </div>
+                                            <span className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-tighter leading-tight">{business.ownerName || '-'}</span>
+                                        </td>
+                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                            <span className="text-[10px] font-bold text-slate-400 leading-tight">{business.email || business.ownerEmail || '-'}</span>
                                         </td>
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                             <Badge variant="outline" className="font-bold border-slate-200 dark:border-slate-800 whitespace-nowrap rounded-none">

@@ -12,7 +12,7 @@ export const Badge = ({ children, variant = 'default', className }) => {
     };
 
     return (
-        <span className={clsx("px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1", variants[variant] || variants.default, className)}>
+        <span className={clsx("px-3 py-1 rounded-none text-xs font-semibold inline-flex items-center gap-1", variants[variant] || variants.default, className)}>
             {children}
         </span>
     );
