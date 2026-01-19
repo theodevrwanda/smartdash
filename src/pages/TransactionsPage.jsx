@@ -100,7 +100,6 @@ const PaymentsPage = () => {
                         <thead>
                             <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 uppercase tracking-widest text-left whitespace-nowrap">
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">No</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Document ID</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Business Context</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">User Identity</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Financial Data</th>
@@ -116,12 +115,6 @@ const PaymentsPage = () => {
                                 <tr key={txn.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
                                         <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
-                                    </td>
-                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex items-center gap-2 font-mono text-[10px] font-bold text-slate-500 bg-slate-100 dark:bg-slate-900 px-2 py-1 border border-slate-200 dark:border-slate-800">
-                                            <Hash size={10} />
-                                            {txn.id.toUpperCase()}
-                                        </div>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
                                         <div className="flex flex-col">
