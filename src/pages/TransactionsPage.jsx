@@ -33,7 +33,7 @@ const PaymentsPage = () => {
         }
         if (confirm(`Approve payment of ${txn.amount} ${txn.currency || 'RWF'} for plan '${txn.plan}'?`)) {
             try {
-                await adminService.approveTransaction(txn.id, txn.businessId, txn.plan || 'month');
+                await adminService.approveTransaction(txn.id, txn.businessId, txn.plan || 'monthly');
                 loadTransactions();
             } catch (error) {
                 console.error(error);

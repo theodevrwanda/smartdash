@@ -238,23 +238,30 @@ export const adminService = {
             const startDate = new Date();
             let endDate = new Date();
 
+            // Normalize plan type to one of the four supported plans: free, monthly, annually, forever
             const duration = planType.toLowerCase();
+            let normalizedPlan = 'free'; // default
 
-            if (duration === 'monthly') {
+            if (duration === 'monthly' || duration === 'month') {
+                normalizedPlan = 'monthly';
                 endDate.setDate(startDate.getDate() + 30);
             } else if (duration === 'annually' || duration === 'yearly' || duration === 'year') {
+                normalizedPlan = 'annually';
                 endDate.setDate(startDate.getDate() + 365);
-            } else if (duration === 'forever') {
+            } else if (duration === 'forever' || duration === 'lifetime') {
+                normalizedPlan = 'forever';
                 endDate.setFullYear(startDate.getFullYear() + 100);
             } else if (duration === 'free') {
+                normalizedPlan = 'free';
                 endDate.setDate(startDate.getDate() + 30); // 30 days for free plan
             } else {
-                // Default to 1 month if unknown
+                // Default to free plan if unknown
+                normalizedPlan = 'free';
                 endDate.setDate(startDate.getDate() + 30);
             }
 
             await updateDoc(businessRef, {
-                'subscription.plan': planType,
+                'subscription.plan': normalizedPlan,
                 'subscription.status': 'active',
                 'subscription.startDate': startDate.toISOString(),
                 'subscription.endDate': endDate.toISOString(),
