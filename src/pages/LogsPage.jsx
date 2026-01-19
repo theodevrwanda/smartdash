@@ -1,21 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService } from '../services/adminService';
-import { Clock, Shield, AlertCircle, Info, ShoppingCart, UserPlus, FileText, Activity, ShieldCheck, Eye, Trash2, Hash, User, Calendar } from 'lucide-react';
+import {
+    Clock, Shield, AlertCircle, Info, ShoppingCart,
+    UserPlus, FileText, Activity, ShieldCheck, Eye,
+    Trash2, Hash, User, Calendar, Building2, MapPin, Search
+} from 'lucide-react';
 
 const LogsPage = ({ limit }) => {
     const navigate = useNavigate();
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Filter states
+    const [businesses, setBusinesses] = useState([]);
+    const [branches, setBranches] = useState([]);
+    const [selectedBusiness, setSelectedBusiness] = useState('');
+    const [selectedBranch, setSelectedBranch] = useState('');
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
+
     useEffect(() => {
-        loadLogs();
+        const initFilters = async () => {
+            try {
+                const bizData = await adminService.fetchAllBusinesses();
+                setBusinesses(bizData);
+
+                // If limit is provided (dashboard widget), load immediately
+                if (limit) {
+                    await loadLogs();
+                }
+            } catch (error) {
+                console.error("Failed to initialize log filters", error);
+            } finally {
+                setIsInitialLoad(false);
+                if (!limit) setLoading(false);
+            }
+        };
+        initFilters();
     }, [limit]);
 
-    const loadLogs = async () => {
+    // Load branches when business changes
+    useEffect(() => {
+        if (selectedBusiness) {
+            loadBranches(selectedBusiness);
+            loadLogs(selectedBusiness, ''); // Reset branch when business changes
+            setSelectedBranch('');
+        }
+    }, [selectedBusiness]);
+
+    // Load logs when branch changes
+    useEffect(() => {
+        if (selectedBusiness && selectedBranch) {
+            loadLogs(selectedBusiness, selectedBranch);
+        }
+    }, [selectedBranch]);
+
+    const loadBranches = async (businessId) => {
+        try {
+            const allBranches = await adminService.fetchBranches();
+            const filteredBranches = allBranches.filter(b => b.businessId === businessId);
+            setBranches(filteredBranches);
+        } catch (error) {
+            console.error("Failed to load branches", error);
+        }
+    };
+
+    const loadLogs = async (businessId = null, branchId = null) => {
         setLoading(true);
         try {
-            const data = await adminService.fetchAuditLogs();
+            const data = await adminService.fetchAuditLogs(businessId, branchId);
             setLogs(limit ? data.slice(0, limit) : data);
         } catch (error) {
             console.error("Failed to load logs", error);
@@ -44,12 +97,12 @@ const LogsPage = ({ limit }) => {
         return 'bg-slate-50 text-slate-600 dark:bg-slate-900/20 dark:text-slate-400 border-slate-100 dark:border-slate-800';
     };
 
-    if (loading) {
+    if (isInitialLoad) {
         return (
-            <div className="flex items-center justify-center p-20">
+            <div className="flex items-center justify-center p-20 h-full">
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-12 h-12 border-4 border-blue-600/20 rounded-full border-t-blue-600 animate-spin"></div>
-                    <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Filtering Stream...</p>
+                    <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Initializing Matrix...</p>
                 </div>
             </div>
         );
@@ -58,123 +111,184 @@ const LogsPage = ({ limit }) => {
     return (
         <div className={`flex flex-col h-full ${limit ? '' : 'animate-fade-in py-6'}`}>
             {!limit && (
-                <div className="flex items-center justify-between mb-8 px-0">
-                    <div>
-                        <div className="flex items-center gap-2 text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em] mb-2">
-                            <Activity size={12} />
-                            <span>System Observability</span>
+                <div className="flex flex-col gap-8 mb-8">
+                    {/* Header */}
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <div className="flex items-center gap-2 text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em] mb-2">
+                                <Activity size={12} />
+                                <span>System Observability</span>
+                            </div>
+                            <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight uppercase">
+                                Audit Matrix
+                            </h1>
                         </div>
-                        <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                            Audit Matrix
-                        </h1>
+                        <button
+                            onClick={() => loadLogs(selectedBusiness, selectedBranch)}
+                            className="group bg-slate-900 dark:bg-white p-1 pr-6 rounded-none flex items-center gap-3 hover:scale-105 transition-all active:scale-95 shadow-none"
+                        >
+                            <div className="w-10 h-10 bg-slate-800 dark:bg-slate-100 rounded-none flex items-center justify-center">
+                                <Clock className="w-5 h-5 text-white dark:text-slate-900" />
+                            </div>
+                            <span className="text-white dark:text-slate-900 text-sm font-black uppercase tracking-wider">Sync Matrix</span>
+                        </button>
                     </div>
-                    <button
-                        onClick={loadLogs}
-                        className="group bg-slate-900 dark:bg-white p-1 pr-6 rounded-none flex items-center gap-3 hover:scale-105 transition-all active:scale-95"
-                    >
-                        <div className="w-10 h-10 bg-slate-800 dark:bg-slate-100 rounded-none flex items-center justify-center">
-                            <Clock className="w-5 h-5 text-white dark:text-slate-900" />
+
+                    {/* Filters */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-900/50 p-6 border border-slate-200 dark:border-slate-800">
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                                <Building2 size={12} /> Target Business Entity
+                            </label>
+                            <select
+                                value={selectedBusiness}
+                                onChange={(e) => setSelectedBusiness(e.target.value)}
+                                className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 text-xs font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors cursor-pointer"
+                            >
+                                <option value="">Select Business Account</option>
+                                {businesses.map(biz => (
+                                    <option key={biz.id} value={biz.id}>{biz.businessName}</option>
+                                ))}
+                            </select>
                         </div>
-                        <span className="text-white dark:text-slate-900 text-sm font-black uppercase tracking-wider">Refresh Buffer</span>
-                    </button>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                                <MapPin size={12} /> Geographic Node (Branch)
+                            </label>
+                            <select
+                                value={selectedBranch}
+                                onChange={(e) => setSelectedBranch(e.target.value)}
+                                disabled={!selectedBusiness}
+                                className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 text-xs font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <option value="">All Branch Nodes</option>
+                                {branches.map(branch => (
+                                    <option key={branch.id} value={branch.id}>{branch.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
                 </div>
             )}
 
-            <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col">
-                <div className="overflow-x-auto">
-                    <table className="w-full min-w-[1500px] border-collapse">
-                        <thead>
-                            <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 uppercase tracking-widest text-left">
-                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">#</th>
-                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">Type</th>
-                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">Business</th>
-                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">Action Logic</th>
-                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">Operator</th>
-                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">Execution Date</th>
-                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
-                            {logs.map((log, index) => (
-                                <tr key={log.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
-                                        <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
-                                    </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex items-center gap-2">
-                                            <div className={`p-1.5 rounded-none ${getColor(log.transactionType || log.action)}`}>
-                                                {getIcon(log.transactionType || log.action)}
-                                            </div>
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
-                                                {log.transactionType?.replace('_', ' ') || 'SYSTEM_EVENT'}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                        <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight italic">
-                                            {log.businessName || 'Platform Root'}
-                                        </span>
-                                    </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex flex-col">
-                                            <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-tight">
-                                                {log.action || log.actionDetails || 'N/A'}
-                                            </span>
-                                            <span className="text-[10px] font-bold text-slate-400 leading-tight">
-                                                {log.details || 'Baseline operational signal.'}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-[11px] font-black text-slate-700 dark:text-slate-300 uppercase underline decoration-slate-200">
-                                                {log.userName || log.userEmail || 'Platform'}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex flex-col items-center">
-                                            <div className="flex items-center gap-1.5 text-[10px] font-black text-slate-600 dark:text-slate-400">
-                                                <Calendar size={10} /> {log.createdAt || log.timestamp ? new Date(log.createdAt || log.timestamp).toLocaleDateString() : '-'}
-                                            </div>
-                                            <div className="flex items-center gap-1.5 text-[8px] font-bold text-slate-400">
-                                                <Clock size={8} /> {log.createdAt || log.timestamp ? new Date(log.createdAt || log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
-                                        <button
-                                            onClick={() => navigate(`/logs/${log.id}`)}
-                                            className="p-1.5 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800"
-                                            title="View Analysis"
-                                        >
-                                            <Eye size={12} />
-                                        </button>
-                                    </td>
+            <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col shadow-xl">
+                {loading ? (
+                    <div className="flex-1 flex flex-col items-center justify-center p-20 gap-4">
+                        <div className="w-12 h-12 border-4 border-blue-600/10 rounded-full border-t-blue-600 animate-spin"></div>
+                        <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Filtering Stream...</p>
+                    </div>
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="w-full min-w-[1500px] border-collapse">
+                            <thead>
+                                <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 uppercase tracking-widest text-left">
+                                    <th className="px-4 py-4 border border-slate-200 dark:border-slate-800">#</th>
+                                    <th className="px-4 py-4 border border-slate-200 dark:border-slate-800">Operational Type</th>
+                                    <th className="px-4 py-4 border border-slate-200 dark:border-slate-800">Entity Node</th>
+                                    <th className="px-4 py-4 border border-slate-200 dark:border-slate-800">Action Logic</th>
+                                    <th className="px-4 py-4 border border-slate-200 dark:border-slate-800">Operator Identity</th>
+                                    <th className="px-4 py-4 border border-slate-200 dark:border-slate-800 text-center">Execution Timestamp</th>
+                                    <th className="px-4 py-4 border border-slate-200 dark:border-slate-800 text-right">Matrix Analysis</th>
                                 </tr>
-                            ))}
-                            {logs.length === 0 && (
-                                <tr>
-                                    <td colSpan="20" className="px-6 py-20 text-center">
-                                        <div className="flex flex-col items-center gap-2">
-                                            <Shield size={40} className="text-slate-200 dark:text-slate-800" />
-                                            <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">No Events Logged</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
+                                {logs.map((log, index) => (
+                                    <tr key={log.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
+                                        <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
+                                            <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
+                                        </td>
+                                        <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
+                                            <div className="flex items-center gap-2">
+                                                <div className={`p-2 rounded-none border ${getColor(log.transactionType || log.action)}`}>
+                                                    {getIcon(log.transactionType || log.action)}
+                                                </div>
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                                                    {log.transactionType?.replace('_', ' ') || 'SYSTEM_SIGNAL'}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
+                                            <div className="flex flex-col gap-0.5">
+                                                <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-tight italic">
+                                                    {log.businessName || 'Platform Root'}
+                                                </span>
+                                                <span className="text-[9px] font-bold text-blue-600 uppercase tracking-widest">
+                                                    {log.branchName || 'Primary Node'}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-tight">
+                                                    {log.action || log.actionDetails || 'N/A'}
+                                                </span>
+                                                <span className="text-[10px] font-bold text-slate-400 leading-tight">
+                                                    {log.details || 'Baseline automated signal.'}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-8 h-8 rounded-none bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-inner">
+                                                    <User size={14} className="text-slate-400" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-[11px] font-black text-slate-700 dark:text-slate-300 uppercase underline decoration-slate-200 decoration-2 underline-offset-2">
+                                                        {log.userName || 'Root User'}
+                                                    </span>
+                                                    <span className="text-[9px] font-bold text-slate-400 tracking-tighter lowercase">
+                                                        {log.userEmail || 'system@internal'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
+                                            <div className="flex flex-col items-center">
+                                                <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 dark:text-slate-300">
+                                                    <Calendar size={12} /> {log.createdAt || log.timestamp ? new Date(log.createdAt || log.timestamp).toLocaleDateString() : '-'}
+                                                </div>
+                                                <div className="flex items-center gap-1.5 text-[9px] font-black text-slate-400 italic">
+                                                    <Clock size={10} /> {log.createdAt || log.timestamp ? new Date(log.createdAt || log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '-'}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-right">
+                                            <button
+                                                onClick={() => navigate(`/logs/${log.id}`)}
+                                                className="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800"
+                                                title="Open Vector Dossier"
+                                            >
+                                                <Eye size={16} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {logs.length === 0 && !loading && (
+                                    <tr>
+                                        <td colSpan="20" className="px-6 py-32 text-center">
+                                            <div className="flex flex-col items-center gap-4 opacity-50">
+                                                <Search size={64} className="text-slate-200 dark:text-slate-800" />
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-slate-400 font-black uppercase tracking-widest text-sm">Signal Nullified</p>
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">No operational events found for this filter vector.</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
 
             {limit && logs.length > 0 && (
-                <div className="mt-4 flex justify-center">
+                <div className="mt-6 flex justify-center">
                     <button
-                        onClick={() => window.location.href = '/logs'}
-                        className="px-6 py-2 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-slate-200 transition-all"
+                        onClick={() => navigate('/logs')}
+                        className="px-8 py-3 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-[10px] font-black uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-xl"
                     >
-                        Inspect Full Audit Stream →
+                        Access Full Audit Matrix →
                     </button>
                 </div>
             )}

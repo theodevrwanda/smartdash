@@ -4,13 +4,36 @@ import { collection, getDocs, doc, updateDoc, query, where, orderBy, getDoc, del
 
 export const adminService = {
     // Fetch Audit Logs (Transactions collection)
-    async fetchAuditLogs() {
+    async fetchAuditLogs(businessId = null, branchId = null) {
         try {
-            const q = query(collection(db, 'transactions'), orderBy('createdAt', 'desc'));
-            const snapshot = await getDocs(q);
+            let q = collection(db, 'transactions');
+            const constraints = [];
+
+            if (businessId) {
+                constraints.push(where('businessId', '==', businessId));
+            }
+            if (branchId) {
+                constraints.push(where('branchId', '==', branchId));
+            }
+
+            constraints.push(orderBy('createdAt', 'desc'));
+            const finalQuery = query(q, ...constraints);
+
+            const snapshot = await getDocs(finalQuery);
             return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         } catch (error) {
             console.error("Error fetching audit logs", error);
+            // If it's an index error, suggest the user to create an index
+            if (error.code === 'failed-precondition') {
+                console.warn("Firestore requires a composite index for this query. Falling back to client-side filtering.");
+                const snapshot = await getDocs(collection(db, 'transactions'));
+                let data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                if (businessId) data = data.filter(d => d.businessId === businessId);
+                if (branchId) data = data.filter(d => d.branchId === branchId);
+
+                return data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            }
             return [];
         }
     },
