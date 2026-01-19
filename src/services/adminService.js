@@ -1,6 +1,6 @@
 
 import { db } from '../firebase/config';
-import { collection, getDocs, doc, updateDoc, query, where, orderBy, getDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, query, where, orderBy, getDoc, deleteDoc } from 'firebase/firestore';
 
 export const adminService = {
     // Fetch Audit Logs (Transactions collection)
@@ -335,6 +335,30 @@ export const adminService = {
             return true;
         } catch (error) {
             console.error("Error rejecting transaction:", error);
+            throw error;
+        }
+    },
+
+    // Update business details
+    async updateBusinessDetails(businessId, details) {
+        try {
+            const businessRef = doc(db, 'businesses', businessId);
+            await updateDoc(businessRef, details);
+            return true;
+        } catch (error) {
+            console.error("Error updating business details:", error);
+            throw error;
+        }
+    },
+
+    // Delete business
+    async deleteBusiness(businessId) {
+        try {
+            const businessRef = doc(db, 'businesses', businessId);
+            await deleteDoc(businessRef);
+            return true;
+        } catch (error) {
+            console.error("Error deleting business:", error);
             throw error;
         }
     }

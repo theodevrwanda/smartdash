@@ -31,7 +31,7 @@ const Layout = () => {
                 />
 
                 <main className="flex-1 overflow-y-auto custom-scrollbar">
-                    <div className="max-w-[1600px] mx-auto px-6 md:px-8 pb-8 w-full">
+                    <div className="px-6 md:px-8 pb-8 w-full">
                         <Outlet />
                     </div>
                 </main>
