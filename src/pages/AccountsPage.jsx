@@ -227,8 +227,8 @@ const AccountsPage = () => {
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                             <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-tighter
                                                 ${(business.plan === 'forever' || business.subscription?.plan === 'forever') ? 'bg-purple-100 text-purple-700' :
-                                                    (business.plan === 'year' || business.subscription?.plan === 'year') ? 'bg-blue-100 text-blue-700' :
-                                                        (business.plan === 'month' || business.subscription?.plan === 'month') ? 'bg-sky-100 text-sky-700' :
+                                                    (business.plan === 'yearly' || business.subscription?.plan === 'yearly' || business.plan === 'year' || business.subscription?.plan === 'year') ? 'bg-blue-100 text-blue-700' :
+                                                        (business.plan === 'monthly' || business.subscription?.plan === 'monthly' || business.plan === 'month' || business.subscription?.plan === 'month') ? 'bg-sky-100 text-sky-700' :
                                                             'bg-slate-100 text-slate-600'}`}>
                                                 {business.plan || (business.subscription?.plan) || 'Free'}
                                             </span>
@@ -347,7 +347,7 @@ const AccountsPage = () => {
                 }
             >
                 <div className="grid grid-cols-1 gap-3">
-                    {['free', 'month', 'year', 'forever'].map((plan) => (
+                    {['free', 'monthly', 'yearly', 'forever'].map((plan) => (
                         <button
                             key={plan}
                             onClick={() => setSelectedPlan(plan)}

@@ -155,10 +155,31 @@ export const adminService = {
     async updateBusinessPlan(businessId, planType) {
         try {
             const businessRef = doc(db, 'businesses', businessId);
-            // Also need to update endDate based on plan possibly, but for now just validation of plan
+
+            const startDate = new Date();
+            let endDate = new Date();
+
+            const duration = planType.toLowerCase();
+
+            if (duration === 'monthly' || duration === 'month') {
+                endDate.setDate(startDate.getDate() + 30);
+            } else if (duration === 'yearly' || duration === 'year') {
+                endDate.setDate(startDate.getDate() + 365);
+            } else if (duration === 'forever') {
+                endDate.setFullYear(startDate.getFullYear() + 100);
+            } else if (duration === 'free') {
+                endDate.setDate(startDate.getDate() + 14); // 14 days trial for free
+            } else {
+                // Default to 1 month if unknown
+                endDate.setDate(startDate.getDate() + 30);
+            }
+
             await updateDoc(businessRef, {
                 'subscription.plan': planType,
-                'subscription.status': 'active'
+                'subscription.status': 'active',
+                'subscription.startDate': startDate.toISOString(),
+                'subscription.endDate': endDate.toISOString(),
+                'isActive': true // reactivate business if it was expired
             });
             return true;
         } catch (error) {
@@ -268,19 +289,27 @@ export const adminService = {
                 let businessName = data.businessName || 'Unknown'; // Use stored name if available
                 let ownerName = 'Unknown';
 
-                if (data.businessId && businessName === 'Unknown') {
+                if (data.businessId) {
                     try {
                         const businessDoc = await getDoc(doc(db, 'businesses', data.businessId));
                         if (businessDoc.exists()) {
                             const bData = businessDoc.data();
                             businessName = bData.businessName;
+
+                            // If ownerName is still unknown, try to get it from business ownerId
+                            if (ownerName === 'Unknown' && bData.ownerId) {
+                                const userDoc = await getDoc(doc(db, 'users', bData.ownerId));
+                                if (userDoc.exists()) {
+                                    const uData = userDoc.data();
+                                    ownerName = uData.fullName || `${uData.firstName} ${uData.lastName}`;
+                                }
+                            }
                         }
                     } catch (e) { console.log("Error fetching txn details", e); }
                 }
 
-                // Try to resolve owner name from business ownerId or if stored in payment?
-                // Payment data has userId, let's try to fetch user if ownerName is needed
-                if (data.userId) {
+                // Fallback: Try to resolve owner name from userId in payment if still unknown
+                if (ownerName === 'Unknown' && data.userId) {
                     try {
                         const userDoc = await getDoc(doc(db, 'users', data.userId));
                         if (userDoc.exists()) {
@@ -308,14 +337,15 @@ export const adminService = {
     // Approve transaction
     async approveTransaction(transactionId, businessId, plan) {
         try {
+            // Update business plan and dates first
+            await this.updateBusinessPlan(businessId, plan);
+
             // Update transaction status
             const transactionRef = doc(db, 'payments', transactionId);
             await updateDoc(transactionRef, {
-                status: 'approved'
+                status: 'approved',
+                approvedAt: new Date().toISOString()
             });
-
-            // Update business plan
-            await this.updateBusinessPlan(businessId, plan);
 
             return true;
         } catch (error) {
