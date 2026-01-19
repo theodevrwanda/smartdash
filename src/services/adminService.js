@@ -142,16 +142,28 @@ export const adminService = {
             });
             const businessGrowthData = last14Days.map(key => dailyGrowth[key]);
 
-            // Payments Over Time
-            const paymentsByMonth = {};
-            payments.forEach(p => {
-                const date = p.createdAt ? (p.createdAt.toDate ? p.createdAt.toDate() : new Date(p.createdAt)) : new Date();
-                const key = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-                paymentsByMonth[key] = (paymentsByMonth[key] || 0) + (Number(p.amount) || 0);
+            // Revenue Velocity (Daily for last 14 days)
+            const dailyRevenue = {};
+            last14Days.forEach(key => {
+                const d = new Date(key);
+                dailyRevenue[key] = {
+                    name: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                    value: 0
+                };
             });
-            const paymentsGrowthData = Object.entries(paymentsByMonth)
-                .map(([name, value]) => ({ name, value }))
-                .slice(-6);
+
+            payments.forEach(p => {
+                if (p.status === 'approved') {
+                    const date = p.createdAt ? (p.createdAt.toDate ? p.createdAt.toDate() : new Date(p.createdAt)) : null;
+                    if (date) {
+                        const key = date.toISOString().split('T')[0];
+                        if (dailyRevenue[key]) {
+                            dailyRevenue[key].value += (Number(p.amount) || 0);
+                        }
+                    }
+                }
+            });
+            const paymentsGrowthData = last14Days.map(key => dailyRevenue[key]);
 
             return {
                 businessStats,

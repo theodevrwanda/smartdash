@@ -169,27 +169,56 @@ const DashboardPage = () => {
 
                 {/* Revenue Chart */}
                 <Card className="p-6 h-96 flex flex-col">
-                    <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
-                        <Wallet size={18} /> Revenue Over Time
-                    </h3>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                            <Wallet size={18} className="text-purple-500" /> Revenue Flow Velocity
+                        </h3>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Past 14 Days</span>
+                    </div>
                     <div className="flex-1 w-full min-h-0">
                         <ResponsiveContainer>
-                            <LineChart data={paymentsGrowthData}>
+                            <AreaChart data={paymentsGrowthData}>
+                                <defs>
+                                    <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor={theme === 'dark' ? '#a78bfa' : '#8b5cf6'} stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor={theme === 'dark' ? '#a78bfa' : '#8b5cf6'} stopOpacity={0} />
+                                    </linearGradient>
+                                </defs>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={CHART_GRID} />
-                                <XAxis dataKey="name" fontSize={12} stroke={CHART_TEXT} />
-                                <YAxis fontSize={12} stroke={CHART_TEXT} />
+                                <XAxis
+                                    dataKey="name"
+                                    fontSize={10}
+                                    stroke={CHART_TEXT}
+                                    tickLine={false}
+                                    axisLine={false}
+                                />
+                                <YAxis
+                                    fontSize={10}
+                                    stroke={CHART_TEXT}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
+                                />
                                 <Tooltip
                                     formatter={(value) => new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF' }).format(value)}
                                     contentStyle={{
                                         backgroundColor: theme === 'dark' ? '#0f172a' : '#fff',
                                         borderRadius: '8px',
                                         border: theme === 'dark' ? '1px solid #1e293b' : 'none',
-                                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                                        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                                        fontSize: '12px',
+                                        fontWeight: 'bold'
                                     }}
-                                    itemStyle={{ color: theme === 'dark' ? '#f1f5f9' : '#1e293b' }}
                                 />
-                                <Line type="monotone" dataKey="value" stroke={theme === 'dark' ? '#a78bfa' : '#8b5cf6'} strokeWidth={3} dot={{ strokeWidth: 2 }} />
-                            </LineChart>
+                                <Area
+                                    type="monotone"
+                                    dataKey="value"
+                                    stroke={theme === 'dark' ? '#a78bfa' : '#8b5cf6'}
+                                    strokeWidth={4}
+                                    fillOpacity={1}
+                                    fill="url(#colorRevenue)"
+                                />
+                            </AreaChart>
                         </ResponsiveContainer>
                     </div>
                 </Card>
