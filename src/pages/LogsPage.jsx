@@ -79,47 +79,57 @@ const LogsPage = ({ limit }) => {
                 </div>
             )}
 
-            <div className={`bg-white dark:bg-slate-950 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col ${limit ? 'max-h-[500px]' : ''}`}>
+            <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden flex flex-col">
                 <div className="overflow-x-auto">
-                    <table className="w-full min-w-[1000px] border-collapse">
+                    <table className="w-full min-w-[1200px] border-collapse">
                         <thead>
-                            <tr className="bg-slate-50/80 dark:bg-slate-900/50 backdrop-blur-xl">
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left w-16">TYPE</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">ACTION</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">DETAILS</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-center">INITIATOR</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-center">TIMESTAMP</th>
+                            <tr className="bg-slate-100 dark:bg-slate-900">
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Level</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Internal Reference</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Security Event</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">User Identity</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Execution Date</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
                             {logs.map((log) => (
-                                <tr key={log.id} className="group hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-all duration-300">
-                                    <td className="px-6 py-4">
-                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${getColor(log.transactionType)}`}>
-                                            {getIcon(log.transactionType)}
+                                <tr key={log.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10">
+                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                        <Badge variant={log.severity === 'error' ? 'error' : log.severity === 'warning' ? 'warning' : 'success'} className="uppercase text-[9px] font-black rounded-none">
+                                            {log.severity || 'INFO'}
+                                        </Badge>
+                                    </td>
+                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                        <div className="flex items-center gap-2 font-mono text-[10px] font-bold text-slate-400">
+                                            <Hash size={10} />
+                                            {log.id.toUpperCase().substring(0, 16)}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 font-black text-slate-900 dark:text-white text-xs uppercase tracking-tight">
-                                        {log.transactionType?.replace(/_/g, ' ') || 'SYSTEM_EVENT'}
+                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight">{log.action || 'System Process'}</span>
+                                            <span className="text-[10px] font-bold text-slate-400 leading-tight">{log.details || 'Baseline automated event recorded.'}</span>
+                                        </div>
                                     </td>
-                                    <td className="px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-400 italic">
-                                        "{log.actionDetails || 'No auxiliary payload provided'}"
-                                    </td>
-                                    <td className="px-6 py-4 text-center">
-                                        {log.userName ? (
-                                            <div className="px-3 py-1 bg-slate-900 dark:bg-white rounded-full w-fit mx-auto">
-                                                <span className="text-[10px] font-black uppercase text-white dark:text-slate-900">{log.userName}</span>
+                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 bg-slate-100 dark:bg-slate-800 rounded-none flex items-center justify-center">
+                                                <User size={12} className="text-slate-400" />
                                             </div>
-                                        ) : (
-                                            <span className="text-[10px] font-black text-slate-300">SYSTEM</span>
-                                        )}
+                                            <span className="text-[10px] font-black text-slate-700 dark:text-slate-300 uppercase underline decoration-slate-200">{log.userEmail || 'System'}</span>
+                                        </div>
                                     </td>
-                                    <td className="px-6 py-4 text-center">
-                                        <div className="flex flex-col items-center leading-none gap-1">
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">RECORDED</span>
-                                            <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400">
-                                                {log.createdAt ? (log.createdAt.toDate ? log.createdAt.toDate().toLocaleString() : new Date(log.createdAt).toLocaleString()) : '-'}
+                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
+                                        <div className="flex flex-col items-center">
+                                            <span className="text-xs font-black text-slate-700 dark:text-slate-300">
+                                                {log.timestamp ? (typeof log.timestamp === 'object' && log.timestamp.toDate ? log.timestamp.toDate().toLocaleDateString() : new Date(log.timestamp).toLocaleDateString()) : '-'}
                                             </span>
+                                            <div className="flex items-center gap-1 text-[8px] font-bold text-slate-400">
+                                                <Clock size={8} />
+                                                <span>
+                                                    {log.timestamp ? (typeof log.timestamp === 'object' && log.timestamp.toDate ? log.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) : '-'}
+                                                </span>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
