@@ -72,7 +72,7 @@ const PaymentsPage = () => {
                     </h1>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-2xl text-xs font-black uppercase tracking-wider hover:bg-slate-50 transition-all">
+                    <button className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-white rounded-2xl text-xs font-black uppercase tracking-wider hover:bg-slate-50 transition-all">
                         <Filter size={14} /> Filter
                     </button>
                     <button className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-xs font-black uppercase tracking-wider hover:bg-slate-800 transition-all active:scale-95">
@@ -91,7 +91,7 @@ const PaymentsPage = () => {
                 <div className="overflow-x-auto">
                     <table className="w-full min-w-[2000px] border-collapse">
                         <thead>
-                            <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 uppercase tracking-widest text-left whitespace-nowrap">
+                            <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 dark:text-white uppercase tracking-widest text-left whitespace-nowrap">
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">No</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Business Name</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Business ID</th>
@@ -112,31 +112,31 @@ const PaymentsPage = () => {
                             {transactions.map((txn, index) => (
                                 <tr key={txn.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
+                                        <span className="text-xs font-black text-slate-400 dark:text-white">{String(index + 1).padStart(2, '0')}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
                                         <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{txn.businessName || '-'}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <span className="text-[10px] font-mono font-bold text-slate-400">{txn.businessId || '-'}</span>
+                                        <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-white">{txn.businessId || '-'}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
                                         <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{txn.ownerName || '-'}</span>
                                     </td>
                                     <td className="px-4 py-4 border border-slate-200 dark:border-slate-800">
-                                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300 lowercase">{txn.email || '-'}</span>
+                                        <span className="text-xs font-bold text-slate-700 dark:text-white lowercase">{txn.email || '-'}</span>
                                     </td>
                                     <td className="px-4 py-4 border border-slate-200 dark:border-slate-800">
-                                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{txn.phoneNumber || '-'}</span>
+                                        <span className="text-xs font-bold text-slate-700 dark:text-white">{txn.phoneNumber || '-'}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-right">
                                         <span className="text-sm font-black text-emerald-600 font-mono tracking-tight">{txn.amount?.toLocaleString()}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
-                                        <span className="text-[10px] font-black text-slate-400">{txn.currency || 'RWF'}</span>
+                                        <span className="text-[10px] font-black text-slate-400 dark:text-white">{txn.currency || 'RWF'}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
-                                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{txn.method || 'MOMO'}</span>
+                                        <span className="text-[9px] font-black text-slate-500 dark:text-white uppercase tracking-widest">{txn.method || 'MOMO'}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
                                         <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none bg-purple-50 text-purple-600 border-purple-100">
@@ -153,10 +153,10 @@ const PaymentsPage = () => {
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
                                         <div className="flex flex-col items-center">
-                                            <span className="text-[10px] font-black text-slate-700 dark:text-slate-300">
+                                            <span className="text-[10px] font-black text-slate-700 dark:text-white">
                                                 {txn.timestamp ? (typeof txn.timestamp === 'object' && txn.timestamp.toDate ? txn.timestamp.toDate().toLocaleDateString() : new Date(txn.timestamp).toLocaleDateString()) : '-'}
                                             </span>
-                                            <span className="text-[8px] font-bold text-slate-400">
+                                            <span className="text-[8px] font-bold text-slate-400 dark:text-white">
                                                 {txn.timestamp ? (typeof txn.timestamp === 'object' && txn.timestamp.toDate ? txn.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : new Date(txn.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) : '-'}
                                             </span>
                                         </div>

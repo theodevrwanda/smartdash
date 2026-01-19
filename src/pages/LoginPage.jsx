@@ -56,7 +56,7 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-[#F8FAFC] relative overflow-hidden font-sans selection:bg-blue-100 selection:text-blue-900">
+        <div className="min-h-screen w-full flex items-center justify-center bg-[#F8FAFC] dark:bg-slate-950 relative overflow-hidden font-sans selection:bg-blue-100 selection:text-blue-900">
 
             {/* Animated Background Gradients */}
             <div className={`absolute top-0 left-0 w-full h-full overflow-hidden transition-opacity duration-1000 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
@@ -76,10 +76,10 @@ const LoginPage = () => {
             {/* Main Card Container */}
             <div className={`w-full max-w-[400px] z-10 p-4 transition-all duration-700 ease-out ${mounted ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-8 opacity-0 scale-95'}`}>
 
-                <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[32px] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] p-8 md:p-10 relative overflow-hidden group">
+                <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white dark:border-slate-800 rounded-[32px] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] p-8 md:p-10 relative overflow-hidden group">
 
                     {/* Glass Shine Effect */}
-                    <div className="absolute top-0 left-0 w-full h-[100%] bg-gradient-to-b from-white/60 to-transparent pointer-events-none"></div>
+                    <div className="absolute top-0 left-0 w-full h-[100%] bg-gradient-to-b from-white/60 to-transparent dark:from-white/5 pointer-events-none"></div>
 
                     {/* Logo/Header Area */}
                     <div className="relative text-center mb-8">
@@ -89,14 +89,14 @@ const LoginPage = () => {
                                 <path d="M5.26 17.242a.75.75 0 10-.897-1.272A7.795 7.795 0 002.178 20.5a.75.75 0 00.416 1.135 5.86 5.86 0 003.418-.383l7.92-2.822.763-2.617a.75.75 0 10-1.439-.42l-.423 1.453-7.574 2.397z" />
                             </svg>
                         </div>
-                        <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Welcome back</h1>
-                        <p className="text-slate-500 text-sm mt-1">Please enter your details to sign in</p>
+                        <h1 className="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Welcome back</h1>
+                        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Please enter your details to sign in</p>
                     </div>
 
                     {/* Form */}
                     <form onSubmit={handleEmailLogin} className="relative space-y-4">
                         <div className="space-y-1">
-                            <label className="text-xs font-semibold text-slate-500 ml-1 uppercase tracking-wider">Email</label>
+                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 ml-1 uppercase tracking-wider">Email</label>
                             <div className="relative group/input">
                                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within/input:text-blue-500 transition-colors">
                                     <Mail size={18} />
@@ -105,7 +105,7 @@ const LoginPage = () => {
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-800 placeholder-slate-400 text-sm font-medium"
+                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-800 dark:text-white placeholder-slate-400 text-sm font-medium"
                                     placeholder="Enter your email"
                                     required
                                 />
@@ -113,7 +113,7 @@ const LoginPage = () => {
                         </div>
 
                         <div className="space-y-1">
-                            <label className="text-xs font-semibold text-slate-500 ml-1 uppercase tracking-wider">Password</label>
+                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 ml-1 uppercase tracking-wider">Password</label>
                             <div className="relative group/input">
                                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within/input:text-blue-500 transition-colors">
                                     <Lock size={18} />
@@ -122,7 +122,7 @@ const LoginPage = () => {
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-800 placeholder-slate-400 text-sm font-medium"
+                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-800 dark:text-white placeholder-slate-400 text-sm font-medium"
                                     placeholder="••••••••"
                                     required
                                 />
@@ -131,7 +131,7 @@ const LoginPage = () => {
 
                         {/* Error Message */}
                         {error && (
-                            <div className="p-3 rounded-lg bg-red-50 text-red-600 text-xs font-medium border border-red-100 flex items-center gap-2 animate-pulse">
+                            <div className="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs font-medium border border-red-100 dark:border-red-900/30 flex items-center gap-2 animate-pulse">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                                 </svg>
@@ -141,12 +141,12 @@ const LoginPage = () => {
 
                         <div className="flex items-center justify-between pt-1">
                             <label className="flex items-center gap-2 cursor-pointer group">
-                                <div className="w-4 h-4 rounded border border-slate-300 bg-white group-hover:border-blue-400 transition-colors flex items-center justify-center">
+                                <div className="w-4 h-4 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 group-hover:border-blue-400 transition-colors flex items-center justify-center">
                                     {/* Custom checkbox check could go here, relying on default for now or add controlled state */}
                                     <input type="checkbox" className="hidden peer" />
-                                    <Check size={10} className="text-blue-600 opacity-0 peer-checked:opacity-100" />
+                                    <Check size={10} className="text-blue-600 dark:text-blue-400 opacity-0 peer-checked:opacity-100" />
                                 </div>
-                                <span className="text-xs text-slate-500 font-medium group-hover:text-slate-700 transition-colors">Remember me</span>
+                                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors">Remember me</span>
                             </label>
                             <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors">Forgot Password?</a>
                         </div>
@@ -162,16 +162,16 @@ const LoginPage = () => {
 
                     {/* Divider */}
                     <div className="relative flex py-5 items-center">
-                        <div className="flex-grow border-t border-slate-200"></div>
-                        <span className="flex-shrink-0 mx-3 text-slate-400 text-xs font-medium uppercase">Or continue with</span>
-                        <div className="flex-grow border-t border-slate-200"></div>
+                        <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+                        <span className="flex-shrink-0 mx-3 text-slate-400 font-medium uppercase text-[10px] tracking-widest">Or continue with</span>
+                        <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
                     </div>
 
                     {/* Google Button */}
                     <button
                         onClick={handleGoogleLogin}
                         disabled={loading}
-                        className="w-full bg-white hover:bg-gray-50 text-slate-700 border border-slate-200 h-11 rounded-xl font-semibold transition-all flex items-center justify-center gap-2.5 shadow-sm hover:shadow hover:-translate-y-0.5"
+                        className="w-full bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 text-slate-700 dark:text-white border border-slate-200 dark:border-slate-700 h-11 rounded-xl font-semibold transition-all flex items-center justify-center gap-2.5 shadow-sm hover:shadow hover:-translate-y-0.5"
                     >
                         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="G" className="w-4 h-4" />
                         <span>Google</span>

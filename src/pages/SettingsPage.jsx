@@ -63,8 +63,8 @@ const SettingsPage = () => {
         <div className="space-y-6 max-w-4xl mx-auto animate-fade-in">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-800">App Settings</h1>
-                    <p className="text-slate-500">Global configuration for the platform.</p>
+                    <h1 className="text-2xl font-bold text-slate-800 dark:text-white">App Settings</h1>
+                    <p className="text-slate-500 dark:text-white">Global configuration for the platform.</p>
                 </div>
                 <button
                     onClick={handleSave}
@@ -78,35 +78,35 @@ const SettingsPage = () => {
             <div className="grid grid-cols-1 gap-6">
                 {/* Pricing Configuration */}
                 <Card className="p-6">
-                    <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
                         <DollarSign size={20} className="text-green-600" /> Subscription Pricing (RWF)
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Monthly Plan</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-white mb-1">Monthly Plan</label>
                             <input
                                 type="number"
                                 value={settings.pricing?.month || 0}
                                 onChange={(e) => handleChange('pricing', 'month', Number(e.target.value))}
-                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-slate-900 dark:text-white"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Yearly Plan</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-white mb-1">Yearly Plan</label>
                             <input
                                 type="number"
                                 value={settings.pricing?.year || 0}
                                 onChange={(e) => handleChange('pricing', 'year', Number(e.target.value))}
-                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-slate-900 dark:text-white"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Forever Plan</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-white mb-1">Forever Plan</label>
                             <input
                                 type="number"
                                 value={settings.pricing?.forever || 0}
                                 onChange={(e) => handleChange('pricing', 'forever', Number(e.target.value))}
-                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-slate-900 dark:text-white"
                             />
                         </div>
                     </div>
@@ -115,7 +115,7 @@ const SettingsPage = () => {
                 {/* Free Plan Limits */}
                 <Card className="p-6">
                     <div className="flex justify-between items-start mb-4">
-                        <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
                             <Shield size={20} className="text-blue-600" /> Free Plan Limits
                         </h3>
                         <label className="flex items-center gap-2 cursor-pointer">
@@ -125,46 +125,46 @@ const SettingsPage = () => {
                                 onChange={(e) => handleChange(null, 'enableFreePlan', e.target.checked)}
                                 className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
                             />
-                            <span className="text-sm font-medium text-slate-700">Enable Free Plan</span>
+                            <span className="text-sm font-medium text-slate-700 dark:text-white">Enable Free Plan</span>
                         </label>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 opacity-100 disabled:opacity-50">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Max Products</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-white mb-1">Max Products</label>
                             <input
                                 type="number"
                                 value={settings.limits?.maxProducts || 0}
                                 onChange={(e) => handleChange('limits', 'maxProducts', Number(e.target.value))}
-                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-slate-900 dark:text-white"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Max Users</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-white mb-1">Max Users</label>
                             <input
                                 type="number"
                                 value={settings.limits?.maxUsers || 0}
                                 onChange={(e) => handleChange('limits', 'maxUsers', Number(e.target.value))}
-                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-slate-900 dark:text-white"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Max Branches</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-white mb-1">Max Branches</label>
                             <input
                                 type="number"
                                 value={settings.limits?.maxBranches || 0}
                                 onChange={(e) => handleChange('limits', 'maxBranches', Number(e.target.value))}
-                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none dark:bg-slate-900 dark:text-white"
                             />
                         </div>
                     </div>
                 </Card>
 
                 {/* System Maintenance */}
-                <Card className="p-6 border-red-100 bg-red-50">
-                    <h3 className="text-lg font-bold text-red-700 mb-2 flex items-center gap-2">
+                <Card className="p-6 border-red-100 bg-red-50 dark:bg-red-900/10 dark:border-red-900/30">
+                    <h3 className="text-lg font-bold text-red-700 dark:text-red-400 mb-2 flex items-center gap-2">
                         <Activity size={20} /> System Control
                     </h3>
-                    <p className="text-red-600 text-sm mb-4">
+                    <p className="text-red-600 dark:text-red-300 text-sm mb-4">
                         Enabling Maintenance Mode will prevent standard users from accessing the system. Only admins will have access.
                     </p>
                     <label className="flex items-center gap-2">
@@ -177,7 +177,7 @@ const SettingsPage = () => {
                             />
                             <span className="block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></span>
                         </div>
-                        <span className="text-sm font-bold text-red-700">
+                        <span className="text-sm font-bold text-red-700 dark:text-red-400">
                             {settings.maintenanceMode ? 'Maintenance Mode ACTIVE' : 'Maintenance Mode Inactive'}
                         </span>
                     </label>

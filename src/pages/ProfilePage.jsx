@@ -169,16 +169,16 @@ const ProfilePage = () => {
                             </h3>
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium text-slate-500 dark:text-slate-400">System Health</span>
-                                    <span className="text-xs font-bold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded">98% Stable</span>
+                                    <span className="text-sm font-medium text-slate-500 dark:text-white">System Health</span>
+                                    <span className="text-xs font-bold text-green-600 dark:text-white bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded">98% Stable</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Security Level</span>
-                                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Root Access</span>
+                                    <span className="text-sm font-medium text-slate-500 dark:text-white">Security Level</span>
+                                    <span className="text-xs font-bold text-blue-600 dark:text-white bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Root Access</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Active Session</span>
-                                    <span className="text-xs font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">2h 15m</span>
+                                    <span className="text-sm font-medium text-slate-500 dark:text-white">Active Session</span>
+                                    <span className="text-xs font-bold text-slate-600 dark:text-white bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">2h 15m</span>
                                 </div>
                             </div>
 
@@ -187,7 +187,7 @@ const ProfilePage = () => {
                             </h3>
                             <div className="flex flex-wrap gap-2">
                                 {['Users', 'Payments', 'Audit Logs', 'Branches', 'Settings'].map(skill => (
-                                    <span key={skill} className="px-3 py-1 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-full border border-slate-200 dark:border-slate-700">
+                                    <span key={skill} className="px-3 py-1 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-white text-xs font-semibold rounded-full border border-slate-200 dark:border-slate-700">
                                         {skill}
                                     </span>
                                 ))}
@@ -209,11 +209,11 @@ const ProfilePage = () => {
                             <p className="text-indigo-500 font-semibold mb-2">{user.role?.replace('_', ' ').toUpperCase()}</p>
 
                             <div className="flex items-center gap-1">
-                                <span className="text-sm font-bold text-slate-800 dark:text-slate-200">9.8</span>
+                                <span className="text-sm font-bold text-slate-800 dark:text-white">9.8</span>
                                 <div className="flex text-amber-400 gap-0.5">
                                     {[1, 2, 3, 4, 5].map(i => <Star key={i} size={14} fill="currentColor" strokeWidth={0} />)}
                                 </div>
-                                <span className="text-xs text-slate-400 ml-2">(System Trust Score)</span>
+                                <span className="text-xs text-slate-400 dark:text-white ml-2">(System Trust Score)</span>
                             </div>
                         </div>
 
@@ -224,7 +224,7 @@ const ProfilePage = () => {
                             >
                                 <Edit3 size={16} /> {isEditing ? 'Cancel Edit' : 'Edit Profile'}
                             </button>
-                            <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                            <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white rounded-lg font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
                                 <Layers size={16} /> Reports
                             </button>
                         </div>
@@ -237,8 +237,8 @@ const ProfilePage = () => {
                                 key={tab}
                                 onClick={() => setActiveTab(tab.toLowerCase().split(' ')[0])} // 'platform' for summary
                                 className={`pb-4 text-sm font-bold uppercase tracking-wide transition-all relative ${activeTab === tab.toLowerCase().split(' ')[0]
-                                    ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600'
-                                    : 'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                                    ? 'text-blue-600 dark:text-white after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white'
+                                    : 'text-slate-400 hover:text-slate-700 dark:hover:text-white'
                                     }`}
                             >
                                 {tab}
@@ -260,7 +260,7 @@ const ProfilePage = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {/* First Name */}
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">First Name</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-white uppercase">First Name</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
@@ -269,13 +269,13 @@ const ProfilePage = () => {
                                                     onChange={(e) => setProfileData({ ...profileData, firstName: e.target.value })}
                                                 />
                                             ) : (
-                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 border-b border-transparent py-2">{profileData.firstName}</span>
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-white border-b border-transparent py-2">{profileData.firstName}</span>
                                             )}
                                         </div>
 
                                         {/* Last Name */}
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Last Name</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-white uppercase">Last Name</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
@@ -284,13 +284,13 @@ const ProfilePage = () => {
                                                     onChange={(e) => setProfileData({ ...profileData, lastName: e.target.value })}
                                                 />
                                             ) : (
-                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 border-b border-transparent py-2">{profileData.lastName}</span>
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-white border-b border-transparent py-2">{profileData.lastName}</span>
                                             )}
                                         </div>
 
                                         {/* Phone */}
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Phone Number</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-white uppercase">Phone Number</label>
                                             {isEditing ? (
                                                 <input
                                                     type="tel"
@@ -301,14 +301,14 @@ const ProfilePage = () => {
                                             ) : (
                                                 <div className="flex items-center gap-2 py-2">
                                                     <Phone size={14} className="text-blue-500" />
-                                                    <span className="block text-sm font-medium text-slate-800 dark:text-slate-200">{profileData.phone || 'N/A'}</span>
+                                                    <span className="block text-sm font-medium text-slate-800 dark:text-white">{profileData.phone || 'N/A'}</span>
                                                 </div>
                                             )}
                                         </div>
 
                                         {/* Gender */}
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Gender</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-white uppercase">Gender</label>
                                             {isEditing ? (
                                                 <select
                                                     className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg font-medium text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
@@ -320,7 +320,7 @@ const ProfilePage = () => {
                                                     <option value="female">Female</option>
                                                 </select>
                                             ) : (
-                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 border-b border-transparent py-2 capitalize">{profileData.gender || 'Not Specified'}</span>
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-white border-b border-transparent py-2 capitalize">{profileData.gender || 'Not Specified'}</span>
                                             )}
                                         </div>
                                     </div>
@@ -331,7 +331,7 @@ const ProfilePage = () => {
                                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Location Details</h4>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">District</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-white uppercase">District</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
@@ -340,11 +340,11 @@ const ProfilePage = () => {
                                                     onChange={(e) => setProfileData({ ...profileData, district: e.target.value })}
                                                 />
                                             ) : (
-                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 py-2">{profileData.district || 'N/A'}</span>
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-white py-2">{profileData.district || 'N/A'}</span>
                                             )}
                                         </div>
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Sector</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-white uppercase">Sector</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
@@ -353,11 +353,11 @@ const ProfilePage = () => {
                                                     onChange={(e) => setProfileData({ ...profileData, sector: e.target.value })}
                                                 />
                                             ) : (
-                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 py-2">{profileData.sector || 'N/A'}</span>
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-white py-2">{profileData.sector || 'N/A'}</span>
                                             )}
                                         </div>
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Cell</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-white uppercase">Cell</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
@@ -366,11 +366,11 @@ const ProfilePage = () => {
                                                     onChange={(e) => setProfileData({ ...profileData, cell: e.target.value })}
                                                 />
                                             ) : (
-                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 py-2">{profileData.cell || 'N/A'}</span>
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-white py-2">{profileData.cell || 'N/A'}</span>
                                             )}
                                         </div>
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Village</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-white uppercase">Village</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
@@ -379,7 +379,7 @@ const ProfilePage = () => {
                                                     onChange={(e) => setProfileData({ ...profileData, village: e.target.value })}
                                                 />
                                             ) : (
-                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 py-2">{profileData.village || 'N/A'}</span>
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-white py-2">{profileData.village || 'N/A'}</span>
                                             )}
                                         </div>
                                     </div>
@@ -408,30 +408,30 @@ const ProfilePage = () => {
                                     <Card className="p-4 border border-slate-200 dark:border-slate-800 shadow-sm bg-indigo-50 dark:bg-indigo-900/10">
                                         <div className="flex justify-between items-start mb-2">
                                             <Building2 className="text-indigo-600 dark:text-indigo-400" size={24} />
-                                            <span className="text-xs font-bold text-indigo-500 dark:text-indigo-300 px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Businesses</span>
+                                            <span className="text-xs font-bold text-indigo-500 dark:text-white px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Businesses</span>
                                         </div>
                                         <div className="text-3xl font-black text-indigo-900 dark:text-white">{stats.businessStats?.total || 0}</div>
-                                        <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-1">Total Registered</div>
+                                        <div className="text-xs text-indigo-600 dark:text-white mt-1">Total Registered</div>
                                     </Card>
 
                                     <Card className="p-4 border border-slate-200 dark:border-slate-800 shadow-sm bg-emerald-50 dark:bg-emerald-900/10">
                                         <div className="flex justify-between items-start mb-2">
                                             <Users className="text-emerald-600 dark:text-emerald-400" size={24} />
-                                            <span className="text-xs font-bold text-emerald-500 dark:text-emerald-300 px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Users</span>
+                                            <span className="text-xs font-bold text-emerald-500 dark:text-white px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Users</span>
                                         </div>
                                         <div className="text-3xl font-black text-emerald-900 dark:text-white">{stats.userStats?.total || 0}</div>
-                                        <div className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Active Accounts</div>
+                                        <div className="text-xs text-emerald-600 dark:text-white mt-1">Active Accounts</div>
                                     </Card>
 
                                     <Card className="p-4 border border-slate-200 dark:border-slate-800 shadow-sm bg-amber-50 dark:bg-amber-900/10">
                                         <div className="flex justify-between items-start mb-2">
                                             <CreditCard className="text-amber-600 dark:text-amber-400" size={24} />
-                                            <span className="text-xs font-bold text-amber-500 dark:text-amber-300 px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Revenue</span>
+                                            <span className="text-xs font-bold text-amber-500 dark:text-white px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Revenue</span>
                                         </div>
                                         <div className="text-3xl font-black text-amber-900 dark:text-white">
                                             {new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF', notation: "compact" }).format(stats.paymentStats?.revenue || 0)}
                                         </div>
-                                        <div className="text-xs text-amber-600 dark:text-amber-400 mt-1">Total Transactions</div>
+                                        <div className="text-xs text-amber-600 dark:text-white mt-1">Total Transactions</div>
                                     </Card>
 
                                     {/* Detailed Mini-List */}
@@ -443,7 +443,7 @@ const ProfilePage = () => {
                                             <div className="flex gap-4 overflow-x-auto pb-2">
                                                 {Object.entries(stats.businessStats?.byPlan || {}).map(([plan, count]) => (
                                                     <div key={plan} className="flex-shrink-0 px-4 py-2 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-slate-100 dark:border-slate-700 min-w-[120px]">
-                                                        <span className="block text-xs uppercase text-slate-500 dark:text-slate-400 font-bold">{plan}</span>
+                                                        <span className="block text-xs uppercase text-slate-500 dark:text-white font-bold">{plan}</span>
                                                         <span className="block text-xl font-bold text-slate-900 dark:text-white">{count}</span>
                                                     </div>
                                                 ))}
@@ -464,7 +464,7 @@ const ProfilePage = () => {
                             </h4>
                             <form onSubmit={handleUpdatePassword} className="space-y-5">
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-slate-600 dark:text-slate-300">New Password</label>
+                                    <label className="text-xs font-bold text-slate-600 dark:text-white">New Password</label>
                                     <div className="relative">
                                         <Lock size={16} className="absolute left-3 top-3.5 text-slate-400" />
                                         <input
@@ -477,7 +477,7 @@ const ProfilePage = () => {
                                     </div>
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-slate-600 dark:text-slate-300">Confirm Password</label>
+                                    <label className="text-xs font-bold text-slate-600 dark:text-white">Confirm Password</label>
                                     <div className="relative">
                                         <Lock size={16} className="absolute left-3 top-3.5 text-slate-400" />
                                         <input

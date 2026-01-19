@@ -84,7 +84,7 @@ const BranchDetailsPage = () => {
                 <div className="flex items-center gap-6">
                     <button
                         onClick={() => navigate('/branches')}
-                        className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 transition-all shadow-sm group"
+                        className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 transition-all shadow-sm group dark:text-white"
                     >
                         <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                     </button>
@@ -164,7 +164,7 @@ const BranchDetailsPage = () => {
                                     </div>
                                     <div>
                                         <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-1">Corporate Core</p>
-                                        <p className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tight">{business.district}, {business.sector}</p>
+                                        <p className="text-sm font-bold text-slate-600 dark:text-white uppercase tracking-tight">{business.district}, {business.sector}</p>
                                     </div>
                                     <div>
                                         <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-1">Operational State</p>
@@ -197,15 +197,15 @@ const BranchDetailsPage = () => {
                                         <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-3">{user.role}</p>
 
                                         <div className="space-y-1.5 border-t border-slate-100 dark:border-slate-900 pt-3">
-                                            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
+                                            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-white">
                                                 <Mail size={10} />
-                                                <span className="truncate max-w-[150px]">{user.email}</span>
+                                                <span className="truncate max-w-[150px] font-bold">{user.email}</span>
                                             </div>
-                                            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
+                                            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-white">
                                                 <Phone size={10} />
                                                 <span>{user.phone}</span>
                                             </div>
-                                            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
+                                            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-white">
                                                 <ShieldCheck size={10} />
                                                 <span>Status: {user.isActive ? 'ACTIVE' : 'HALTED'}</span>
                                             </div>

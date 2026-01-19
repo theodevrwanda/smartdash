@@ -17,7 +17,7 @@ const Modal = ({ isOpen, onClose, title, children, footer, variant = 'default' }
             <div className="bg-white dark:bg-slate-950 rounded-none shadow-2xl w-full max-w-lg overflow-hidden border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-200">
                 <div className={`flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800 ${variant === 'danger' ? 'bg-red-50/50 dark:bg-red-950/20' : variant === 'warning' ? 'bg-amber-50/50 dark:bg-amber-950/20' : ''}`}>
                     <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight uppercase">{title}</h3>
-                    <button onClick={onClose} className="p-2 hover:bg-slate-200/50 dark:hover:bg-slate-800 rounded-none transition-colors text-slate-500">
+                    <button onClick={onClose} className="p-2 hover:bg-slate-200/50 dark:hover:bg-slate-800 rounded-none transition-colors text-slate-500 dark:text-white">
                         <X size={20} />
                     </button>
                 </div>
@@ -232,7 +232,7 @@ const BranchesPage = () => {
                         placeholder="SEARCH NODES, BUSINESSES OR LOCATION VECTORS..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-11 pr-4 py-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors"
+                        className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-11 pr-4 py-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors dark:text-white"
                     />
                 </div>
                 <div className="relative">
@@ -240,7 +240,7 @@ const BranchesPage = () => {
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-11 pr-4 py-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors appearance-none cursor-pointer"
+                        className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-11 pr-4 py-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors appearance-none cursor-pointer dark:text-white"
                     >
                         <option value="all">ALL SYSTEM STATUSES</option>
                         <option value="active">OPERATIONAL ONLY</option>
@@ -253,7 +253,7 @@ const BranchesPage = () => {
                 <div className="overflow-x-auto">
                     <table className="w-full min-w-[1400px] border-collapse">
                         <thead>
-                            <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 uppercase tracking-widest text-left whitespace-nowrap">
+                            <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 dark:text-white uppercase tracking-widest text-left whitespace-nowrap">
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">No</th>
                                 <th onClick={() => requestSort('branchName')} className="px-4 py-3 border border-slate-200 dark:border-slate-800 cursor-pointer hover:bg-slate-200/50 transition-colors group">
                                     <div className="flex items-center">Branch Name <SortIcon column="branchName" /></div>
@@ -279,7 +279,7 @@ const BranchesPage = () => {
                             {processedBranches.map((branch, index) => (
                                 <tr key={branch.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
-                                        <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
+                                        <span className="text-xs font-black text-slate-400 dark:text-white">{String(index + 1).padStart(2, '0')}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 font-black">
                                         <div className="flex items-center gap-2">
@@ -290,7 +290,7 @@ const BranchesPage = () => {
                                         </div>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <span className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-tight underline decoration-slate-200 underline-offset-4">{branch.businessName}</span>
+                                        <span className="text-sm font-black text-slate-700 dark:text-white uppercase tracking-tight underline decoration-slate-200 underline-offset-4">{branch.businessName}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
                                         <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none border-blue-100 text-blue-600 bg-blue-50/30 tracking-widest">{branch.district}</Badge>
@@ -298,15 +298,15 @@ const BranchesPage = () => {
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
                                         <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none border-slate-100 text-slate-600 tracking-widest">{branch.sector}</Badge>
                                     </td>
-                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-400 uppercase italic">
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-400 dark:text-white uppercase italic">
                                         {branch.cell || '---'}
                                     </td>
-                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-400 uppercase italic">
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-400 dark:text-white uppercase italic">
                                         {branch.village || '---'}
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex items-center gap-1.5 text-[10px] font-black text-slate-500 uppercase tracking-tighter">
-                                            <Calendar size={10} className="text-slate-400" /> {branch.createdAt ? (typeof branch.createdAt === 'object' && branch.createdAt.toDate ? branch.createdAt.toDate().toLocaleDateString() : new Date(branch.createdAt).toLocaleDateString()) : '-'}
+                                        <div className="flex items-center gap-1.5 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-tighter">
+                                            <Calendar size={10} className="text-slate-400 dark:text-white" /> {branch.createdAt ? (typeof branch.createdAt === 'object' && branch.createdAt.toDate ? branch.createdAt.toDate().toLocaleDateString() : new Date(branch.createdAt).toLocaleDateString()) : '-'}
                                         </div>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
@@ -366,7 +366,7 @@ const BranchesPage = () => {
                 title="Node Modification Protocol"
                 footer={
                     <>
-                        <button onClick={() => closeModal('edit')} className="px-6 py-3 font-bold text-slate-500 uppercase text-[10px] tracking-widest">Discard</button>
+                        <button onClick={() => closeModal('edit')} className="px-6 py-3 font-bold text-slate-500 dark:text-white uppercase text-[10px] tracking-widest">Discard</button>
                         <button onClick={handleUpdateBranch} className="px-8 py-3 bg-slate-900 border-none text-white dark:bg-white dark:text-slate-900 flex items-center gap-2 font-black uppercase text-[10px] tracking-widest hover:bg-blue-600 hover:text-white transition-all">Update Vector</button>
                     </>
                 }
@@ -380,12 +380,12 @@ const BranchesPage = () => {
                         { label: 'Village Node', key: 'village', placeholder: 'Unit Node' }
                     ].map((field) => (
                         <div key={field.key} className="space-y-1.5">
-                            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{field.label}</label>
+                            <label className="text-[9px] font-black text-slate-400 dark:text-white uppercase tracking-widest ml-1">{field.label}</label>
                             <input
                                 type="text"
                                 value={editForm[field.key]}
                                 onChange={(e) => setEditForm({ ...editForm, [field.key]: e.target.value })}
-                                className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 outline-none focus:border-blue-600 focus:bg-white transition-all font-bold placeholder:text-slate-300 text-xs shadow-inner"
+                                className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-slate-950 transition-all font-bold placeholder:text-slate-300 dark:placeholder:text-slate-600 text-xs shadow-inner dark:text-white"
                                 placeholder={field.placeholder}
                             />
                         </div>
@@ -400,7 +400,7 @@ const BranchesPage = () => {
                 variant="danger"
                 footer={
                     <>
-                        <button onClick={() => closeModal('delete')} className="px-6 py-3 font-bold text-slate-500 text-[10px] uppercase tracking-widest">Abort</button>
+                        <button onClick={() => closeModal('delete')} className="px-6 py-3 font-bold text-slate-500 dark:text-white text-[10px] uppercase tracking-widest">Abort</button>
                         <button onClick={handleDeleteBranch} className="px-10 py-3 bg-rose-600 text-white rounded-none font-black uppercase text-[10px] tracking-[0.2em] border-none shadow-lg shadow-rose-200 dark:shadow-none hover:bg-rose-700 transition-all">Execute Purge</button>
                     </>
                 }
@@ -411,7 +411,7 @@ const BranchesPage = () => {
                     </div>
                     <div className="space-y-4">
                         <h4 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Irreversible Purge</h4>
-                        <p className="text-[11px] font-bold text-slate-400 leading-relaxed max-w-sm uppercase tracking-tight">
+                        <p className="text-[11px] font-bold text-slate-400 dark:text-white leading-relaxed max-w-sm uppercase tracking-tight">
                             You are about to permanently disconnect <span className="text-rose-600 decoration-rose-200 underline underline-offset-4">{selectedBranch?.branchName || selectedBranch?.name}</span> from the infrastructure matrix. All associated operational links will be severed.
                         </p>
                     </div>
@@ -424,7 +424,7 @@ const BranchesPage = () => {
                 title="Personnel Deployment Matrix"
                 footer={
                     <>
-                        <button onClick={() => closeModal('assign')} className="px-6 py-3 font-bold text-slate-500 text-[10px] uppercase tracking-widest">Abort</button>
+                        <button onClick={() => closeModal('assign')} className="px-6 py-3 font-bold text-slate-500 dark:text-white text-[10px] uppercase tracking-widest">Abort</button>
                         <button onClick={handleAssignUser} className="px-8 py-3 bg-purple-600 text-white border-none font-black uppercase text-[10px] tracking-widest shadow-lg shadow-purple-100 dark:shadow-none hover:bg-purple-700 transition-all">Execute Deployment</button>
                     </>
                 }
@@ -432,7 +432,7 @@ const BranchesPage = () => {
                 {loadingUsers ? (
                     <div className="flex flex-col items-center py-10 gap-4">
                         <div className="w-12 h-12 border-4 border-purple-600/10 border-t-purple-600 rounded-full animate-spin"></div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Scanning IDs</p>
+                        <p className="text-[10px] font-black text-slate-400 dark:text-white uppercase tracking-[0.4em]">Scanning IDs</p>
                     </div>
                 ) : (
                     <div className="space-y-6">
@@ -445,7 +445,7 @@ const BranchesPage = () => {
                         </div>
 
                         <div className="space-y-3">
-                            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Personnel Identifier</label>
+                            <label className="text-[9px] font-black text-slate-400 dark:text-white uppercase tracking-widest ml-1">Personnel Identifier</label>
                             <div className="relative">
                                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                                 <select

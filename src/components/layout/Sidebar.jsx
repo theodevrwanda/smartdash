@@ -51,7 +51,7 @@ const Sidebar = ({ isDesktopOpen, setIsDesktopOpen, isMobileOpen, setIsMobileOpe
                                         <div className="w-2 h-2 rounded-full bg-amber-400"></div>
                                     </div>
                                 </div>
-                                <span className="text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight whitespace-nowrap">SmartDash</span>
+                                <span className="text-xl font-bold text-slate-800 dark:text-white tracking-tight whitespace-nowrap">SmartDash</span>
                             </div>
                         )}
 
@@ -76,7 +76,7 @@ const Sidebar = ({ isDesktopOpen, setIsDesktopOpen, isMobileOpen, setIsMobileOpe
                                         isDesktopOpen ? "px-4" : "justify-center px-0",
                                         isActive
                                             ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg shadow-slate-200 dark:shadow-none"
-                                            : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
+                                            : "text-slate-500 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
                                     )
                                 }
                                 onClick={() => setIsMobileOpen(false)}

@@ -80,7 +80,7 @@ const PaymentDetailsPage = () => {
         return (
             <div className="p-8 text-center">
                 <ShieldCheck className="mx-auto text-slate-300 mb-4" size={48} />
-                <h2 className="text-xl font-black text-slate-800">Transaction Not Found</h2>
+                <h2 className="text-xl font-black text-slate-800 dark:text-white">Transaction Not Found</h2>
                 <button onClick={() => navigate('/transactions')} className="mt-4 text-blue-600 font-bold uppercase text-sm">Back to Ledger</button>
             </div>
         );
@@ -136,7 +136,7 @@ const PaymentDetailsPage = () => {
                 <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
                     <button
                         onClick={() => navigate('/transactions')}
-                        className="p-4 bg-white/10 hover:bg-white/20 rounded-none transition-all border border-white/10 group"
+                        className="p-4 bg-white/10 hover:bg-white/20 rounded-none transition-all border border-white/10 group dark:text-white"
                     >
                         <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
                     </button>
@@ -181,7 +181,7 @@ const PaymentDetailsPage = () => {
                                                 {item.value}
                                             </Badge>
                                         ) : (
-                                            <span className={`text-sm font-bold tracking-tight ${item.mono ? 'font-mono text-blue-600' : 'text-slate-900 dark:text-white'} ${item.uppercase ? 'uppercase' : ''} ${item.highlight ? 'text-lg font-black text-emerald-600' : ''}`}>
+                                            <span className={`text-sm font-bold tracking-tight ${item.mono ? 'font-mono text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-white'} ${item.uppercase ? 'uppercase' : ''} ${item.highlight ? 'text-lg font-black text-emerald-600 dark:text-emerald-400' : ''}`}>
                                                 {item.value || '-'}
                                             </span>
                                         )}

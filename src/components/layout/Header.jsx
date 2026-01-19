@@ -58,11 +58,11 @@ const Header = ({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, isMobileSidebar
                             <React.Fragment key={name}>
                                 <ChevronRight size={12} className="text-slate-300 dark:text-slate-600" />
                                 {isLast ? (
-                                    <span className="text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                                    <span className="text-slate-900 dark:text-white whitespace-nowrap">
                                         {getDisplayName(name)}
                                     </span>
                                 ) : (
-                                    <Link to={routeTo} className="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors whitespace-nowrap">
+                                    <Link to={routeTo} className="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors whitespace-nowrap">
                                         {getDisplayName(name)}
                                     </Link>
                                 )}
@@ -90,7 +90,7 @@ const Header = ({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, isMobileSidebar
                         className="bg-white dark:bg-slate-800 rounded-full pl-4 pr-2 py-2 pill-shadow flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors focus:outline-none"
                     >
                         <div className="text-right hidden sm:block">
-                            <span className="block text-xs font-bold text-slate-700 dark:text-slate-200 leading-tight">Welcome, {user?.firstName || 'User'}!</span>
+                            <span className="block text-xs font-bold text-slate-700 dark:text-white leading-tight">Welcome, {user?.firstName || 'User'}!</span>
                         </div>
                         <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-slate-100 dark:border-slate-700 bg-slate-100">
                             <img
@@ -113,7 +113,7 @@ const Header = ({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, isMobileSidebar
                                 <Link
                                     to="/profile"
                                     onClick={() => setIsDropdownOpen(false)}
-                                    className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                                    className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-600 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                                 >
                                     <UserCircle size={16} /> My Profile
                                 </Link>

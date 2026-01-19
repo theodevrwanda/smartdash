@@ -112,7 +112,7 @@ const LogDetailsPage = () => {
                 <div className="flex items-center gap-6">
                     <button
                         onClick={() => navigate('/logs')}
-                        className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 transition-all group"
+                        className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 transition-all group dark:text-white"
                     >
                         <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                     </button>
@@ -124,7 +124,7 @@ const LogDetailsPage = () => {
                         <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-none">
                             Log Vector Detail
                         </h1>
-                        <p className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-widest">
+                        <p className="text-xs font-bold text-slate-400 dark:text-white mt-2 uppercase tracking-widest">
                             Transaction Hash: {log.id.substring(0, 20)}...
                         </p>
                     </div>
@@ -167,7 +167,7 @@ const LogDetailsPage = () => {
                             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white">Raw Payload (Metadata)</h3>
                         </div>
                         <div className="p-6">
-                            <pre className="bg-slate-50 dark:bg-slate-900 p-4 border border-slate-100 dark:border-slate-800 overflow-x-auto text-[10px] font-mono text-slate-600 dark:text-slate-400">
+                            <pre className="bg-slate-50 dark:bg-slate-900 p-4 border border-slate-100 dark:border-slate-800 overflow-x-auto text-[10px] font-mono text-slate-600 dark:text-white">
                                 {JSON.stringify(log.metadata, null, 2)}
                             </pre>
                         </div>

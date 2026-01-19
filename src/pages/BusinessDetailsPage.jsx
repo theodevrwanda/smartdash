@@ -135,7 +135,7 @@ const BusinessDetailsPage = () => {
         return (
             <div className="p-8 text-center">
                 <Shield className="mx-auto text-slate-300 mb-4" size={48} />
-                <h2 className="text-xl font-black text-slate-800">Business Not Identified</h2>
+                <h2 className="text-xl font-black text-slate-800 dark:text-white">Business Not Identified</h2>
                 <button onClick={() => navigate('/accounts')} className="mt-4 text-blue-600 font-bold">Return to Hub</button>
             </div>
         );
@@ -166,7 +166,7 @@ const BusinessDetailsPage = () => {
                 <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
                     <button
                         onClick={() => navigate('/accounts')}
-                        className="p-4 bg-white/10 hover:bg-white/20 rounded-none transition-all border border-white/10 group"
+                        className="p-4 bg-white/10 hover:bg-white/20 rounded-none transition-all border border-white/10 group dark:text-white"
                     >
                         <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
                     </button>
@@ -208,7 +208,7 @@ const BusinessDetailsPage = () => {
                 ].map((stat, i) => (
                     <div key={i} className={`p-4 ${stat.bg} border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center`}>
                         <span className={`text-2xl font-black ${stat.color}`}>{stat.count}</span>
-                        <span className="text-[10px] font-black uppercase text-slate-500 tracking-widest">{stat.label}</span>
+                        <span className="text-[10px] font-black uppercase text-slate-500 dark:text-white tracking-widest">{stat.label}</span>
                     </div>
                 ))}
             </div>
@@ -228,7 +228,7 @@ const BusinessDetailsPage = () => {
                         <tab.icon size={16} />
                         <span className="uppercase tracking-wider text-[11px]">{tab.label}</span>
                         {tab.count !== undefined && (
-                            <span className={`px-2 py-0.5 rounded-none text-[10px] ${activeTab === tab.id ? 'bg-blue-50 text-blue-600' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
+                            <span className={`px-2 py-0.5 rounded-none text-[10px] ${activeTab === tab.id ? 'bg-blue-50 text-blue-600' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-white'}`}>
                                 {tab.count}
                             </span>
                         )}
@@ -254,7 +254,7 @@ const BusinessDetailsPage = () => {
                                             { label: 'Deployment Date', val: business.createdAt ? new Date(business.createdAt).toLocaleDateString() : 'Historical' }
                                         ].map((item, i) => (
                                             <div key={i} className="flex justify-between border-b border-slate-50 pb-2 dark:border-slate-900">
-                                                <span className="text-slate-400 text-xs font-bold uppercase">{item.label}</span>
+                                                <span className="text-slate-400 dark:text-white text-xs font-bold uppercase">{item.label}</span>
                                                 <span className="text-slate-900 dark:text-white font-black text-sm">{item.val || '-'}</span>
                                             </div>
                                         ))}
@@ -279,7 +279,7 @@ const BusinessDetailsPage = () => {
                                             { label: 'Verification', val: business.isActive ? 'Validated' : 'Pending' }
                                         ].map((item, i) => (
                                             <div key={i} className="flex justify-between border-b border-slate-50 pb-2 dark:border-slate-900">
-                                                <span className="text-slate-400 text-xs font-bold uppercase">{item.label}</span>
+                                                <span className="text-slate-400 dark:text-white text-xs font-bold uppercase">{item.label}</span>
                                                 <span className={`font-black text-sm uppercase ${item.color || 'text-slate-900 dark:text-white'}`}>{item.val || '-'}</span>
                                             </div>
                                         ))}
@@ -304,17 +304,17 @@ const BusinessDetailsPage = () => {
                             <table className="w-full text-sm text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-100 dark:bg-slate-900">
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Identity</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Contact</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Role</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Branch</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">District</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Sector</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Cell</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Village</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Timeline</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Identity</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Contact</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Role</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Branch</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">District</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Sector</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Cell</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Village</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Timeline</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Status</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
@@ -339,32 +339,32 @@ const BusinessDetailsPage = () => {
                                                 </td>
                                                 <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                                     <div className="flex flex-col">
-                                                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{u.email}</span>
-                                                        <span className="text-[9px] font-black text-slate-400">{u.phone}</span>
+                                                        <span className="text-xs font-bold text-slate-700 dark:text-white">{u.email}</span>
+                                                        <span className="text-[9px] font-black text-slate-400 dark:text-white">{u.phone}</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                                     <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 text-[9px] font-black uppercase rounded-none w-fit border border-blue-100 dark:border-blue-800/50">{u.role}</span>
                                                 </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[9px] font-black text-slate-500 uppercase tracking-tighter italic">
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[9px] font-black text-slate-500 dark:text-white uppercase tracking-tighter italic">
                                                     {branchName}
                                                 </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 uppercase tracking-tighter">
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
                                                     {u.district}
                                                 </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 uppercase tracking-tighter">
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
                                                     {u.sector}
                                                 </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 uppercase tracking-tighter">
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
                                                     {u.cell}
                                                 </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 uppercase tracking-tighter">
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
                                                     {u.village}
                                                 </td>
                                                 <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
                                                     <div className="flex flex-col items-center">
-                                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Registered</span>
-                                                        <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</span>
+                                                        <span className="text-[9px] font-black text-slate-400 dark:text-white uppercase tracking-widest">Registered</span>
+                                                        <span className="text-[10px] font-bold text-slate-700 dark:text-white">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
@@ -392,10 +392,10 @@ const BusinessDetailsPage = () => {
                             <table className="w-full text-sm text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-100 dark:bg-slate-900">
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Branch Name</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Context</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Branch Name</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Context</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Status</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
@@ -425,16 +425,16 @@ const BusinessDetailsPage = () => {
                             <table className="w-full text-sm text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-100 dark:bg-slate-900">
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Product / Identity</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Branch Context</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Category</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Volume</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Unit Cost</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Selling Price</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Total Equity</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Timeline</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Product / Identity</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Branch Context</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Category</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Volume</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Unit Cost</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Selling Price</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Total Equity</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Timeline</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Status</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
@@ -446,14 +446,14 @@ const BusinessDetailsPage = () => {
                                                 <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                                     <div className="flex flex-col">
                                                         <span className="font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{p.productName}</span>
-                                                        <span className="text-[9px] font-bold text-slate-400">{p.model}</span>
+                                                        <span className="text-[9px] font-bold text-slate-400 dark:text-white">{p.model}</span>
                                                     </div>
                                                 </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-600 uppercase tracking-tighter">
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
                                                     {branchName}
                                                 </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 font-bold text-xs uppercase">{p.category}</td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right text-xs font-bold text-slate-700 dark:text-slate-300">{p.quantity} {p.unit}</td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-white font-bold text-xs uppercase">{p.category}</td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right text-xs font-bold text-slate-700 dark:text-white">{p.quantity} {p.unit}</td>
                                                 <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-emerald-600 text-xs">
                                                     {p.costPricePerUnit?.toLocaleString()}
                                                 </td>
@@ -465,7 +465,7 @@ const BusinessDetailsPage = () => {
                                                 </td>
                                                 <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                                     <div className="flex flex-col items-center">
-                                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em]">Added: {p.addedDate ? new Date(p.addedDate).toLocaleDateString() : '-'}</span>
+                                                        <span className="text-[9px] font-black text-slate-400 dark:text-white uppercase tracking-[0.1em]">Added: {p.addedDate ? new Date(p.addedDate).toLocaleDateString() : '-'}</span>
                                                         <span className="text-[9px] font-black text-rose-500 uppercase tracking-[0.1em]">Exp: {p.expiryDate || p.deadline || '-'}</span>
                                                     </div>
                                                 </td>
@@ -493,7 +493,7 @@ const BusinessDetailsPage = () => {
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm text-left border-collapse">
                                 <thead>
-                                    <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 uppercase tracking-widest text-left">
+                                    <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 dark:text-white uppercase tracking-widest text-left">
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800">Timestamp</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800">Method</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">Amount</th>
@@ -503,10 +503,10 @@ const BusinessDetailsPage = () => {
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
                                     {tabData.transactions.map(t => (
                                         <tr key={t.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10">
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 font-mono text-[10px] uppercase">
+                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-white font-mono text-[10px] uppercase">
                                                 {t.createdAt ? (typeof t.createdAt === 'object' && t.createdAt.toDate ? t.createdAt.toDate().toLocaleString() : new Date(t.createdAt).toLocaleString()) : '-'}
                                             </td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 font-black uppercase text-slate-700 dark:text-slate-300 tracking-tighter text-xs">
+                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 font-black uppercase text-slate-700 dark:text-white tracking-tighter text-xs">
                                                 <div className="flex flex-col">
                                                     <span>{t.method || t.type}</span>
                                                     <span className="text-[9px] text-slate-400 font-bold">{t.phoneNumber}</span>
@@ -539,8 +539,8 @@ const BusinessDetailsPage = () => {
                         .filter(([key]) => !(itemType === 'users' && (key === 'isActive' || key === 'imagephoto' || key === 'updatedAt')))
                         .map(([key, val]) => (
                             <div key={key} className="p-4 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
-                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{key.replace(/([A-Z])/g, ' $1')}</p>
-                                <p className="text-sm font-bold text-slate-800 dark:text-slate-200 break-all">
+                                <p className="text-[9px] font-black text-slate-400 dark:text-white uppercase tracking-widest mb-1">{key.replace(/([A-Z])/g, ' $1')}</p>
+                                <p className="text-sm font-bold text-slate-800 dark:text-white break-all">
                                     {(key === 'profileImage' || key === 'imagephoto') ? (
                                         <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 overflow-hidden">
                                             {val ? (
@@ -577,12 +577,12 @@ const BusinessDetailsPage = () => {
                         return !commonExclude.includes(k) && !(itemType === 'users' && userExclude.includes(k));
                     }).map(key => (
                         <div key={key} className="space-y-1.5">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{key.replace(/([A-Z])/g, ' $1')}</label>
+                            <label className="text-[10px] font-black text-slate-400 dark:text-white uppercase tracking-widest ml-1">{key.replace(/([A-Z])/g, ' $1')}</label>
                             {((itemType === 'products' || itemType === 'users') && key === 'branch') ? (
                                 <select
                                     value={formData[key] || ''}
                                     onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none outline-none focus:border-blue-500 font-bold text-sm uppercase"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none outline-none focus:border-blue-500 font-bold text-sm uppercase dark:text-white"
                                 >
                                     <option value="">Select Branch</option>
                                     {tabData.branches.map(b => (
@@ -593,7 +593,7 @@ const BusinessDetailsPage = () => {
                                 <select
                                     value={formData[key] || ''}
                                     onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none outline-none focus:border-blue-500 font-bold text-sm uppercase"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none outline-none focus:border-blue-500 font-bold text-sm uppercase dark:text-white"
                                 >
                                     {['super_admin', 'admin', 'staff'].map(role => (
                                         <option key={role} value={role}>{role.replace('_', ' ')}</option>
@@ -613,7 +613,7 @@ const BusinessDetailsPage = () => {
                                     type="text"
                                     value={formData[key] || ''}
                                     onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none outline-none focus:border-blue-500 font-bold text-sm"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none outline-none focus:border-blue-500 font-bold text-sm dark:text-white"
                                 />
                             )}
                         </div>

@@ -209,7 +209,7 @@ const LogsPage = ({ limit }) => {
                             <select
                                 value={selectedBusiness}
                                 onChange={(e) => setSelectedBusiness(e.target.value)}
-                                className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors cursor-pointer"
+                                className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors cursor-pointer dark:text-white"
                             >
                                 <option value="">Select Business</option>
                                 <option value="all" className="text-blue-600 font-black">Global Matrix</option>
@@ -226,7 +226,7 @@ const LogsPage = ({ limit }) => {
                                 value={selectedBranch}
                                 onChange={(e) => setSelectedBranch(e.target.value)}
                                 disabled={!selectedBusiness || selectedBusiness === 'all'}
-                                className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed dark:text-white"
                             >
                                 <option value="">All Branch Nodes</option>
                                 {branches.map(branch => (
@@ -244,7 +244,7 @@ const LogsPage = ({ limit }) => {
                                     placeholder="Search events, operators, or logic blocks..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors"
+                                    className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors dark:text-white"
                                 />
                             </div>
                         </div>
@@ -275,7 +275,7 @@ const LogsPage = ({ limit }) => {
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-[1500px] border-collapse">
                             <thead>
-                                <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 uppercase tracking-widest text-left">
+                                <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 dark:text-white uppercase tracking-widest text-left">
                                     <th className="px-4 py-4 border border-slate-200 dark:border-slate-800">#</th>
                                     <th onClick={() => requestSort('transactionType')} className="px-4 py-4 border border-slate-200 dark:border-slate-800 cursor-pointer hover:bg-slate-200/50 transition-colors group">
                                         <div className="flex items-center">Operational Type <SortIcon column="transactionType" /></div>
@@ -299,14 +299,14 @@ const LogsPage = ({ limit }) => {
                                 {processedLogs.map((log, index) => (
                                     <tr key={log.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
                                         <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
-                                            <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
+                                            <span className="text-xs font-black text-slate-400 dark:text-white">{String(index + 1).padStart(2, '0')}</span>
                                         </td>
                                         <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
                                             <div className="flex items-center gap-2">
                                                 <div className={`p-2 rounded-none border ${getColor(log.transactionType || log.action)}`}>
                                                     {getIcon(log.transactionType || log.action)}
                                                 </div>
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-white">
                                                     {log.transactionType?.replace('_', ' ') || 'SYSTEM_SIGNAL'}
                                                 </span>
                                             </div>
@@ -326,7 +326,7 @@ const LogsPage = ({ limit }) => {
                                                 <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-tight">
                                                     {log.action || log.actionDetails || 'N/A'}
                                                 </span>
-                                                <span className="text-[10px] font-bold text-slate-400 leading-tight">
+                                                <span className="text-[10px] font-bold text-slate-400 dark:text-white leading-tight">
                                                     {log.details || 'Baseline automated signal.'}
                                                 </span>
                                             </div>
@@ -337,10 +337,10 @@ const LogsPage = ({ limit }) => {
                                                     <User size={14} className="text-slate-400" />
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[11px] font-black text-slate-700 dark:text-slate-300 uppercase underline decoration-slate-200 decoration-2 underline-offset-2">
+                                                    <span className="text-[11px] font-black text-slate-700 dark:text-white uppercase underline decoration-slate-200 decoration-2 underline-offset-2">
                                                         {log.userName || 'Root User'}
                                                     </span>
-                                                    <span className="text-[9px] font-bold text-slate-400 tracking-tighter lowercase">
+                                                    <span className="text-[9px] font-bold text-slate-400 dark:text-white tracking-tighter lowercase">
                                                         {log.userEmail || 'system@internal'}
                                                     </span>
                                                 </div>
@@ -348,10 +348,10 @@ const LogsPage = ({ limit }) => {
                                         </td>
                                         <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
                                             <div className="flex flex-col items-center">
-                                                <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 dark:text-slate-300">
+                                                <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 dark:text-white">
                                                     <Calendar size={12} /> {log.createdAt || log.timestamp ? new Date(log.createdAt || log.timestamp).toLocaleDateString() : '-'}
                                                 </div>
-                                                <div className="flex items-center gap-1.5 text-[9px] font-black text-slate-400 italic">
+                                                <div className="flex items-center gap-1.5 text-[9px] font-black text-slate-400 dark:text-white italic">
                                                     <Clock size={10} /> {log.createdAt || log.timestamp ? new Date(log.createdAt || log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '-'}
                                                 </div>
                                             </div>
@@ -373,10 +373,10 @@ const LogsPage = ({ limit }) => {
                                             <div className="flex flex-col items-center gap-4 opacity-50">
                                                 <Search size={64} className="text-slate-200 dark:text-slate-800" />
                                                 <div className="flex flex-col gap-1">
-                                                    <p className="text-slate-400 font-black uppercase tracking-widest text-sm">
+                                                    <p className="text-slate-400 dark:text-white font-black uppercase tracking-widest text-sm">
                                                         {selectedBusiness ? 'Signal Nullified' : 'Awaiting Input'}
                                                     </p>
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                                    <p className="text-[10px] font-bold text-slate-400 dark:text-white uppercase tracking-tighter">
                                                         {selectedBusiness
                                                             ? 'No operational events found for this filter vector.'
                                                             : 'Please select a business entity or global matrix to initialize the stream.'}

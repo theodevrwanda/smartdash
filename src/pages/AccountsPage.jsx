@@ -14,7 +14,7 @@ const Modal = ({ isOpen, onClose, title, children, footer, variant = 'default' }
             <div className="bg-white dark:bg-slate-950 rounded-none shadow-2xl w-full max-w-lg overflow-hidden border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-200">
                 <div className={`flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800 ${variant === 'danger' ? 'bg-red-50/50 dark:bg-red-950/20' : variant === 'warning' ? 'bg-amber-50/50 dark:bg-amber-950/20' : ''}`}>
                     <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{title}</h3>
-                    <button onClick={onClose} className="p-2 hover:bg-slate-200/50 dark:hover:bg-slate-800 rounded-none transition-colors text-slate-500">
+                    <button onClick={onClose} className="p-2 hover:bg-slate-200/50 dark:hover:bg-slate-800 rounded-none transition-colors text-slate-500 dark:text-white">
                         <X size={20} />
                     </button>
                 </div>
@@ -176,19 +176,19 @@ const AccountsPage = () => {
                     <table className="w-full min-w-[1700px] border-collapse">
                         <thead>
                             <tr className="bg-slate-100 dark:bg-slate-900">
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">#</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Entity Name</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Owner Name</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Owner Email</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">District</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Sector</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px) font-black text-slate-500 uppercase tracking-widest text-left">Plan</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Active</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Sub Status</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Start Date</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">End Date</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Remain</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">#</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">Entity Name</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">Owner Name</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">Owner Email</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">District</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">Sector</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">Plan</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">Active</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">Sub Status</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">Start Date</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">End Date</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-left">Remain</th>
+                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
@@ -197,23 +197,23 @@ const AccountsPage = () => {
                                 return (
                                     <tr key={business.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10">
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
-                                            <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
+                                            <span className="text-xs font-black text-slate-400 dark:text-white">{String(index + 1).padStart(2, '0')}</span>
                                         </td>
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                             <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{business.businessName || 'Unnamed'}</span>
                                         </td>
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                            <span className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-tighter leading-tight">{business.ownerName || '-'}</span>
+                                            <span className="text-sm font-black text-slate-700 dark:text-white uppercase tracking-tighter leading-tight">{business.ownerName || '-'}</span>
                                         </td>
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                            <span className="text-[10px] font-bold text-slate-400 leading-tight">{business.email || business.ownerEmail || '-'}</span>
+                                            <span className="text-[10px] font-bold text-slate-400 dark:text-white leading-tight">{business.email || business.ownerEmail || '-'}</span>
                                         </td>
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                             <Badge variant="outline" className="font-bold border-slate-200 dark:border-slate-800 whitespace-nowrap rounded-none">
                                                 {business.district || '-'}
                                             </Badge>
                                         </td>
-                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-sm font-medium text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-sm font-medium text-slate-600 dark:text-white whitespace-nowrap">
                                             {business.sector || '-'}
                                         </td>
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
@@ -241,15 +241,15 @@ const AccountsPage = () => {
                                                 {business.subscription?.status || 'Expired'}
                                             </Badge>
                                         </td>
-                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-500 whitespace-nowrap">
+                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-500 dark:text-white whitespace-nowrap">
                                             {business.subscription?.startDate ? new Date(business.subscription.startDate).toLocaleDateString() : '-'}
                                         </td>
-                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-500 whitespace-nowrap">
+                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-500 dark:text-white whitespace-nowrap">
                                             {business.subscription?.endDate ? new Date(business.subscription.endDate).toLocaleDateString() : '-'}
                                         </td>
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                             {remain !== null ? (
-                                                <div className={`text-center py-0.5 border font-black text-[10px] min-w-[36px] ${remain <= 7 ? 'bg-red-600 text-white border-red-500' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800'}`}>
+                                                <div className={`text-center py-0.5 border font-black text-[10px] min-w-[36px] ${remain <= 7 ? 'bg-red-600 text-white border-red-500' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-white border-slate-200 dark:border-slate-800'}`}>
                                                     {remain} <span className="text-[8px] opacity-70">D</span>
                                                 </div>
                                             ) : '-'}
@@ -279,7 +279,7 @@ const AccountsPage = () => {
                 variant="warning"
                 footer={
                     <>
-                        <button onClick={() => closeModal('status')} className="px-6 py-3 font-bold text-slate-500">Cancel</button>
+                        <button onClick={() => closeModal('status')} className="px-6 py-3 font-bold text-slate-500 dark:text-white">Cancel</button>
                         <button onClick={handleConfirmToggleStatus} className={`px-8 py-3 rounded-none font-black text-white hover:scale-105 transition-all ${selectedBusiness?.isActive ? 'bg-rose-600' : 'bg-emerald-600'}`}>
                             Confirm {selectedBusiness?.isActive ? 'Deactivation' : 'Activation'}
                         </button>
@@ -290,8 +290,8 @@ const AccountsPage = () => {
                     <div className={`w-20 h-20 rounded-none flex items-center justify-center ${selectedBusiness?.isActive ? 'bg-rose-100 text-rose-600' : 'bg-emerald-100 text-emerald-600'}`}>
                         <Power size={32} />
                     </div>
-                    <p className="text-slate-600 leading-relaxed">
-                        Are you sure you want to <span className="font-black text-slate-900">{selectedBusiness?.isActive ? 'DEACTIVATE' : 'ACTIVATE'}</span> access for <span className="font-black text-slate-900">{selectedBusiness?.businessName}</span>?
+                    <p className="text-slate-600 dark:text-white leading-relaxed">
+                        Are you sure you want to <span className="font-black text-slate-900 dark:text-white">{selectedBusiness?.isActive ? 'DEACTIVATE' : 'ACTIVATE'}</span> access for <span className="font-black text-slate-900 dark:text-white">{selectedBusiness?.businessName}</span>?
                         This will immediately impact their ability to log into the terminal.
                     </p>
                 </div>
@@ -318,12 +318,12 @@ const AccountsPage = () => {
                         { label: 'Sector', key: 'sector', placeholder: 'Local Sector' }
                     ].map((field) => (
                         <div key={field.key} className="space-y-1.5">
-                            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{field.label}</label>
+                            <label className="text-[9px] font-black text-slate-400 dark:text-white uppercase tracking-widest ml-1">{field.label}</label>
                             <input
                                 type={field.type || 'text'}
                                 value={editForm[field.key]}
                                 onChange={(e) => setEditForm({ ...editForm, [field.key]: e.target.value })}
-                                className="w-full px-5 py-3.5 rounded-none border-2 border-slate-100 dark:border-slate-800 dark:bg-slate-950 outline-none focus:border-blue-500 transition-all font-bold placeholder:text-slate-300"
+                                className="w-full px-5 py-3.5 rounded-none border-2 border-slate-100 dark:border-slate-800 dark:bg-slate-950 dark:text-white outline-none focus:border-blue-500 transition-all font-bold placeholder:text-slate-300 dark:placeholder:text-slate-600"
                                 placeholder={field.placeholder}
                             />
                         </div>
@@ -350,7 +350,7 @@ const AccountsPage = () => {
                             onClick={() => setSelectedPlan(plan)}
                             className={`p-5 rounded-none border-2 text-left transition-all relative ${selectedPlan === plan ? 'border-purple-600 bg-purple-50 dark:bg-purple-900/20' : 'border-slate-100 dark:border-slate-800 hover:border-slate-200'}`}
                         >
-                            <span className="font-black uppercase tracking-widest text-sm text-slate-900 dark:text-slate-100">{plan}</span>
+                            <span className="font-black uppercase tracking-widest text-sm text-slate-900 dark:text-white">{plan}</span>
                             {selectedPlan === plan && (
                                 <div className="absolute right-5 top-5 text-purple-600">
                                     <ShieldCheck size={20} />
@@ -380,8 +380,8 @@ const AccountsPage = () => {
                     </div>
                     <div className="space-y-3">
                         <h4 className="text-2xl font-black text-slate-900 dark:text-white">Irreversible Action</h4>
-                        <p className="text-slate-500 leading-relaxed max-w-sm">
-                            You are about to purge all data for <span className="font-black text-slate-900">{selectedBusiness?.businessName}</span>. This node and all associated branches will be disconnected permanently.
+                        <p className="text-slate-500 dark:text-white leading-relaxed max-w-sm">
+                            You are about to purge all data for <span className="font-black text-slate-900 dark:text-white">{selectedBusiness?.businessName}</span>. This node and all associated branches will be disconnected permanently.
                         </p>
                     </div>
                 </div>

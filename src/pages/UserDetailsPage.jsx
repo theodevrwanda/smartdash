@@ -129,7 +129,7 @@ const UserDetailsPage = () => {
                 <div className="flex items-center gap-6">
                     <button
                         onClick={() => navigate('/employees')}
-                        className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 transition-all group"
+                        className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group dark:text-white"
                     >
                         <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                     </button>
@@ -138,7 +138,7 @@ const UserDetailsPage = () => {
                             {(user.profileImage || user.imagephoto) ? (
                                 <img src={user.profileImage || user.imagephoto} alt="" className="w-full h-full object-cover" />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-black text-2xl">
+                                <div className="w-full h-full flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-black text-2xl">
                                     {user.firstName?.charAt(0)}{user.lastName?.charAt(0)}
                                 </div>
                             )}
@@ -193,7 +193,7 @@ const UserDetailsPage = () => {
                 </button>
                 <button
                     onClick={() => window.location.href = `mailto:${user.email}`}
-                    className="px-8 py-4 border-2 border-slate-900 dark:border-white font-black uppercase text-xs tracking-widest hover:bg-slate-50 transition-all"
+                    className="px-8 py-4 border-2 border-slate-900 dark:border-white font-black uppercase text-xs tracking-widest hover:bg-slate-50 dark:hover:bg-slate-900 dark:text-white transition-all"
                 >
                     Contact Personnel
                 </button>
