@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../components/ui/Card';
-import { MapPin, Users, User, Building2, Clock, ShieldCheck, Eye, Trash2, Phone, Power, Hash, Edit, UserPlus, X } from 'lucide-react';
+import {
+    MapPin, Users, User, Building2, Clock, ShieldCheck,
+    Eye, Trash2, Phone, Power, Hash, Edit, UserPlus,
+    X, Search, Filter, ArrowUpDown, ChevronUp, ChevronDown
+} from 'lucide-react';
 import { adminService } from '../services/adminService';
 import { Badge } from '../components/ui/Badge';
 
@@ -37,6 +41,11 @@ const BranchesPage = () => {
     const [businessUsers, setBusinessUsers] = useState([]);
     const [loadingUsers, setLoadingUsers] = useState(false);
 
+    // Filtering & Sorting State
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all');
+    const [sortConfig, setSortConfig] = useState({ key: 'branchName', direction: 'asc' });
+
     // Modals state
     const [modals, setModals] = useState({
         edit: false,
@@ -68,6 +77,50 @@ const BranchesPage = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    // Filtered and Sorted Data
+    const processedBranches = useMemo(() => {
+        let result = [...branches];
+
+        // Search Filter
+        if (searchTerm) {
+            const lowSearch = searchTerm.toLowerCase();
+            result = result.filter(b =>
+                (b.branchName || b.name || '').toLowerCase().includes(lowSearch) ||
+                (b.businessName || '').toLowerCase().includes(lowSearch) ||
+                (b.district || '').toLowerCase().includes(lowSearch) ||
+                (b.sector || '').toLowerCase().includes(lowSearch)
+            );
+        }
+
+        // Status Filter
+        if (statusFilter !== 'all') {
+            const isActive = statusFilter === 'active';
+            result = result.filter(b => (b.isActive !== false) === isActive);
+        }
+
+        // Sorting
+        if (sortConfig.key) {
+            result.sort((a, b) => {
+                const aVal = String(a[sortConfig.key] || '').toLowerCase();
+                const bVal = String(b[sortConfig.key] || '').toLowerCase();
+
+                if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+                if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+
+        return result;
+    }, [branches, searchTerm, statusFilter, sortConfig]);
+
+    const requestSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
     };
 
     const openModal = async (type, branch) => {
@@ -137,9 +190,14 @@ const BranchesPage = () => {
         }
     };
 
+    const SortIcon = ({ column }) => {
+        if (sortConfig.key !== column) return <ArrowUpDown size={10} className="ml-1 opacity-20 group-hover:opacity-100" />;
+        return sortConfig.direction === 'asc' ? <ChevronUp size={10} className="ml-1 text-blue-600" /> : <ChevronDown size={10} className="ml-1 text-blue-600" />;
+    };
+
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-full">
+            <div className="flex items-center justify-center h-full p-20">
                 <div className="flex flex-col items-center gap-6">
                     <div className="relative">
                         <div className="w-16 h-16 border-4 border-blue-600/20 rounded-full"></div>
@@ -165,13 +223,39 @@ const BranchesPage = () => {
                 </div>
                 <button
                     onClick={loadBranches}
-                    className="group bg-slate-900 dark:bg-white p-1 pr-6 rounded-2xl flex items-center gap-3 hover:scale-105 transition-all active:scale-95"
+                    className="group bg-slate-900 dark:bg-white p-1 pr-6 rounded-none flex items-center gap-3 hover:scale-105 transition-all active:scale-95"
                 >
-                    <div className="w-10 h-10 bg-slate-800 dark:bg-slate-100 rounded-xl flex items-center justify-center">
+                    <div className="w-10 h-10 bg-slate-800 dark:bg-slate-100 rounded-none flex items-center justify-center">
                         <Clock className="w-5 h-5 text-white dark:text-slate-900 group-hover:rotate-180 transition-transform duration-700" />
                     </div>
                     <span className="text-white dark:text-slate-900 text-sm font-black uppercase tracking-wider">Sync Nodes</span>
                 </button>
+            </div>
+
+            {/* Filter & Search Bar */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50 dark:bg-slate-900/50 p-4 border border-slate-200 dark:border-slate-800">
+                <div className="relative col-span-2">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                    <input
+                        type="text"
+                        placeholder="SEARCH NODES, BUSINESSES OR LOCATION VECTORS..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-11 pr-4 py-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors"
+                    />
+                </div>
+                <div className="relative">
+                    <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                    <select
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-11 pr-4 py-3 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors appearance-none cursor-pointer"
+                    >
+                        <option value="all">ALL SYSTEM STATUSES</option>
+                        <option value="active">OPERATIONAL ONLY</option>
+                        <option value="inactive">HALTED ONLY</option>
+                    </select>
+                </div>
             </div>
 
             <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden flex flex-col">
@@ -180,89 +264,97 @@ const BranchesPage = () => {
                         <thead>
                             <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 uppercase tracking-widest text-left whitespace-nowrap">
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">No</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Branch Name</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Business Name</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">District</th>
+                                <th onClick={() => requestSort('branchName')} className="px-4 py-3 border border-slate-200 dark:border-slate-800 cursor-pointer hover:bg-slate-200/50 transition-colors group">
+                                    <div className="flex items-center">Branch Name <SortIcon column="branchName" /></div>
+                                </th>
+                                <th onClick={() => requestSort('businessName')} className="px-4 py-3 border border-slate-200 dark:border-slate-800 cursor-pointer hover:bg-slate-200/50 transition-colors group">
+                                    <div className="flex items-center">Business Name <SortIcon column="businessName" /></div>
+                                </th>
+                                <th onClick={() => requestSort('district')} className="px-4 py-3 border border-slate-200 dark:border-slate-800 cursor-pointer hover:bg-slate-200/50 transition-colors group">
+                                    <div className="flex items-center">District <SortIcon column="district" /></div>
+                                </th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Sector</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Cell</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Village</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Created At</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Updated At</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">Status</th>
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">Actions</th>
+                                <th onClick={() => requestSort('createdAt')} className="px-4 py-3 border border-slate-200 dark:border-slate-800 cursor-pointer hover:bg-slate-200/50 transition-colors group">
+                                    <div className="flex items-center">Creation Date <SortIcon column="createdAt" /></div>
+                                </th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Last Sync</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">Operational State</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">Matrix Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
-                            {branches.map((branch, index) => (
+                            {processedBranches.map((branch, index) => (
                                 <tr key={branch.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
-                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
                                         <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
                                     </td>
-                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 font-black">
                                         <div className="flex items-center gap-2">
                                             <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center border border-blue-200 dark:border-blue-800">
                                                 <Building2 size={12} className="text-blue-600 dark:text-blue-400" />
                                             </div>
-                                            <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{branch.branchName || branch.name}</span>
+                                            <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight italic decoration-blue-500/30 decoration-2 underline-offset-4">{branch.branchName || branch.name}</span>
                                         </div>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <span className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-tight">{branch.businessName}</span>
+                                        <span className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-tight underline decoration-slate-200 underline-offset-4">{branch.businessName}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none border-blue-100 text-blue-600">{branch.district}</Badge>
+                                        <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none border-blue-100 text-blue-600 bg-blue-50/30 tracking-widest">{branch.district}</Badge>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none border-slate-100 text-slate-600">{branch.sector}</Badge>
+                                        <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none border-slate-100 text-slate-600 tracking-widest">{branch.sector}</Badge>
                                     </td>
-                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-500 uppercase italic">
-                                        {branch.cell}
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-400 uppercase italic">
+                                        {branch.cell || '---'}
                                     </td>
-                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-500 uppercase italic">
-                                        {branch.village}
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-400 uppercase italic">
+                                        {branch.village || '---'}
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex items-center gap-1.5 text-[9px] font-black text-slate-400 uppercase">
-                                            <Clock size={10} /> {branch.createdAt ? (typeof branch.createdAt === 'object' && branch.createdAt.toDate ? branch.createdAt.toDate().toLocaleDateString() : new Date(branch.createdAt).toLocaleDateString()) : '-'}
+                                        <div className="flex items-center gap-1.5 text-[10px] font-black text-slate-500 uppercase tracking-tighter">
+                                            <Calendar size={10} className="text-slate-400" /> {branch.createdAt ? (typeof branch.createdAt === 'object' && branch.createdAt.toDate ? branch.createdAt.toDate().toLocaleDateString() : new Date(branch.createdAt).toLocaleDateString()) : '-'}
                                         </div>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex items-center gap-1.5 text-[9px] font-black text-blue-400 uppercase">
-                                            <ShieldCheck size={10} /> {branch.updatedAt ? (typeof branch.updatedAt === 'object' && branch.updatedAt.toDate ? branch.updatedAt.toDate().toLocaleDateString() : new Date(branch.updatedAt).toLocaleDateString()) : '-'}
+                                        <div className="flex items-center gap-1.5 text-[10px] font-black text-blue-500 uppercase tracking-tighter">
+                                            <ShieldCheck size={10} className="text-blue-400" /> {branch.updatedAt ? (typeof branch.updatedAt === 'object' && branch.updatedAt.toDate ? branch.updatedAt.toDate().toLocaleDateString() : new Date(branch.updatedAt).toLocaleDateString()) : '-'}
                                         </div>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
-                                        <div className={`flex items-center justify-center gap-1.5 px-3 py-1 rounded-none w-fit mx-auto ${branch.isActive !== false ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'}`}>
-                                            <div className={`w-1.5 h-1.5 rounded-full ${branch.isActive !== false ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
-                                            <span className="text-[10px] font-black uppercase tracking-tight">{branch.isActive !== false ? 'Operational' : 'Halted'}</span>
+                                        <div className={`flex items-center justify-center gap-2 px-4 py-1.5 rounded-none w-fit mx-auto border-2 ${branch.isActive !== false ? 'bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-950/20 dark:border-emerald-900/40' : 'bg-rose-50 text-rose-700 border-rose-100 dark:bg-rose-950/20 dark:border-rose-900/40'}`}>
+                                            <div className={`w-2 h-2 rounded-full ${branch.isActive !== false ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
+                                            <span className="text-[10px] font-black uppercase tracking-widest">{branch.isActive !== false ? 'Active Node' : 'Suspended'}</span>
                                         </div>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
                                         <div className="flex items-center justify-center gap-1">
                                             <button
                                                 onClick={() => navigate(`/branch/${branch.id}`)}
-                                                className="p-1.5 text-blue-600 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800"
-                                                title="View Ecosystem"
+                                                className="p-2 text-blue-600 bg-white hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800 shadow-sm"
+                                                title="View Analysis"
                                             >
                                                 <Eye size={12} />
                                             </button>
                                             <button
                                                 onClick={() => openModal('edit', branch)}
-                                                className="p-1.5 text-amber-600 hover:bg-amber-600 hover:text-white transition-all border border-amber-100 dark:border-amber-800"
-                                                title="Edit Node"
+                                                className="p-2 text-amber-600 bg-white hover:bg-amber-600 hover:text-white transition-all border border-amber-100 dark:border-amber-800 shadow-sm"
+                                                title="Modify Node"
                                             >
                                                 <Edit size={12} />
                                             </button>
                                             <button
                                                 onClick={() => openModal('assign', branch)}
-                                                className="p-1.5 text-purple-600 hover:bg-purple-600 hover:text-white transition-all border border-purple-100 dark:border-purple-800"
-                                                title="Assign Personnel"
+                                                className="p-2 text-purple-600 bg-white hover:bg-purple-600 hover:text-white transition-all border border-purple-100 dark:border-purple-800 shadow-sm"
+                                                title="Deploy Operator"
                                             >
                                                 <UserPlus size={12} />
                                             </button>
                                             <button
                                                 onClick={() => openModal('delete', branch)}
-                                                className="p-1.5 text-rose-600 hover:bg-rose-600 hover:text-white transition-all border border-rose-100 dark:border-rose-800"
+                                                className="p-2 text-rose-600 bg-white hover:bg-rose-600 hover:text-white transition-all border border-rose-100 dark:border-rose-800 shadow-sm"
                                                 title="Purge Node"
                                             >
                                                 <Trash2 size={12} />
@@ -276,25 +368,25 @@ const BranchesPage = () => {
                 </div>
             </div>
 
-            {/* Edit Modal */}
+            {/* Modals are kept below with standard styling ... */}
             <Modal
                 isOpen={modals.edit}
                 onClose={() => closeModal('edit')}
-                title="Protocol Modification"
+                title="Node Modification Protocol"
                 footer={
                     <>
-                        <button onClick={() => closeModal('edit')} className="px-6 py-3 font-bold text-slate-500">Discard</button>
-                        <button onClick={handleUpdateBranch} className="px-8 py-3 bg-slate-900 text-white dark:bg-white dark:text-slate-900 rounded-none font-black hover:scale-105 active:scale-95 transition-all">Update Node</button>
+                        <button onClick={() => closeModal('edit')} className="px-6 py-3 font-bold text-slate-500 uppercase text-[10px] tracking-widest">Discard</button>
+                        <button onClick={handleUpdateBranch} className="px-8 py-3 bg-slate-900 border-none text-white dark:bg-white dark:text-slate-900 flex items-center gap-2 font-black uppercase text-[10px] tracking-widest hover:bg-blue-600 hover:text-white transition-all">Update Vector</button>
                     </>
                 }
             >
                 <div className="space-y-4">
                     {[
-                        { label: 'Branch Name', key: 'branchName', placeholder: 'Operational Name' },
-                        { label: 'District', key: 'district', placeholder: 'Rubavu' },
-                        { label: 'Sector', key: 'sector', placeholder: 'Gisenyi' },
-                        { label: 'Cell', key: 'cell', placeholder: 'Cell Name' },
-                        { label: 'Village', key: 'village', placeholder: 'Village Name' }
+                        { label: 'Operational Name', key: 'branchName', placeholder: 'Node Identifier' },
+                        { label: 'Primary District', key: 'district', placeholder: 'Kigali / Center' },
+                        { label: 'Operational Sector', key: 'sector', placeholder: 'Sector Vector' },
+                        { label: 'Cell Identity', key: 'cell', placeholder: 'Digital Cell' },
+                        { label: 'Village Node', key: 'village', placeholder: 'Unit Node' }
                     ].map((field) => (
                         <div key={field.key} className="space-y-1.5">
                             <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{field.label}</label>
@@ -302,7 +394,7 @@ const BranchesPage = () => {
                                 type="text"
                                 value={editForm[field.key]}
                                 onChange={(e) => setEditForm({ ...editForm, [field.key]: e.target.value })}
-                                className="w-full px-5 py-3.5 rounded-none border-2 border-slate-100 dark:border-slate-800 dark:bg-slate-950 outline-none focus:border-blue-500 transition-all font-bold placeholder:text-slate-300"
+                                className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 outline-none focus:border-blue-600 focus:bg-white transition-all font-bold placeholder:text-slate-300 text-xs shadow-inner"
                                 placeholder={field.placeholder}
                             />
                         </div>
@@ -310,72 +402,76 @@ const BranchesPage = () => {
                 </div>
             </Modal>
 
-            {/* Delete Modal */}
             <Modal
                 isOpen={modals.delete}
                 onClose={() => closeModal('delete')}
-                title="Node Termination"
+                title="Network Purge Protocol"
                 variant="danger"
                 footer={
                     <>
-                        <button onClick={() => closeModal('delete')} className="px-6 py-3 font-bold text-slate-500">Cancel</button>
-                        <button onClick={handleDeleteBranch} className="px-8 py-3 bg-red-600 text-white rounded-none font-black hover:scale-105 transition-all">Execute Purge</button>
+                        <button onClick={() => closeModal('delete')} className="px-6 py-3 font-bold text-slate-500 text-[10px] uppercase tracking-widest">Abort</button>
+                        <button onClick={handleDeleteBranch} className="px-10 py-3 bg-rose-600 text-white rounded-none font-black uppercase text-[10px] tracking-[0.2em] border-none shadow-lg shadow-rose-200 dark:shadow-none hover:bg-rose-700 transition-all">Execute Purge</button>
                     </>
                 }
             >
                 <div className="flex flex-col items-center text-center gap-6 py-4">
-                    <div className="w-24 h-24 bg-red-100 dark:bg-red-950/40 rounded-none flex items-center justify-center text-red-600 border-2 border-red-200 dark:border-red-900 animate-pulse">
-                        <Trash2 size={40} />
+                    <div className="w-24 h-24 bg-rose-50 dark:bg-rose-950/20 rounded-none flex items-center justify-center text-rose-600 border-4 border-rose-100 dark:border-rose-900 shadow-xl">
+                        <Trash2 size={40} strokeWidth={2.5} />
                     </div>
-                    <div className="space-y-3">
-                        <h4 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Irreversible Action</h4>
-                        <p className="text-slate-500 leading-relaxed max-w-sm">
-                            You are about to permanently disconnect <span className="font-black text-slate-900">{selectedBranch?.branchName || selectedBranch?.name}</span> from the network infrastructure.
+                    <div className="space-y-4">
+                        <h4 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Irreversible Purge</h4>
+                        <p className="text-[11px] font-bold text-slate-400 leading-relaxed max-w-sm uppercase tracking-tight">
+                            You are about to permanently disconnect <span className="text-rose-600 decoration-rose-200 underline underline-offset-4">{selectedBranch?.branchName || selectedBranch?.name}</span> from the infrastructure matrix. All associated operational links will be severed.
                         </p>
                     </div>
                 </div>
             </Modal>
 
-            {/* Assign User Modal */}
             <Modal
                 isOpen={modals.assign}
                 onClose={() => closeModal('assign')}
-                title="Personnel Deployment"
+                title="Personnel Deployment Matrix"
                 footer={
                     <>
-                        <button onClick={() => closeModal('assign')} className="px-6 py-3 font-bold text-slate-500">Cancel</button>
-                        <button onClick={handleAssignUser} className="px-8 py-3 bg-purple-600 text-white rounded-none font-black hover:scale-105 active:scale-95 transition-all">Deploy Personnel</button>
+                        <button onClick={() => closeModal('assign')} className="px-6 py-3 font-bold text-slate-500 text-[10px] uppercase tracking-widest">Abort</button>
+                        <button onClick={handleAssignUser} className="px-8 py-3 bg-purple-600 text-white border-none font-black uppercase text-[10px] tracking-widest shadow-lg shadow-purple-100 dark:shadow-none hover:bg-purple-700 transition-all">Execute Deployment</button>
                     </>
                 }
             >
                 {loadingUsers ? (
                     <div className="flex flex-col items-center py-10 gap-4">
-                        <div className="w-10 h-10 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Scanning Business Personnel</p>
+                        <div className="w-12 h-12 border-4 border-purple-600/10 border-t-purple-600 rounded-full animate-spin"></div>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Scanning IDs</p>
                     </div>
                 ) : (
-                    <div className="space-y-4">
-                        <div className="bg-slate-50 dark:bg-slate-900/50 p-4 border-l-4 border-purple-600 mb-6">
-                            <p className="text-[10px] font-black text-purple-600 uppercase tracking-widest mb-1">Target Infrastructure</p>
-                            <p className="text-sm font-black text-slate-900 dark:text-white uppercase">{selectedBranch?.branchName || selectedBranch?.name}</p>
+                    <div className="space-y-6">
+                        <div className="bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 flex items-center justify-between">
+                            <div className="flex flex-col gap-1">
+                                <p className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Deployment Node</p>
+                                <p className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">{selectedBranch?.branchName || selectedBranch?.name}</p>
+                            </div>
+                            <MapPin className="text-purple-600 opacity-20" size={32} />
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Select Available Personnel</label>
-                            <select
-                                value={selectedUserId}
-                                onChange={(e) => setSelectedUserId(e.target.value)}
-                                className="w-full px-5 py-4 rounded-none border-2 border-slate-100 dark:border-slate-800 dark:bg-slate-950 outline-none focus:border-purple-600 transition-all font-bold text-slate-900 dark:text-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M5%207L10%2012L15%207%22%20stroke%3D%22%2364748B%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E')] bg-[length:24px] bg-[right_1rem_center] bg-no-repeat"
-                            >
-                                <option value="" className="text-slate-400">DEPLOYMENT TARGET UNSET</option>
-                                {businessUsers.map((user) => (
-                                    <option key={user.id} value={user.id}>
-                                        {user.fullName || `${user.firstName} ${user.lastName}`} — {user.role.toUpperCase()}
-                                    </option>
-                                ))}
-                            </select>
+                        <div className="space-y-3">
+                            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Personnel Identifier</label>
+                            <div className="relative">
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                                <select
+                                    value={selectedUserId}
+                                    onChange={(e) => setSelectedUserId(e.target.value)}
+                                    className="w-full pl-12 pr-10 py-4 bg-slate-50 dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 outline-none focus:border-purple-600 transition-all font-black text-xs uppercase tracking-tight text-slate-900 dark:text-white appearance-none cursor-pointer"
+                                >
+                                    <option value="" className="text-slate-400">SELECT OPERATIONAL AGENT</option>
+                                    {businessUsers.map((user) => (
+                                        <option key={user.id} value={user.id}>
+                                            {user.fullName || `${user.firstName} ${user.lastName}`} — {user.role?.toUpperCase() || 'AGENT'}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                             {businessUsers.length === 0 && (
-                                <p className="text-[10px] font-bold text-rose-500 uppercase tracking-widest text-center py-2">No Authorized Personnel Found</p>
+                                <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest text-center py-4 bg-rose-50 dark:bg-rose-950/20 border-2 border-rose-100 dark:border-rose-900/40">No Authorized Personnel Found in Cluster</p>
                             )}
                         </div>
                     </div>
@@ -384,5 +480,8 @@ const BranchesPage = () => {
         </div>
     );
 };
+
+// Re-using defined icons for group display
+const Calendar = ({ size, className }) => <Clock size={size} className={className} />;
 
 export default BranchesPage;
