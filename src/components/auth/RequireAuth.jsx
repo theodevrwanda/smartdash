@@ -16,7 +16,7 @@ const RequireAuth = ({ children }) => {
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
-    const allowedRoles = ['super_admin', 'admin', 'staff'];
+    const allowedRoles = ['super_admin'];
 
     if (!allowedRoles.includes(user.role)) {
         return (
@@ -26,7 +26,7 @@ const RequireAuth = ({ children }) => {
                     <p className="text-slate-600 dark:text-slate-400 mb-6">
                         You do not have permission to access the Dashboard.
                         <br />
-                        <span className="text-xs mt-2 block">Required Role: Admin or Staff</span>
+                        <span className="text-xs mt-2 block">Required Role: Super Admin</span>
                         <span className="text-xs block">Current Role: <span className="font-mono bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-sm">{user.role}</span></span>
                     </p>
                     <button
