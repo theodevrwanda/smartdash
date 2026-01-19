@@ -98,10 +98,15 @@ export const adminService = {
             };
 
             // 2. User Stats
+            // Filter: Exclude ONLY super_admin (include admins, staff, and regular users)
+            const validUsers = users.filter(u => u.role !== 'super_admin');
+
             const userStats = {
-                total: users.length,
-                active: users.filter(u => u.isActive).length,
-                inactive: users.filter(u => !u.isActive).length,
+                total: validUsers.length,
+                active: validUsers.filter(u => u.isActive).length,
+                inactive: validUsers.filter(u => !u.isActive).length,
+
+                // Track specific internal roles separately if needed
                 admin: users.filter(u => u.role === 'admin').length,
                 staff: users.filter(u => u.role === 'staff').length
             };
