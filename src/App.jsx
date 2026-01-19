@@ -15,6 +15,7 @@ import ProfilePage from './pages/ProfilePage';
 import PaymentDetailsPage from './pages/PaymentDetailsPage';
 import BranchDetailsPage from './pages/BranchDetailsPage';
 import UserDetailsPage from './pages/UserDetailsPage';
+import LogDetailsPage from './pages/LogDetailsPage';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="settings" element={<SettingsPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="logs" element={<LogsPage />} />
+        <Route path="logs/:id" element={<LogDetailsPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/login" replace />} />

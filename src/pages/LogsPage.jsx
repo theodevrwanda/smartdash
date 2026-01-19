@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Card from '../components/ui/Card';
+import { useNavigate } from 'react-router-dom';
 import { adminService } from '../services/adminService';
-import { Clock, Shield, AlertCircle, Info, ShoppingCart, UserPlus, FileText, Activity, ShieldCheck, Eye, Trash2 } from 'lucide-react';
+import { Clock, Shield, AlertCircle, Info, ShoppingCart, UserPlus, FileText, Activity, ShieldCheck, Eye, Trash2, Hash, User, Calendar } from 'lucide-react';
 
 const LogsPage = ({ limit }) => {
+    const navigate = useNavigate();
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -81,56 +82,74 @@ const LogsPage = ({ limit }) => {
 
             <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col">
                 <div className="overflow-x-auto">
-                    <table className="w-full min-w-[1200px] border-collapse">
+                    <table className="w-full min-w-[1500px] border-collapse">
                         <thead>
-                            <tr className="bg-slate-100 dark:bg-slate-900">
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Level</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Internal Reference</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Security Event</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">User Identity</th>
-                                <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Execution Date</th>
+                            <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 uppercase tracking-widest text-left">
+                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">#</th>
+                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">Type</th>
+                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">Business</th>
+                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">Action Logic</th>
+                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">Operator</th>
+                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap">Execution Date</th>
+                                <th className="px-3 py-3 border border-slate-200 dark:border-slate-800 whitespace-nowrap text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
-                            {logs.map((log) => (
-                                <tr key={log.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10">
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                        <Badge variant={log.severity === 'error' ? 'error' : log.severity === 'warning' ? 'warning' : 'success'} className="uppercase text-[9px] font-black rounded-none">
-                                            {log.severity || 'INFO'}
-                                        </Badge>
+                            {logs.map((log, index) => (
+                                <tr key={log.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
+                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
+                                        <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
                                     </td>
                                     <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                        <div className="flex items-center gap-2 font-mono text-[10px] font-bold text-slate-400">
-                                            <Hash size={10} />
-                                            {log.id.toUpperCase().substring(0, 16)}
+                                        <div className="flex items-center gap-2">
+                                            <div className={`p-1.5 rounded-none ${getColor(log.transactionType || log.action)}`}>
+                                                {getIcon(log.transactionType || log.action)}
+                                            </div>
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                                                {log.transactionType?.replace('_', ' ') || 'SYSTEM_EVENT'}
+                                            </span>
                                         </div>
                                     </td>
                                     <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                        <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight italic">
+                                            {log.businessName || 'Platform Root'}
+                                        </span>
+                                    </td>
+                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight">{log.action || 'System Process'}</span>
-                                            <span className="text-[10px] font-bold text-slate-400 leading-tight">{log.details || 'Baseline automated event recorded.'}</span>
+                                            <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-tight">
+                                                {log.action || log.actionDetails || 'N/A'}
+                                            </span>
+                                            <span className="text-[10px] font-bold text-slate-400 leading-tight">
+                                                {log.details || 'Baseline operational signal.'}
+                                            </span>
                                         </div>
                                     </td>
                                     <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                         <div className="flex items-center gap-2">
-                                            <div className="w-6 h-6 bg-slate-100 dark:bg-slate-800 rounded-none flex items-center justify-center">
-                                                <User size={12} className="text-slate-400" />
-                                            </div>
-                                            <span className="text-[10px] font-black text-slate-700 dark:text-slate-300 uppercase underline decoration-slate-200">{log.userEmail || 'System'}</span>
+                                            <span className="text-[11px] font-black text-slate-700 dark:text-slate-300 uppercase underline decoration-slate-200">
+                                                {log.userName || log.userEmail || 'Platform'}
+                                            </span>
                                         </div>
                                     </td>
-                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
+                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                         <div className="flex flex-col items-center">
-                                            <span className="text-xs font-black text-slate-700 dark:text-slate-300">
-                                                {log.timestamp ? (typeof log.timestamp === 'object' && log.timestamp.toDate ? log.timestamp.toDate().toLocaleDateString() : new Date(log.timestamp).toLocaleDateString()) : '-'}
-                                            </span>
-                                            <div className="flex items-center gap-1 text-[8px] font-bold text-slate-400">
-                                                <Clock size={8} />
-                                                <span>
-                                                    {log.timestamp ? (typeof log.timestamp === 'object' && log.timestamp.toDate ? log.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) : '-'}
-                                                </span>
+                                            <div className="flex items-center gap-1.5 text-[10px] font-black text-slate-600 dark:text-slate-400">
+                                                <Calendar size={10} /> {log.createdAt || log.timestamp ? new Date(log.createdAt || log.timestamp).toLocaleDateString() : '-'}
+                                            </div>
+                                            <div className="flex items-center gap-1.5 text-[8px] font-bold text-slate-400">
+                                                <Clock size={8} /> {log.createdAt || log.timestamp ? new Date(log.createdAt || log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}
                                             </div>
                                         </div>
+                                    </td>
+                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
+                                        <button
+                                            onClick={() => navigate(`/logs/${log.id}`)}
+                                            className="p-1.5 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800"
+                                            title="View Analysis"
+                                        >
+                                            <Eye size={12} />
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
