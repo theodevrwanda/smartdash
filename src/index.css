@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,32 +6,82 @@
 
 @layer base {
   :root {
-    --pastel-mint: #d1f7e0;
-    --pastel-mint-dark: #a8dcc0;
-    --pastel-lavender: #e6e0f8;
-    --pastel-lavender-dark: #c8bde0;
-    --pastel-sky: #e0eafc;
-    --pastel-sky-dark: #b8cdec;
-    --pastel-yellow: #fcf4dd;
-    --pastel-yellow-dark: #e8dcb8;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
+    /* Primary gradient colors - Pink/Coral theme */
+    --gradient-start: #ff6b9d;
+    --gradient-middle: #ff8fab;
+    --gradient-end: #ffa8c5;
+
+    /* Accent colors */
+    --accent-coral: #ff6b9d;
+    --accent-pink: #ff8fab;
+    --accent-rose: #ffa8c5;
+    --accent-peach: #ffb8d1;
+
+    /* Soft pastel backgrounds */
+    --pastel-pink: #ffe5f0;
+    --pastel-coral: #ffd4e5;
+    --pastel-peach: #fff0f5;
+    --pastel-cream: #fef8fa;
+
+    /* Neutral colors */
+    --bg-primary: #f5f7fa;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+
+    /* Text colors */
+    --text-primary: #2d3748;
+    --text-secondary: #718096;
+    --text-muted: #a0aec0;
+
+    /* Dark mode colors */
+    --dark-bg: #1a202c;
+    --dark-card: #2d3748;
+    --dark-text: #e2e8f0;
   }
 
   body {
-    @apply font-['Inter'] bg-[#f8fafc] text-slate-800 antialiased;
+    @apply font-['Inter'] bg-[#f5f7fa] text-[#2d3748] antialiased;
+  }
+
+  body.dark {
+    @apply bg-[#1a202c] text-[#e2e8f0];
   }
 }
 
 @layer utilities {
+
+  /* Gradient utilities */
+  .gradient-coral {
+    background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 50%, #ffa8c5 100%);
+  }
+
+  .gradient-soft-pink {
+    background: linear-gradient(135deg, #ffa8c5 0%, #ffb8d1 100%);
+  }
+
+  /* Card shadows - softer and more subtle */
   .card-shadow {
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 16px -4px rgba(255, 107, 157, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
+  }
+
+  .card-shadow-hover {
+    box-shadow: 0 4px 24px -4px rgba(255, 107, 157, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.03);
   }
 
   .pill-shadow {
-    box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px -2px rgba(255, 107, 157, 0.1);
   }
 
+  /* Rounded corners matching the design */
+  .rounded-card {
+    border-radius: 1.25rem;
+  }
+
+  .rounded-soft {
+    border-radius: 1rem;
+  }
+
+  /* Custom scrollbar with pink theme */
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -42,10 +92,15 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-slate-200 dark:bg-slate-800 rounded-full;
+    @apply bg-pink-200 dark:bg-pink-800 rounded-full;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-300 dark:bg-slate-700;
+    @apply bg-pink-300 dark:bg-pink-700;
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
