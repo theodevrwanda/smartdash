@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Download, Filter, CheckCircle, XCircle, Clock, CreditCard, ShieldCheck, Eye, Trash2, Hash, ShoppingCart, User } from 'lucide-react';
 import { adminService } from '../services/adminService';
 
 const PaymentsPage = () => {
+    const navigate = useNavigate();
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -192,7 +194,12 @@ const PaymentsPage = () => {
                                                     </button>
                                                 </>
                                             ) : (
-                                                <button className="p-1.5 text-blue-600 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800 shadow-sm"><Eye size={12} /></button>
+                                                <button
+                                                    onClick={() => navigate(`/transactions/${txn.id}`)}
+                                                    className="p-1.5 text-blue-600 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800 shadow-sm"
+                                                >
+                                                    <Eye size={12} />
+                                                </button>
                                             )}
                                         </div>
                                     </td>
