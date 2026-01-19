@@ -39,19 +39,29 @@ const LogsPage = ({ limit }) => {
         initFilters();
     }, [limit]);
 
-    // Load branches when business changes
+    // Updated load handlers
     useEffect(() => {
-        if (selectedBusiness) {
+        if (selectedBusiness === 'all') {
+            setBranches([]);
+            setSelectedBranch('');
+            loadLogs(null, null);
+        } else if (selectedBusiness) {
             loadBranches(selectedBusiness);
-            loadLogs(selectedBusiness, ''); // Reset branch when business changes
+            loadLogs(selectedBusiness, '');
+            setSelectedBranch('');
+        } else {
+            setLogs([]);
+            setBranches([]);
             setSelectedBranch('');
         }
     }, [selectedBusiness]);
 
     // Load logs when branch changes
     useEffect(() => {
-        if (selectedBusiness && selectedBranch) {
+        if (selectedBusiness && selectedBusiness !== 'all' && selectedBranch) {
             loadLogs(selectedBusiness, selectedBranch);
+        } else if (selectedBusiness && selectedBusiness !== 'all' && !selectedBranch) {
+            loadLogs(selectedBusiness, null);
         }
     }, [selectedBranch]);
 
@@ -146,6 +156,7 @@ const LogsPage = ({ limit }) => {
                                 className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 text-xs font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors cursor-pointer"
                             >
                                 <option value="">Select Business Account</option>
+                                <option value="all" className="text-blue-600 font-black">Global Matrix (All System Hubs)</option>
                                 {businesses.map(biz => (
                                     <option key={biz.id} value={biz.id}>{biz.businessName}</option>
                                 ))}
@@ -158,7 +169,7 @@ const LogsPage = ({ limit }) => {
                             <select
                                 value={selectedBranch}
                                 onChange={(e) => setSelectedBranch(e.target.value)}
-                                disabled={!selectedBusiness}
+                                disabled={!selectedBusiness || selectedBusiness === 'all'}
                                 className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 text-xs font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <option value="">All Branch Nodes</option>
@@ -269,8 +280,14 @@ const LogsPage = ({ limit }) => {
                                             <div className="flex flex-col items-center gap-4 opacity-50">
                                                 <Search size={64} className="text-slate-200 dark:text-slate-800" />
                                                 <div className="flex flex-col gap-1">
-                                                    <p className="text-slate-400 font-black uppercase tracking-widest text-sm">Signal Nullified</p>
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">No operational events found for this filter vector.</p>
+                                                    <p className="text-slate-400 font-black uppercase tracking-widest text-sm">
+                                                        {selectedBusiness ? 'Signal Nullified' : 'Awaiting Input'}
+                                                    </p>
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                                        {selectedBusiness
+                                                            ? 'No operational events found for this filter vector.'
+                                                            : 'Please select a business entity or global matrix to initialize the stream.'}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </td>

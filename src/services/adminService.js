@@ -4,8 +4,16 @@ import { collection, getDocs, doc, updateDoc, query, where, orderBy, getDoc, del
 
 export const adminService = {
     // Fetch Audit Logs (Transactions collection)
+    // Fetch Audit Logs (Transactions collection) with cross-collection user enrichment
     async fetchAuditLogs(businessId = null, branchId = null) {
         try {
+            // Pre-fetch users for high-performance mapping
+            const usersSnapshot = await getDocs(collection(db, 'users'));
+            const userMap = {};
+            usersSnapshot.docs.forEach(uDoc => {
+                userMap[uDoc.id] = uDoc.data();
+            });
+
             let q = collection(db, 'transactions');
             const constraints = [];
 
@@ -20,14 +28,40 @@ export const adminService = {
             const finalQuery = query(q, ...constraints);
 
             const snapshot = await getDocs(finalQuery);
-            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            return snapshot.docs.map(doc => {
+                const data = doc.data();
+                const user = userMap[data.userId] || {};
+
+                return {
+                    id: doc.id,
+                    ...data,
+                    // Dynamic live lookup with transaction-level fallback
+                    userEmail: user.email || data.userEmail || 'system@internal',
+                    userName: user.fullName || data.userName || (user.firstName ? `${user.firstName} ${user.lastName}` : null) || 'System Process',
+                    userRole: user.role || data.userRole || 'admin'
+                };
+            });
         } catch (error) {
             console.error("Error fetching audit logs", error);
-            // If it's an index error, suggest the user to create an index
             if (error.code === 'failed-precondition') {
-                console.warn("Firestore requires a composite index for this query. Falling back to client-side filtering.");
+                console.warn("Firestore requires a composite index. Falling back to client-side logic.");
+
+                const usersSnapshot = await getDocs(collection(db, 'users'));
+                const userMap = {};
+                usersSnapshot.docs.forEach(uDoc => { userMap[uDoc.id] = uDoc.data(); });
+
                 const snapshot = await getDocs(collection(db, 'transactions'));
-                let data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                let data = snapshot.docs.map(doc => {
+                    const tData = doc.data();
+                    const user = userMap[tData.userId] || {};
+                    return {
+                        id: doc.id,
+                        ...tData,
+                        userEmail: user.email || tData.userEmail || 'system@internal',
+                        userName: user.fullName || tData.userName || (user.firstName ? `${user.firstName} ${user.lastName}` : null) || 'System Process',
+                        userRole: user.role || tData.userRole || 'admin'
+                    };
+                });
 
                 if (businessId) data = data.filter(d => d.businessId === businessId);
                 if (branchId) data = data.filter(d => d.branchId === branchId);
