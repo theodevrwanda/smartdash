@@ -4,6 +4,7 @@ import { Save, Settings as SettingsIcon, Shield, DollarSign, Activity } from 'lu
 import { adminService } from '../services/adminService';
 import { db } from '../firebase/config';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+import Loading from '../components/ui/Loading';
 
 const SettingsPage = () => {
     const [settings, setSettings] = useState({
@@ -56,7 +57,7 @@ const SettingsPage = () => {
         }
     };
 
-    if (loading) return <div className="p-8">Loading settings...</div>;
+    if (loading) return <Loading message="Loading Settings" />;
 
     return (
         <div className="space-y-6 max-w-4xl mx-auto animate-fade-in">

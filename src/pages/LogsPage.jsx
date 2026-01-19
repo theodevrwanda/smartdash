@@ -7,6 +7,7 @@ import {
     Trash2, Hash, User, Calendar, Building2, MapPin, Search,
     Filter, ArrowUpDown, ChevronUp, ChevronDown
 } from 'lucide-react';
+import Loading from '../components/ui/Loading';
 
 const LogsPage = ({ limit }) => {
     const navigate = useNavigate();
@@ -170,14 +171,7 @@ const LogsPage = ({ limit }) => {
     };
 
     if (isInitialLoad) {
-        return (
-            <div className="flex items-center justify-center p-20 h-full">
-                <div className="flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 border-4 border-blue-600/20 rounded-full border-t-blue-600 animate-spin"></div>
-                    <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Initializing Matrix...</p>
-                </div>
-            </div>
-        );
+        return <Loading message="Initializing Matrix" />;
     }
 
     return (
@@ -260,9 +254,22 @@ const LogsPage = ({ limit }) => {
 
             <div className="flex-1 bg-white dark:bg-slate-950 rounded-none border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col shadow-xl">
                 {loading ? (
-                    <div className="flex-1 flex flex-col items-center justify-center p-20 gap-4">
-                        <div className="w-12 h-12 border-4 border-blue-600/10 rounded-full border-t-blue-600 animate-spin"></div>
-                        <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Filtering Stream...</p>
+                    <div className="flex-1 flex items-center justify-center">
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="spinner-gradient">
+                                {[...Array(12)].map((_, i) => (
+                                    <div
+                                        key={i}
+                                        className="spinner-bar"
+                                        style={{
+                                            transform: `rotate(${i * 30}deg) translate(0, -140%)`,
+                                            animationDelay: `${-1.2 + i * 0.1}s`,
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                            <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Filtering Stream...</p>
+                        </div>
                     </div>
                 ) : (
                     <div className="overflow-x-auto">

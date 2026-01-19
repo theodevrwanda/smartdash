@@ -9,6 +9,7 @@ import {
     Clock, Mail, Phone, Calendar, Globe, Power, Hash, Info,
     ChevronRight, Briefcase
 } from 'lucide-react';
+import Loading from '../components/ui/Loading';
 
 const BranchDetailsPage = () => {
     const { id } = useParams();
@@ -63,14 +64,7 @@ const BranchDetailsPage = () => {
     };
 
     if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-[400px]">
-                <div className="flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                    <p className="text-slate-500 font-bold uppercase text-xs tracking-widest">Aggregating Node Environment</p>
-                </div>
-            </div>
-        );
+        return <Loading message="Aggregating Node Environment" />;
     }
 
     if (!branch) {

@@ -9,6 +9,7 @@ import {
     Globe, Power, Hash, Info, Briefcase, MapPin, Clock,
     UserCircle, Map, Activity
 } from 'lucide-react';
+import Loading from '../components/ui/Loading';
 
 const UserDetailsPage = () => {
     const { id } = useParams();
@@ -56,14 +57,7 @@ const UserDetailsPage = () => {
     };
 
     if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-[400px]">
-                <div className="flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                    <p className="text-slate-500 font-bold uppercase text-xs tracking-widest">Decoding Personnel Signature</p>
-                </div>
-            </div>
-        );
+        return <Loading message="Decoding Personnel Signature" />;
     }
 
     if (!user) {

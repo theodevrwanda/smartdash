@@ -9,6 +9,7 @@ import {
     ChevronUp, ChevronDown
 } from 'lucide-react';
 import { adminService } from '../services/adminService';
+import Loading from '../components/ui/Loading';
 
 const EmployeesPage = () => {
     const navigate = useNavigate();
@@ -102,17 +103,7 @@ const EmployeesPage = () => {
     };
 
     if (loading) {
-        return (
-            <div className="flex items-center justify-center h-full p-20">
-                <div className="flex flex-col items-center gap-6">
-                    <div className="relative">
-                        <div className="w-16 h-16 border-4 border-blue-600/20 rounded-full"></div>
-                        <div className="absolute top-0 left-0 w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                    </div>
-                    <p className="text-slate-500 font-bold tracking-widest uppercase text-xs">Syncing Personnel Data</p>
-                </div>
-            </div>
-        );
+        return <Loading message="Syncing Personnel Data" />;
     }
 
     return (
@@ -241,8 +232,8 @@ const EmployeesPage = () => {
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
                                         <span className={`px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.15em] border-2 shadow-sm ${employee.role === 'super_admin' ? 'bg-rose-50 text-rose-700 border-rose-100' :
-                                                employee.role === 'admin' ? 'bg-purple-50 text-purple-700 border-purple-100' :
-                                                    'bg-blue-50 text-blue-700 border-blue-100'
+                                            employee.role === 'admin' ? 'bg-purple-50 text-purple-700 border-purple-100' :
+                                                'bg-blue-50 text-blue-700 border-blue-100'
                                             }`}>
                                             {employee.role?.replace('_', ' ') || 'AGENT'}
                                         </span>

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import Card from '../components/ui/Card';
 import { useTheme } from '../context/ThemeContext';
+import Loading from '../components/ui/Loading';
 
 const DashboardPage = () => {
     const [stats, setStats] = useState(null);
@@ -30,7 +31,7 @@ const DashboardPage = () => {
         loadStats();
     }, []);
 
-    if (loading) return <div className="p-8 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-800 dark:border-slate-200"></div></div>;
+    if (loading) return <Loading message="Loading Dashboard Data" />;
     if (!stats) return <div className="p-8 dark:text-slate-300">Failed to load dashboard data.</div>;
 
     const { businessStats, userStats, paymentStats, businessGrowthData, paymentsGrowthData } = stats;
