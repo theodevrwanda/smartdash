@@ -109,7 +109,14 @@ const PaymentDetailsPage = () => {
             items: [
                 { label: "Transaction Amount", value: `${transaction.amount?.toLocaleString()} ${transaction.currency}`, icon: CreditCard, highlight: true },
                 { label: "Payment Gateway", value: transaction.method, icon: Globe, uppercase: true },
-                { label: "Plan Type", value: transaction.plan, icon: Info, uppercase: true },
+                {
+                    label: "Plan Type", value: (() => {
+                        const p = (transaction.plan || '').toLowerCase();
+                        if (['monthly', 'month'].includes(p)) return 'monthly';
+                        if (['annually', 'yearly', 'year'].includes(p)) return 'annually';
+                        return p || 'free';
+                    })(), icon: Info, uppercase: true
+                },
                 { label: "System Priority", value: transaction.type, icon: ShieldCheck, uppercase: true }
             ]
         },
@@ -127,7 +134,7 @@ const PaymentDetailsPage = () => {
     return (
         <div className="flex flex-col gap-8 animate-fade-in py-6">
             {/* Header Area */}
-            <div className="bg-slate-900 rounded-none p-8 text-white relative overflow-hidden shadow-2xl">
+            <div className="bg-slate-900 rounded-none p-8 text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-12 opacity-5">
                     <History size={200} />
                 </div>
@@ -163,7 +170,7 @@ const PaymentDetailsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="md:col-span-2 space-y-6">
                     {detailSections.map((section, idx) => (
-                        <Card key={idx} className="p-0 overflow-hidden bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 rounded-none shadow-xl">
+                        <Card key={idx} className="p-0 overflow-hidden bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 rounded-none">
                             <div className="px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
                                 <section.icon size={16} className="text-blue-600" />
                                 <h3 className="text-xs font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white">{section.title}</h3>
@@ -193,7 +200,7 @@ const PaymentDetailsPage = () => {
 
                 <div className="space-y-6">
                     <Card className="p-8 bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 rounded-none flex flex-col items-center text-center">
-                        <div className="w-20 h-20 bg-blue-600 rounded-none flex items-center justify-center text-3xl font-black text-white shadow-2xl mb-6">
+                        <div className="w-20 h-20 bg-blue-600 rounded-none flex items-center justify-center text-3xl font-black text-white mb-6">
                             {transaction.ownerName?.charAt(0)}
                         </div>
                         <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase mb-1">{transaction.ownerName}</h4>

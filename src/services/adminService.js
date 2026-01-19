@@ -33,10 +33,10 @@ export const adminService = {
                 active: businesses.filter(b => b.isActive).length,
                 inactive: businesses.filter(b => !b.isActive).length,
                 byPlan: {
-                    free: businesses.filter(b => b.subscription?.plan === 'free').length,
-                    monthly: businesses.filter(b => b.subscription?.plan === 'month').length,
-                    yearly: businesses.filter(b => b.subscription?.plan === 'year').length,
-                    forever: businesses.filter(b => b.subscription?.plan === 'forever').length
+                    free: businesses.filter(b => (b.subscription?.plan || '').toLowerCase() === 'free').length,
+                    monthly: businesses.filter(b => ['monthly', 'month'].includes((b.subscription?.plan || '').toLowerCase())).length,
+                    annually: businesses.filter(b => ['annually', 'yearly', 'year'].includes((b.subscription?.plan || '').toLowerCase())).length,
+                    forever: businesses.filter(b => (b.subscription?.plan || '').toLowerCase() === 'forever').length
                 }
             };
 
@@ -161,14 +161,14 @@ export const adminService = {
 
             const duration = planType.toLowerCase();
 
-            if (duration === 'monthly' || duration === 'month') {
+            if (duration === 'monthly') {
                 endDate.setDate(startDate.getDate() + 30);
-            } else if (duration === 'yearly' || duration === 'year') {
+            } else if (duration === 'annually' || duration === 'yearly' || duration === 'year') {
                 endDate.setDate(startDate.getDate() + 365);
             } else if (duration === 'forever') {
                 endDate.setFullYear(startDate.getFullYear() + 100);
             } else if (duration === 'free') {
-                endDate.setDate(startDate.getDate() + 14); // 14 days trial for free
+                endDate.setDate(startDate.getDate() + 30); // 30 days for free plan
             } else {
                 // Default to 1 month if unknown
                 endDate.setDate(startDate.getDate() + 30);

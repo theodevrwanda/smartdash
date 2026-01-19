@@ -81,15 +81,15 @@ const PaymentsPage = () => {
                     </h1>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-2xl text-xs font-black uppercase tracking-wider hover:bg-slate-50 transition-all shadow-sm">
+                    <button className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-2xl text-xs font-black uppercase tracking-wider hover:bg-slate-50 transition-all">
                         <Filter size={14} /> Filter
                     </button>
-                    <button className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-xs font-black uppercase tracking-wider hover:bg-slate-800 transition-all shadow-xl active:scale-95">
+                    <button className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-xs font-black uppercase tracking-wider hover:bg-slate-800 transition-all active:scale-95">
                         <Download size={14} /> Export
                     </button>
                     <button
                         onClick={loadTransactions}
-                        className="w-10 h-10 bg-blue-600 text-white rounded-2xl flex items-center justify-center hover:scale-105 transition-all shadow-lg active:scale-95"
+                        className="w-10 h-10 bg-blue-600 text-white rounded-2xl flex items-center justify-center hover:scale-105 transition-all active:scale-95"
                     >
                         <Clock className="w-5 h-5" />
                     </button>
@@ -151,7 +151,14 @@ const PaymentsPage = () => {
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
                                         <div className="flex flex-col gap-1">
                                             <div className="flex items-center gap-2">
-                                                <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none bg-purple-50 text-purple-600 border-purple-100">{txn.plan}</Badge>
+                                                <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none bg-purple-50 text-purple-600 border-purple-100">
+                                                    {(() => {
+                                                        const p = (txn.plan || '').toLowerCase();
+                                                        if (['monthly', 'month'].includes(p)) return 'monthly';
+                                                        if (['annually', 'yearly', 'year'].includes(p)) return 'annually';
+                                                        return p || 'free';
+                                                    })()}
+                                                </Badge>
                                                 <Badge variant="outline" className="text-[9px] font-black uppercase rounded-none bg-blue-50 text-blue-600 border-blue-100">{txn.type}</Badge>
                                             </div>
                                             {txn.isManualVerification && (
@@ -196,7 +203,7 @@ const PaymentsPage = () => {
                                             ) : (
                                                 <button
                                                     onClick={() => navigate(`/transactions/${txn.id}`)}
-                                                    className="p-1.5 text-blue-600 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800 shadow-sm"
+                                                    className="p-1.5 text-blue-600 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800"
                                                 >
                                                     <Eye size={12} />
                                                 </button>

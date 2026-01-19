@@ -164,7 +164,7 @@ const BusinessDetailsPage = () => {
     return (
         <div className="flex flex-col gap-8 animate-fade-in py-6">
             {/* Premium Header */}
-            <div className="bg-slate-900 rounded-none p-8 text-white relative overflow-hidden shadow-2xl">
+            <div className="bg-slate-900 rounded-none p-8 text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-12 opacity-5">
                     <Building2 size={200} />
                 </div>
@@ -193,7 +193,14 @@ const BusinessDetailsPage = () => {
 
                     <div className="bg-white/5 backdrop-blur-md rounded-none p-6 border border-white/10 min-w-[200px]">
                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Current Protocol</p>
-                        <p className="text-2xl font-black text-blue-400 uppercase tracking-tight leading-none">{business.plan || 'Free Tier'}</p>
+                        <p className="text-2xl font-black text-blue-400 uppercase tracking-tight leading-none">
+                            {(() => {
+                                const p = (business.plan || 'free').toLowerCase();
+                                if (['monthly', 'month'].includes(p)) return 'monthly';
+                                if (['annually', 'yearly', 'year'].includes(p)) return 'annually';
+                                return p;
+                            })()}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -220,7 +227,7 @@ const BusinessDetailsPage = () => {
                         onClick={() => setActiveTab(tab.id)}
                         className={`px-6 py-3 rounded-none flex items-center gap-3 text-sm font-black transition-all
                             ${activeTab === tab.id
-                                ? 'bg-white dark:bg-slate-800 text-blue-600 shadow-sm'
+                                ? 'bg-white dark:bg-slate-800 text-blue-600'
                                 : 'text-slate-500 hover:text-slate-700 hover:bg-white/50 dark:hover:bg-slate-800/50'}
                         `}
                     >
@@ -263,7 +270,16 @@ const BusinessDetailsPage = () => {
                                     <h3 className="text-xs font-black text-purple-600 uppercase tracking-[0.2em]">Subscription Matrix</h3>
                                     <div className="space-y-4">
                                         {[
-                                            { label: 'Active Plan', val: business.plan || business.subscription?.plan, color: 'text-purple-600' },
+                                            {
+                                                label: 'Active Plan',
+                                                val: (() => {
+                                                    const p = (business.plan || business.subscription?.plan || 'free').toLowerCase();
+                                                    if (['monthly', 'month'].includes(p)) return 'monthly';
+                                                    if (['annually', 'yearly', 'year'].includes(p)) return 'annually';
+                                                    return p;
+                                                })(),
+                                                color: 'text-purple-600'
+                                            },
                                             { label: 'License Status', val: business.subscription?.status },
                                             { label: 'Renewal Date', val: business.subscription?.endDate ? new Date(business.subscription.endDate).toLocaleDateString() : '-' },
                                             { label: 'Verification', val: business.isActive ? 'Validated' : 'Pending' }
@@ -279,7 +295,7 @@ const BusinessDetailsPage = () => {
                         </Card>
 
                         <Card className="p-8 bg-slate-50 dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 shadow-inner flex flex-col justify-center text-center">
-                            <div className="w-20 h-20 bg-blue-600 rounded-none mx-auto flex items-center justify-center text-3xl font-black text-white shadow-2xl mb-6">
+                            <div className="w-20 h-20 bg-blue-600 rounded-none mx-auto flex items-center justify-center text-3xl font-black text-white mb-6">
                                 {business.businessName?.charAt(0)}
                             </div>
                             <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase mb-2">{business.businessName}</h4>
@@ -556,7 +572,7 @@ const BusinessDetailsPage = () => {
                 footer={
                     <>
                         <button onClick={closeModal} className="px-6 py-2 font-bold text-slate-500 uppercase text-xs">Cancel</button>
-                        <button onClick={handleUpdate} className="px-8 py-3 bg-blue-600 text-white font-black uppercase text-xs shadow-xl shadow-blue-200">Commit Changes</button>
+                        <button onClick={handleUpdate} className="px-8 py-3 bg-blue-600 text-white font-black uppercase text-xs">Commit Changes</button>
                     </>
                 }
             >
@@ -620,7 +636,7 @@ const BusinessDetailsPage = () => {
                 footer={
                     <>
                         <button onClick={closeModal} className="px-6 py-2 font-bold text-slate-500 uppercase text-xs">Abort</button>
-                        <button onClick={handleDelete} className="px-8 py-3 bg-rose-600 text-white font-black uppercase text-xs shadow-xl shadow-rose-200">Execute Purege</button>
+                        <button onClick={handleDelete} className="px-8 py-3 bg-rose-600 text-white font-black uppercase text-xs">Execute Purege</button>
                     </>
                 }
             >

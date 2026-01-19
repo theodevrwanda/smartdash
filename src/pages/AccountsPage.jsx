@@ -171,7 +171,7 @@ const AccountsPage = () => {
                 </div>
                 <button
                     onClick={loadBusinesses}
-                    className="group bg-slate-900 dark:bg-white p-1 pr-6 rounded-2xl flex items-center gap-3 hover:scale-105 transition-all shadow-2xl active:scale-95"
+                    className="group bg-slate-900 dark:bg-white p-1 pr-6 rounded-2xl flex items-center gap-3 hover:scale-105 transition-all active:scale-95"
                 >
                     <div className="w-10 h-10 bg-slate-800 dark:bg-slate-100 rounded-xl flex items-center justify-center">
                         <Clock className="w-5 h-5 text-white dark:text-slate-900 group-hover:rotate-180 transition-transform duration-700" />
@@ -227,10 +227,15 @@ const AccountsPage = () => {
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                             <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-tighter
                                                 ${(business.plan === 'forever' || business.subscription?.plan === 'forever') ? 'bg-purple-100 text-purple-700' :
-                                                    (business.plan === 'yearly' || business.subscription?.plan === 'yearly' || business.plan === 'year' || business.subscription?.plan === 'year') ? 'bg-blue-100 text-blue-700' :
+                                                    (business.plan === 'annually' || business.subscription?.plan === 'annually' || business.plan === 'yearly' || business.subscription?.plan === 'yearly' || business.plan === 'year' || business.subscription?.plan === 'year') ? 'bg-blue-100 text-blue-700' :
                                                         (business.plan === 'monthly' || business.subscription?.plan === 'monthly' || business.plan === 'month' || business.subscription?.plan === 'month') ? 'bg-sky-100 text-sky-700' :
                                                             'bg-slate-100 text-slate-600'}`}>
-                                                {business.plan || (business.subscription?.plan) || 'Free'}
+                                                {(() => {
+                                                    const p = (business.plan || business.subscription?.plan || 'free').toLowerCase();
+                                                    if (['monthly', 'month'].includes(p)) return 'monthly';
+                                                    if (['annually', 'yearly', 'year'].includes(p)) return 'annually';
+                                                    return p;
+                                                })()}
                                             </span>
                                         </td>
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
@@ -283,7 +288,7 @@ const AccountsPage = () => {
                 footer={
                     <>
                         <button onClick={() => closeModal('status')} className="px-6 py-3 font-bold text-slate-500">Cancel</button>
-                        <button onClick={handleConfirmToggleStatus} className={`px-8 py-3 rounded-none font-black text-white shadow-xl hover:scale-105 transition-all ${selectedBusiness?.isActive ? 'bg-rose-600 shadow-rose-200' : 'bg-emerald-600 shadow-emerald-200'}`}>
+                        <button onClick={handleConfirmToggleStatus} className={`px-8 py-3 rounded-none font-black text-white hover:scale-105 transition-all ${selectedBusiness?.isActive ? 'bg-rose-600' : 'bg-emerald-600'}`}>
                             Confirm {selectedBusiness?.isActive ? 'Deactivation' : 'Activation'}
                         </button>
                     </>
@@ -308,7 +313,7 @@ const AccountsPage = () => {
                 footer={
                     <>
                         <button onClick={() => closeModal('edit')} className="px-6 py-3 font-bold text-slate-500">Discard</button>
-                        <button onClick={handleUpdateBusiness} className="px-8 py-3 bg-slate-900 text-white dark:bg-white dark:text-slate-900 rounded-none font-black shadow-xl hover:scale-105 active:scale-95 transition-all">Save Matrix</button>
+                        <button onClick={handleUpdateBusiness} className="px-8 py-3 bg-slate-900 text-white dark:bg-white dark:text-slate-900 rounded-none font-black hover:scale-105 active:scale-95 transition-all">Save Matrix</button>
                     </>
                 }
             >
@@ -342,12 +347,12 @@ const AccountsPage = () => {
                 footer={
                     <>
                         <button onClick={() => closeModal('plan')} className="px-6 py-3 font-bold text-slate-500">Cancel</button>
-                        <button onClick={handleChangePlan} className="px-8 py-3 bg-purple-600 text-white rounded-none font-black shadow-xl shadow-purple-200 hover:scale-105 active:scale-95 transition-all">Apply Protocol</button>
+                        <button onClick={handleChangePlan} className="px-8 py-3 bg-purple-600 text-white rounded-none font-black hover:scale-105 active:scale-95 transition-all">Apply Protocol</button>
                     </>
                 }
             >
                 <div className="grid grid-cols-1 gap-3">
-                    {['free', 'monthly', 'yearly', 'forever'].map((plan) => (
+                    {['free', 'monthly', 'annually', 'forever'].map((plan) => (
                         <button
                             key={plan}
                             onClick={() => setSelectedPlan(plan)}
@@ -373,7 +378,7 @@ const AccountsPage = () => {
                 footer={
                     <>
                         <button onClick={() => closeModal('delete')} className="px-6 py-3 font-bold text-slate-500">Cancel</button>
-                        <button onClick={handleDeleteBusiness} className="px-8 py-3 bg-red-600 text-white rounded-none font-black shadow-xl shadow-red-200 hover:scale-105 transition-all">Execute Deletion</button>
+                        <button onClick={handleDeleteBusiness} className="px-8 py-3 bg-red-600 text-white rounded-none font-black hover:scale-105 transition-all">Execute Deletion</button>
                     </>
                 }
             >
