@@ -169,16 +169,16 @@ const ProfilePage = () => {
                             </h3>
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium text-slate-500">System Health</span>
-                                    <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">98% Stable</span>
+                                    <span className="text-sm font-medium text-slate-500 dark:text-slate-400">System Health</span>
+                                    <span className="text-xs font-bold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded">98% Stable</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium text-slate-500">Security Level</span>
-                                    <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">Root Access</span>
+                                    <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Security Level</span>
+                                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Root Access</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium text-slate-500">Active Session</span>
-                                    <span className="text-xs font-bold text-slate-600 bg-slate-100 px-2 py-1 rounded">2h 15m</span>
+                                    <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Active Session</span>
+                                    <span className="text-xs font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">2h 15m</span>
                                 </div>
                             </div>
 
@@ -260,11 +260,11 @@ const ProfilePage = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {/* First Name */}
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 uppercase">First Name</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">First Name</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
-                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg font-medium text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
                                                     value={profileData.firstName}
                                                     onChange={(e) => setProfileData({ ...profileData, firstName: e.target.value })}
                                                 />
@@ -275,11 +275,11 @@ const ProfilePage = () => {
 
                                         {/* Last Name */}
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 uppercase">Last Name</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Last Name</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
-                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg font-medium text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
                                                     value={profileData.lastName}
                                                     onChange={(e) => setProfileData({ ...profileData, lastName: e.target.value })}
                                                 />
@@ -290,11 +290,11 @@ const ProfilePage = () => {
 
                                         {/* Phone */}
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 uppercase">Phone Number</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Phone Number</label>
                                             {isEditing ? (
                                                 <input
                                                     type="tel"
-                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg font-medium text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
                                                     value={profileData.phone}
                                                     onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
                                                 />
@@ -308,10 +308,10 @@ const ProfilePage = () => {
 
                                         {/* Gender */}
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 uppercase">Gender</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Gender</label>
                                             {isEditing ? (
                                                 <select
-                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg font-medium text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
                                                     value={profileData.gender}
                                                     onChange={(e) => setProfileData({ ...profileData, gender: e.target.value })}
                                                 >
@@ -331,11 +331,11 @@ const ProfilePage = () => {
                                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Location Details</h4>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 uppercase">District</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">District</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
-                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg font-medium text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
                                                     value={profileData.district}
                                                     onChange={(e) => setProfileData({ ...profileData, district: e.target.value })}
                                                 />
@@ -344,11 +344,11 @@ const ProfilePage = () => {
                                             )}
                                         </div>
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 uppercase">Sector</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Sector</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
-                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg font-medium text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
                                                     value={profileData.sector}
                                                     onChange={(e) => setProfileData({ ...profileData, sector: e.target.value })}
                                                 />
@@ -357,11 +357,11 @@ const ProfilePage = () => {
                                             )}
                                         </div>
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 uppercase">Cell</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Cell</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
-                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg font-medium text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
                                                     value={profileData.cell}
                                                     onChange={(e) => setProfileData({ ...profileData, cell: e.target.value })}
                                                 />
@@ -370,11 +370,11 @@ const ProfilePage = () => {
                                             )}
                                         </div>
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold text-slate-500 uppercase">Village</label>
+                                            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Village</label>
                                             {isEditing ? (
                                                 <input
                                                     type="text"
-                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    className="w-full p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg font-medium text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
                                                     value={profileData.village}
                                                     onChange={(e) => setProfileData({ ...profileData, village: e.target.value })}
                                                 />
@@ -407,31 +407,31 @@ const ProfilePage = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                     <Card className="p-4 border border-slate-200 dark:border-slate-800 shadow-sm bg-indigo-50 dark:bg-indigo-900/10">
                                         <div className="flex justify-between items-start mb-2">
-                                            <Building2 className="text-indigo-600" size={24} />
-                                            <span className="text-xs font-bold text-indigo-500 px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Businesses</span>
+                                            <Building2 className="text-indigo-600 dark:text-indigo-400" size={24} />
+                                            <span className="text-xs font-bold text-indigo-500 dark:text-indigo-300 px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Businesses</span>
                                         </div>
                                         <div className="text-3xl font-black text-indigo-900 dark:text-white">{stats.businessStats?.total || 0}</div>
-                                        <div className="text-xs text-indigo-600 mt-1">Total Registered</div>
+                                        <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-1">Total Registered</div>
                                     </Card>
 
                                     <Card className="p-4 border border-slate-200 dark:border-slate-800 shadow-sm bg-emerald-50 dark:bg-emerald-900/10">
                                         <div className="flex justify-between items-start mb-2">
-                                            <Users className="text-emerald-600" size={24} />
-                                            <span className="text-xs font-bold text-emerald-500 px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Users</span>
+                                            <Users className="text-emerald-600 dark:text-emerald-400" size={24} />
+                                            <span className="text-xs font-bold text-emerald-500 dark:text-emerald-300 px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Users</span>
                                         </div>
                                         <div className="text-3xl font-black text-emerald-900 dark:text-white">{stats.userStats?.total || 0}</div>
-                                        <div className="text-xs text-emerald-600 mt-1">Active Accounts</div>
+                                        <div className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Active Accounts</div>
                                     </Card>
 
                                     <Card className="p-4 border border-slate-200 dark:border-slate-800 shadow-sm bg-amber-50 dark:bg-amber-900/10">
                                         <div className="flex justify-between items-start mb-2">
-                                            <CreditCard className="text-amber-600" size={24} />
-                                            <span className="text-xs font-bold text-amber-500 px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Revenue</span>
+                                            <CreditCard className="text-amber-600 dark:text-amber-400" size={24} />
+                                            <span className="text-xs font-bold text-amber-500 dark:text-amber-300 px-2 py-1 bg-white dark:bg-slate-800 rounded-full">Revenue</span>
                                         </div>
                                         <div className="text-3xl font-black text-amber-900 dark:text-white">
                                             {new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF', notation: "compact" }).format(stats.paymentStats?.revenue || 0)}
                                         </div>
-                                        <div className="text-xs text-amber-600 mt-1">Total Transactions</div>
+                                        <div className="text-xs text-amber-600 dark:text-amber-400 mt-1">Total Transactions</div>
                                     </Card>
 
                                     {/* Detailed Mini-List */}
@@ -442,8 +442,8 @@ const ProfilePage = () => {
                                             </h5>
                                             <div className="flex gap-4 overflow-x-auto pb-2">
                                                 {Object.entries(stats.businessStats?.byPlan || {}).map(([plan, count]) => (
-                                                    <div key={plan} className="flex-shrink-0 px-4 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-100 dark:border-slate-700 min-w-[120px]">
-                                                        <span className="block text-xs uppercase text-slate-500 font-bold">{plan}</span>
+                                                    <div key={plan} className="flex-shrink-0 px-4 py-2 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-slate-100 dark:border-slate-700 min-w-[120px]">
+                                                        <span className="block text-xs uppercase text-slate-500 dark:text-slate-400 font-bold">{plan}</span>
                                                         <span className="block text-xl font-bold text-slate-900 dark:text-white">{count}</span>
                                                     </div>
                                                 ))}
