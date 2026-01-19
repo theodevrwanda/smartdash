@@ -4,13 +4,22 @@ import { Globe, Mail, Lock, Check } from 'lucide-react';
 import { auth } from '../firebase/config';
 import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
 
+import { useAuth } from '../context/AuthContext';
+
 const LoginPage = () => {
     const navigate = useNavigate();
+    const { user, loading: authLoading } = useAuth();
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        if (user && !authLoading) {
+            navigate('/dashboard');
+        }
+    }, [user, authLoading, navigate]);
 
     useEffect(() => {
         setMounted(true);

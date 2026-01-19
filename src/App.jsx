@@ -17,13 +17,19 @@ import BranchDetailsPage from './pages/BranchDetailsPage';
 import UserDetailsPage from './pages/UserDetailsPage';
 import LogDetailsPage from './pages/LogDetailsPage';
 
+import RequireAuth from './components/auth/RequireAuth';
+
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
 
-      <Route path="/" element={<Layout />}>
+      <Route path="/" element={
+        <RequireAuth>
+          <Layout />
+        </RequireAuth>
+      }>
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="accounts" element={<AccountsPage />} />
         <Route path="transactions" element={<TransactionsPage />} />

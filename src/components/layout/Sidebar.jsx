@@ -3,9 +3,12 @@ import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Users, ShoppingBag, PieChart, Settings, ArrowRight, ChevronLeft, ChevronRight, X, Building2, CreditCard, MapPin, FileText } from 'lucide-react';
 import clsx from 'clsx';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
+import { LogOut } from 'lucide-react';
 
 const Sidebar = ({ isDesktopOpen, setIsDesktopOpen, isMobileOpen, setIsMobileOpen }) => {
     const { theme } = useTheme();
+    const { user, logout } = useAuth();
 
     const navItems = [
         { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard', color: 'text-emerald-500', darkColor: 'dark:text-emerald-400', bg: 'bg-emerald-100', darkBg: 'dark:bg-emerald-900/30' },
@@ -105,19 +108,41 @@ const Sidebar = ({ isDesktopOpen, setIsDesktopOpen, isMobileOpen, setIsMobileOpe
                 </div>
 
                 {/* Footer User */}
-                <div className="mt-auto px-4">
+                <div className="mt-auto px-4 space-y-2">
+                    {/* Logout Button */}
+                    <button
+                        onClick={logout}
+                        className={clsx(
+                            "flex items-center gap-4 py-2 rounded-xl transition-all duration-200 group text-sm font-semibold w-full text-slate-500 hover:bg-red-50 hover:text-red-600 dark:text-slate-400 dark:hover:bg-red-900/20 dark:hover:text-red-400",
+                            isDesktopOpen ? "px-4" : "justify-center px-0"
+                        )}
+                        title="Logout"
+                    >
+                        <div className={clsx(
+                            "p-1.5 rounded-full transition-colors flex-shrink-0 bg-slate-100 dark:bg-slate-800 group-hover:bg-red-100 dark:group-hover:bg-red-900/30"
+                        )}>
+                            <LogOut size={18} />
+                        </div>
+                        <span className={clsx(
+                            "transition-all duration-300 overflow-hidden whitespace-nowrap",
+                            isDesktopOpen ? "w-auto opacity-100" : "w-0 opacity-0 hidden"
+                        )}>
+                            Logout
+                        </span>
+                    </button>
+
                     <NavLink to="/profile" className={clsx(
                         "bg-slate-900 dark:bg-slate-800 rounded-full flex items-center group cursor-pointer hover:bg-slate-800 dark:hover:bg-slate-700 transition-all overflow-hidden",
                         isDesktopOpen ? "p-2 pl-4 justify-between" : "p-2 justify-center w-12 h-12 mx-auto"
                     )}>
                         <div className="flex items-center gap-2">
                             <div className="w-8 h-8 bg-amber-200 rounded-full flex items-center justify-center text-amber-700 text-xs font-bold flex-shrink-0">
-                                A
+                                {user?.firstName?.charAt(0) || user?.email?.charAt(0) || 'A'}
                             </div>
                             {isDesktopOpen && (
                                 <div className="flex flex-col whitespace-nowrap">
-                                    <span className="text-[10px] text-slate-400 font-medium leading-none mb-0.5">ADMIN</span>
-                                    <span className="text-white text-sm font-bold leading-none">Super Admin</span>
+                                    <span className="text-[10px] text-slate-400 font-medium leading-none mb-0.5 uppercase">{user?.role || 'User'}</span>
+                                    <span className="text-white text-sm font-bold leading-none truncate max-w-[120px]">{user?.firstName || 'Admin'}</span>
                                 </div>
                             )}
                         </div>
