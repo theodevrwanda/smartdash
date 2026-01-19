@@ -513,14 +513,26 @@ const BusinessDetailsPage = () => {
                 footer={<button onClick={closeModal} className="px-8 py-3 bg-slate-900 text-white font-black uppercase text-xs">Acknowledge</button>}
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {selectedItem && Object.entries(selectedItem).map(([key, val]) => (
-                        <div key={key} className="p-4 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
-                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{key.replace(/([A-Z])/g, ' $1')}</p>
-                            <p className="text-sm font-bold text-slate-800 dark:text-slate-200 break-all">
-                                {typeof val === 'object' ? JSON.stringify(val) : String(val)}
-                            </p>
-                        </div>
-                    ))}
+                    {selectedItem && Object.entries(selectedItem)
+                        .filter(([key]) => !(itemType === 'users' && (key === 'isActive' || key === 'imagephoto')))
+                        .map(([key, val]) => (
+                            <div key={key} className="p-4 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{key.replace(/([A-Z])/g, ' $1')}</p>
+                                <p className="text-sm font-bold text-slate-800 dark:text-slate-200 break-all">
+                                    {(key === 'profileImage' || key === 'imagephoto') ? (
+                                        <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 overflow-hidden">
+                                            {val ? (
+                                                <img src={val} alt="Profile" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <User className="w-full h-full p-4 text-slate-300" />
+                                            )}
+                                        </div>
+                                    ) : (
+                                        typeof val === 'object' ? JSON.stringify(val) : String(val)
+                                    )}
+                                </p>
+                            </div>
+                        ))}
                 </div>
             </Modal>
 
@@ -537,7 +549,11 @@ const BusinessDetailsPage = () => {
                 }
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {selectedItem && Object.keys(selectedItem).filter(k => k !== 'id' && k !== 'createdAt' && k !== 'businessId').map(key => (
+                    {selectedItem && Object.keys(selectedItem).filter(k => {
+                        const commonExclude = ['id', 'createdAt', 'businessId', 'updatedAt'];
+                        const userExclude = ['imagephoto', 'profileImage', 'fullName', 'productNameLower', 'modelLower', 'categoryLower'];
+                        return !commonExclude.includes(k) && !(itemType === 'users' && userExclude.includes(k));
+                    }).map(key => (
                         <div key={key} className="space-y-1.5">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{key.replace(/([A-Z])/g, ' $1')}</label>
                             {((itemType === 'products' || itemType === 'users') && key === 'branch') ? (
@@ -550,6 +566,25 @@ const BusinessDetailsPage = () => {
                                     {tabData.branches.map(b => (
                                         <option key={b.id} value={b.id}>{b.branchName}</option>
                                     ))}
+                                </select>
+                            ) : itemType === 'users' && key === 'role' ? (
+                                <select
+                                    value={formData[key] || ''}
+                                    onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none outline-none focus:border-blue-500 font-bold text-sm uppercase"
+                                >
+                                    {['super_admin', 'admin', 'staff'].map(role => (
+                                        <option key={role} value={role}>{role.replace('_', ' ')}</option>
+                                    ))}
+                                </select>
+                            ) : itemType === 'users' && key === 'isActive' ? (
+                                <select
+                                    value={formData[key] === true ? 'true' : 'false'}
+                                    onChange={(e) => setFormData({ ...formData, [key]: e.target.value === 'true' })}
+                                    className={`w-full px-4 py-3 border rounded-none outline-none font-black text-sm uppercase transition-colors ${formData[key] ? 'bg-emerald-50 border-emerald-200 text-emerald-600' : 'bg-rose-50 border-rose-200 text-rose-600'}`}
+                                >
+                                    <option value="true">Active (Verified)</option>
+                                    <option value="false">Inactive (Suspended)</option>
                                 </select>
                             ) : (
                                 <input
