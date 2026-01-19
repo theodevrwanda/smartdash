@@ -91,7 +91,6 @@ const Header = ({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, isMobileSidebar
                     >
                         <div className="text-right hidden sm:block">
                             <span className="block text-xs font-bold text-slate-700 dark:text-slate-200 leading-tight">Welcome, {user?.firstName || 'User'}!</span>
-                            <span className="block text-[10px] text-slate-400 font-medium leading-tight">{user?.role?.replace('_', ' ') || 'Admin'}</span>
                         </div>
                         <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-slate-100 dark:border-slate-700 bg-slate-100">
                             <img
