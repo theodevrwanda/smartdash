@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
-import { Download, Filter, CheckCircle, XCircle, Clock, CreditCard, ShieldCheck, Eye, Trash2, Hash, ShoppingCart, User } from 'lucide-react';
+import { Download, Filter, CheckCircle, XCircle, Clock, CreditCard, ShieldCheck, Eye, Trash2, Hash, ShoppingCart, User, Power } from 'lucide-react';
 import { adminService } from '../services/adminService';
 
 const PaymentsPage = () => {
