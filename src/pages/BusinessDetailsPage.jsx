@@ -296,8 +296,12 @@ const BusinessDetailsPage = () => {
                                     <tr className="bg-slate-100 dark:bg-slate-900">
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Identity</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Contact</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Role & Branch</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Location Context</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Role</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Branch</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">District</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Sector</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Cell</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Village</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Timeline</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
@@ -330,14 +334,22 @@ const BusinessDetailsPage = () => {
                                                     </div>
                                                 </td>
                                                 <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 text-[9px] font-black uppercase rounded-none w-fit border border-blue-100 dark:border-blue-800/50">{u.role}</span>
-                                                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-tighter italic">{branchName}</span>
-                                                    </div>
+                                                    <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 text-[9px] font-black uppercase rounded-none w-fit border border-blue-100 dark:border-blue-800/50">{u.role}</span>
                                                 </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-500 uppercase leading-tight">
-                                                    {u.village}, {u.cell},<br />
-                                                    {u.sector}, {u.district}
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[9px] font-black text-slate-500 uppercase tracking-tighter italic">
+                                                    {branchName}
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 uppercase tracking-tighter">
+                                                    {u.district}
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 uppercase tracking-tighter">
+                                                    {u.sector}
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 uppercase tracking-tighter">
+                                                    {u.cell}
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 uppercase tracking-tighter">
+                                                    {u.village}
                                                 </td>
                                                 <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
                                                     <div className="flex flex-col items-center">
@@ -514,7 +526,7 @@ const BusinessDetailsPage = () => {
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {selectedItem && Object.entries(selectedItem)
-                        .filter(([key]) => !(itemType === 'users' && (key === 'isActive' || key === 'imagephoto')))
+                        .filter(([key]) => !(itemType === 'users' && (key === 'isActive' || key === 'imagephoto' || key === 'updatedAt')))
                         .map(([key, val]) => (
                             <div key={key} className="p-4 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
                                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{key.replace(/([A-Z])/g, ' $1')}</p>
