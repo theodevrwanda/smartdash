@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import {
     Camera, Mail, MapPin, Phone, Calendar, Globe,
     Shield, Edit3, Grid, Activity, Users, CreditCard,
-    Building2, CheckCircle, Smartphone, Layers, Lock
+    Building2, CheckCircle, Smartphone, Layers, Lock, Star, Save
 } from 'lucide-react';
 import { updatePassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
@@ -20,6 +19,34 @@ const ProfilePage = () => {
     const [activeTab, setActiveTab] = useState('about');
     const [uploading, setUploading] = useState(false);
     const [stats, setStats] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+
+    // Profile Form State
+    const [profileData, setProfileData] = useState({
+        firstName: '',
+        lastName: '',
+        phone: '',
+        gender: '',
+        district: '',
+        sector: '',
+        cell: '',
+        village: ''
+    });
+
+    useEffect(() => {
+        if (user) {
+            setProfileData({
+                firstName: user.firstName || '',
+                lastName: user.lastName || '',
+                phone: user.phone || '',
+                gender: user.gender || '',
+                district: user.district || '',
+                sector: user.sector || '',
+                cell: user.cell || '',
+                village: user.village || ''
+            });
+        }
+    }, [user]);
 
     // Security states
     const [newPassword, setNewPassword] = useState('');
@@ -76,6 +103,23 @@ const ProfilePage = () => {
             setConfirmPassword('');
         } catch (error) {
             setMessage({ type: 'error', text: error.message });
+        }
+    };
+
+    const handleProfileUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            const userRef = doc(db, 'users', user.uid);
+            await updateDoc(userRef, {
+                ...profileData,
+                fullName: `${profileData.firstName} ${profileData.lastName}`,
+                updatedAt: new Date().toISOString()
+            });
+            setIsEditing(false); // Exit editing mode after successful update
+            window.location.reload();
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            alert("Failed to update profile");
         }
     };
 
@@ -166,16 +210,19 @@ const ProfilePage = () => {
 
                             <div className="flex items-center gap-1">
                                 <span className="text-sm font-bold text-slate-800 dark:text-slate-200">9.8</span>
-                                <div className="flex text-amber-400">
-                                    {[1, 2, 3, 4, 5].map(i => <Activity key={i} size={14} fill="currentColor" />)}
+                                <div className="flex text-amber-400 gap-0.5">
+                                    {[1, 2, 3, 4, 5].map(i => <Star key={i} size={14} fill="currentColor" strokeWidth={0} />)}
                                 </div>
                                 <span className="text-xs text-slate-400 ml-2">(System Trust Score)</span>
                             </div>
                         </div>
 
                         <div className="mt-4 md:mt-0 flex gap-3">
-                            <button className="flex items-center gap-2 px-6 py-2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg font-semibold hover:opacity-90 transition-all shadow-lg shadow-slate-200 dark:shadow-none">
-                                <Edit3 size={16} /> Edit Profile
+                            <button
+                                onClick={() => setIsEditing(!isEditing)}
+                                className={`flex items-center gap-2 px-6 py-2 rounded-lg font-semibold transition-all shadow-lg ${isEditing ? 'bg-indigo-600 text-white shadow-indigo-200' : 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-slate-200 dark:shadow-none'}`}
+                            >
+                                <Edit3 size={16} /> {isEditing ? 'Cancel Edit' : 'Edit Profile'}
                             </button>
                             <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
                                 <Layers size={16} /> Reports
@@ -190,8 +237,8 @@ const ProfilePage = () => {
                                 key={tab}
                                 onClick={() => setActiveTab(tab.toLowerCase().split(' ')[0])} // 'platform' for summary
                                 className={`pb-4 text-sm font-bold uppercase tracking-wide transition-all relative ${activeTab === tab.toLowerCase().split(' ')[0]
-                                        ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600'
-                                        : 'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                                    ? 'text-blue-600 dark:text-blue-400 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600'
+                                    : 'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                                     }`}
                             >
                                 {tab}
@@ -202,61 +249,153 @@ const ProfilePage = () => {
                     {/* CONTENT AREA */}
                     {activeTab === 'about' && (
                         <div className="animate-fade-in space-y-8">
-                            {/* Contact Info Group */}
-                            <div>
-                                <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Contact Information</h4>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
-                                    <div className="flex items-start gap-3">
-                                        <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded text-blue-500"><Phone size={18} /></div>
-                                        <div>
-                                            <span className="block text-sm font-bold text-slate-900 dark:text-white">{user.phone || 'N/A'}</span>
-                                            <span className="text-xs text-slate-400">Mobile Number</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-3">
-                                        <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded text-indigo-500"><Mail size={18} /></div>
-                                        <div>
-                                            <span className="block text-sm font-bold text-slate-900 dark:text-white" title={user.email}>{user.email}</span>
-                                            <span className="text-xs text-slate-400">Email Address</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-3">
-                                        <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded text-rose-500"><MapPin size={18} /></div>
-                                        <div>
-                                            <span className="block text-sm font-bold text-slate-900 dark:text-white">{[user.district, user.cell, 'Rwanda'].filter(Boolean).join(', ')}</span>
-                                            <span className="text-xs text-slate-400">Current Location</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-3">
-                                        <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded text-emerald-500"><Globe size={18} /></div>
-                                        <div>
-                                            <span className="block text-sm font-bold text-slate-900 dark:text-white">www.smartstock.rw</span>
-                                            <span className="text-xs text-slate-400">Website</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <form onSubmit={handleProfileUpdate}>
+                                {/* Contact Info Group */}
+                                <div className="mb-8">
+                                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex justify-between items-center">
+                                        Personal & Contact Information
+                                        {isEditing && <span className="text-indigo-500 text-[10px] bg-indigo-50 px-2 py-1 rounded">Editing Enabled</span>}
+                                    </h4>
 
-                            {/* Basic Info Group */}
-                            <div>
-                                <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Basic Information</h4>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
-                                    <div className="flex flex-col gap-1">
-                                        <span className="text-xs font-bold text-slate-500 uppercase">Joined Date</span>
-                                        <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{formatDate(user.createdAt)}</span>
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <span className="text-xs font-bold text-slate-500 uppercase">Gender</span>
-                                        <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{user.gender || 'Not Specified'}</span>
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <span className="text-xs font-bold text-slate-500 uppercase">Role ID</span>
-                                        <span className="text-sm font-medium text-slate-800 dark:text-slate-200 font-mono text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded w-fit">
-                                            {user.uid?.slice(0, 12)}...
-                                        </span>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {/* First Name */}
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-slate-500 uppercase">First Name</label>
+                                            {isEditing ? (
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    value={profileData.firstName}
+                                                    onChange={(e) => setProfileData({ ...profileData, firstName: e.target.value })}
+                                                />
+                                            ) : (
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 border-b border-transparent py-2">{profileData.firstName}</span>
+                                            )}
+                                        </div>
+
+                                        {/* Last Name */}
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-slate-500 uppercase">Last Name</label>
+                                            {isEditing ? (
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    value={profileData.lastName}
+                                                    onChange={(e) => setProfileData({ ...profileData, lastName: e.target.value })}
+                                                />
+                                            ) : (
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 border-b border-transparent py-2">{profileData.lastName}</span>
+                                            )}
+                                        </div>
+
+                                        {/* Phone */}
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-slate-500 uppercase">Phone Number</label>
+                                            {isEditing ? (
+                                                <input
+                                                    type="tel"
+                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    value={profileData.phone}
+                                                    onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
+                                                />
+                                            ) : (
+                                                <div className="flex items-center gap-2 py-2">
+                                                    <Phone size={14} className="text-blue-500" />
+                                                    <span className="block text-sm font-medium text-slate-800 dark:text-slate-200">{profileData.phone || 'N/A'}</span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Gender */}
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-slate-500 uppercase">Gender</label>
+                                            {isEditing ? (
+                                                <select
+                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    value={profileData.gender}
+                                                    onChange={(e) => setProfileData({ ...profileData, gender: e.target.value })}
+                                                >
+                                                    <option value="">Select Gender</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                </select>
+                                            ) : (
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 border-b border-transparent py-2 capitalize">{profileData.gender || 'Not Specified'}</span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+
+                                {/* Address Group */}
+                                <div>
+                                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Location Details</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-slate-500 uppercase">District</label>
+                                            {isEditing ? (
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    value={profileData.district}
+                                                    onChange={(e) => setProfileData({ ...profileData, district: e.target.value })}
+                                                />
+                                            ) : (
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 py-2">{profileData.district || 'N/A'}</span>
+                                            )}
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-slate-500 uppercase">Sector</label>
+                                            {isEditing ? (
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    value={profileData.sector}
+                                                    onChange={(e) => setProfileData({ ...profileData, sector: e.target.value })}
+                                                />
+                                            ) : (
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 py-2">{profileData.sector || 'N/A'}</span>
+                                            )}
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-slate-500 uppercase">Cell</label>
+                                            {isEditing ? (
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    value={profileData.cell}
+                                                    onChange={(e) => setProfileData({ ...profileData, cell: e.target.value })}
+                                                />
+                                            ) : (
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 py-2">{profileData.cell || 'N/A'}</span>
+                                            )}
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-slate-500 uppercase">Village</label>
+                                            {isEditing ? (
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded font-medium text-slate-800 focus:outline-none focus:border-indigo-500"
+                                                    value={profileData.village}
+                                                    onChange={(e) => setProfileData({ ...profileData, village: e.target.value })}
+                                                />
+                                            ) : (
+                                                <span className="block text-sm font-medium text-slate-800 dark:text-slate-200 py-2">{profileData.village || 'N/A'}</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {isEditing && (
+                                    <div className="mt-8 flex justify-end">
+                                        <button
+                                            type="submit"
+                                            className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-lg shadow-indigo-200"
+                                        >
+                                            <Save size={18} /> Save Profile Changes
+                                        </button>
+                                    </div>
+                                )}
+                            </form>
                         </div>
                     )}
 
