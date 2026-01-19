@@ -119,27 +119,37 @@ export const adminService = {
 
             // 4. Charts Data preparation
 
-            // Business Growth (Monthly) - Simplified Logic: using createdAt
-            const businessesByMonth = {};
+            // Business Growth (Daily for last 14 days)
+            const dailyGrowth = {};
+            const last14Days = [];
+            for (let i = 13; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const key = d.toISOString().split('T')[0];
+                const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                dailyGrowth[key] = { name: label, value: 0 };
+                last14Days.push(key);
+            }
+
             businesses.forEach(b => {
-                const date = b.createdAt ? (b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt)) : new Date();
-                const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-                businessesByMonth[key] = (businessesByMonth[key] || 0) + 1;
+                const date = b.createdAt ? (b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt)) : null;
+                if (date) {
+                    const key = date.toISOString().split('T')[0];
+                    if (dailyGrowth[key]) {
+                        dailyGrowth[key].value += 1;
+                    }
+                }
             });
-            const businessGrowthData = Object.entries(businessesByMonth)
-                .sort((a, b) => a[0].localeCompare(b[0]))
-                .map(([name, value]) => ({ name, value }))
-                .slice(-6); // Last 6 months
+            const businessGrowthData = last14Days.map(key => dailyGrowth[key]);
 
             // Payments Over Time
             const paymentsByMonth = {};
             payments.forEach(p => {
                 const date = p.createdAt ? (p.createdAt.toDate ? p.createdAt.toDate() : new Date(p.createdAt)) : new Date();
-                const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                const key = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
                 paymentsByMonth[key] = (paymentsByMonth[key] || 0) + (Number(p.amount) || 0);
             });
             const paymentsGrowthData = Object.entries(paymentsByMonth)
-                .sort((a, b) => a[0].localeCompare(b[0]))
                 .map(([name, value]) => ({ name, value }))
                 .slice(-6);
 

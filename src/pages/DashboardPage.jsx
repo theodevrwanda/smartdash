@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { adminService } from '../services/adminService';
 import {
     BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-    PieChart, Pie, Cell, LineChart, Line, CartesianGrid
+    PieChart, Pie, Cell, LineChart, Line, CartesianGrid,
+    AreaChart, Area
 } from 'recharts';
 import {
-    Building2, Users, CreditCard, TrendingUp, Wallet
+    Building2, Users, CreditCard, TrendingUp, Wallet, Activity
 } from 'lucide-react';
 import Card from '../components/ui/Card';
 import { useTheme } from '../context/ThemeContext';
@@ -114,27 +115,54 @@ const DashboardPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Growth Chart */}
                 <Card className="p-6 h-96 flex flex-col">
-                    <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
-                        <TrendingUp size={18} /> Business Growth (Monthly)
-                    </h3>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                            <Activity size={18} className="text-blue-500" /> Business Onboarding Velocity
+                        </h3>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Past 14 Days</span>
+                    </div>
                     <div className="flex-1 w-full min-h-0">
                         <ResponsiveContainer>
-                            <BarChart data={businessGrowthData}>
+                            <AreaChart data={businessGrowthData}>
+                                <defs>
+                                    <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor={theme === 'dark' ? '#0ea5e9' : '#3b82f6'} stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor={theme === 'dark' ? '#0ea5e9' : '#3b82f6'} stopOpacity={0} />
+                                    </linearGradient>
+                                </defs>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={CHART_GRID} />
-                                <XAxis dataKey="name" fontSize={12} stroke={CHART_TEXT} />
-                                <YAxis fontSize={12} stroke={CHART_TEXT} />
+                                <XAxis
+                                    dataKey="name"
+                                    fontSize={10}
+                                    stroke={CHART_TEXT}
+                                    tickLine={false}
+                                    axisLine={false}
+                                />
+                                <YAxis
+                                    fontSize={10}
+                                    stroke={CHART_TEXT}
+                                    tickLine={false}
+                                    axisLine={false}
+                                />
                                 <Tooltip
-                                    cursor={{ fill: theme === 'dark' ? '#1e293b' : '#f8fafc' }}
                                     contentStyle={{
                                         backgroundColor: theme === 'dark' ? '#0f172a' : '#fff',
                                         borderRadius: '8px',
                                         border: theme === 'dark' ? '1px solid #1e293b' : 'none',
-                                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                                        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                                        fontSize: '12px',
+                                        fontWeight: 'bold'
                                     }}
-                                    itemStyle={{ color: theme === 'dark' ? '#f1f5f9' : '#1e293b' }}
                                 />
-                                <Bar dataKey="value" fill={theme === 'dark' ? '#10b981' : '#a8dcc0'} radius={[4, 4, 0, 0]} barSize={40} />
-                            </BarChart>
+                                <Area
+                                    type="monotone"
+                                    dataKey="value"
+                                    stroke={theme === 'dark' ? '#0ea5e9' : '#3b82f6'}
+                                    strokeWidth={4}
+                                    fillOpacity={1}
+                                    fill="url(#colorValue)"
+                                />
+                            </AreaChart>
                         </ResponsiveContainer>
                     </div>
                 </Card>
