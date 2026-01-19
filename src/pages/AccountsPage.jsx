@@ -182,49 +182,49 @@ const AccountsPage = () => {
 
             <div className="flex-1 bg-white dark:bg-slate-950 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col">
                 <div className="overflow-x-auto">
-                    <table className="w-full min-w-[1700px] border-separate border-spacing-0">
+                    <table className="w-full min-w-[1700px] border-collapse">
                         <thead>
-                            <tr className="bg-slate-50/80 dark:bg-slate-900/50 backdrop-blur-xl">
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">#</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Entity Name</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Identified Owner</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">District</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Sector</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Plan</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Active</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Sub Status</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Start Date</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">End Date</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Remain</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-right">Actions</th>
+                            <tr className="bg-slate-100 dark:bg-slate-900">
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">#</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Entity Name</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Identified Owner</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">District</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Sector</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Plan</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Active</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Sub Status</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Start Date</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">End Date</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Remain</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
                             {businesses.map((business, index) => {
                                 const remain = calculateRemainingDays(business.subscription?.endDate);
                                 return (
-                                    <tr key={business.id} className="group hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-all duration-300">
-                                        <td className="px-6 py-4">
+                                    <tr key={business.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/30 dark:even:bg-slate-900/10">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800 text-center">
                                             <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
                                             <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{business.businessName || 'Unnamed'}</span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
                                             <div className="flex flex-col">
                                                 <span className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-tighter leading-tight">{business.ownerName || '-'}</span>
                                                 <span className="text-[10px] font-bold text-slate-400 leading-tight">{business.email || business.ownerEmail || '-'}</span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
                                             <Badge variant="outline" className="font-bold border-slate-200 dark:border-slate-800 whitespace-nowrap">
                                                 {business.district || '-'}
                                             </Badge>
                                         </td>
-                                        <td className="px-6 py-4 text-sm font-medium text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800 text-sm font-medium text-slate-600 dark:text-slate-400 whitespace-nowrap">
                                             {business.sector || '-'}
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
                                             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter
                                                 ${(business.plan === 'forever' || business.subscription?.plan === 'forever') ? 'bg-purple-100 text-purple-700' :
                                                     (business.plan === 'year' || business.subscription?.plan === 'year') ? 'bg-blue-100 text-blue-700' :
@@ -233,37 +233,37 @@ const AccountsPage = () => {
                                                 {business.plan || (business.subscription?.plan) || 'Free'}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
                                             <div className={`flex items-center gap-2 px-3 py-1 rounded-full w-fit ${business.isActive ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'}`}>
                                                 <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${business.isActive ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
                                                 <span className="text-[10px] font-black uppercase">{business.isActive ? 'Active' : 'Offline'}</span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
                                             <Badge variant={business.subscription?.status === 'active' ? 'success' : 'warning'}>
                                                 {business.subscription?.status || 'Expired'}
                                             </Badge>
                                         </td>
-                                        <td className="px-6 py-4 text-[11px] font-bold text-slate-500 whitespace-nowrap">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-500 whitespace-nowrap">
                                             {business.subscription?.startDate ? new Date(business.subscription.startDate).toLocaleDateString() : '-'}
                                         </td>
-                                        <td className="px-6 py-4 text-[11px] font-bold text-slate-500 whitespace-nowrap">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-500 whitespace-nowrap">
                                             {business.subscription?.endDate ? new Date(business.subscription.endDate).toLocaleDateString() : '-'}
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
                                             {remain !== null ? (
                                                 <div className={`text-center py-1 rounded-lg border font-black text-xs min-w-[40px] ${remain <= 7 ? 'bg-red-600 text-white border-red-500' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800'}`}>
                                                     {remain} <span className="text-[8px] opacity-70">D</span>
                                                 </div>
                                             ) : '-'}
                                         </td>
-                                        <td className="px-6 py-4 text-right">
+                                        <td className="px-4 py-3 border border-slate-100 dark:border-slate-800 text-right">
                                             <div className="flex items-center justify-end gap-1.5">
-                                                <button onClick={() => navigate(`/business/${business.id}`)} className="p-2.5 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white rounded-xl transition-all border border-blue-100 dark:border-blue-800 shadow-sm"><Eye size={14} /></button>
-                                                <button onClick={() => openModal('edit', business)} className="p-2.5 text-amber-600 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-600 hover:text-white rounded-xl transition-all border border-amber-100 dark:border-amber-800 shadow-sm"><Edit size={14} /></button>
-                                                <button onClick={() => openModal('plan', business)} className="p-2.5 text-purple-600 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-600 hover:text-white rounded-xl transition-all border border-purple-100 dark:border-purple-800 shadow-sm"><CreditCard size={14} /></button>
-                                                <button onClick={() => openModal('status', business)} className={`p-2.5 rounded-xl transition-all border shadow-sm ${business.isActive ? 'text-rose-600 bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-600 hover:text-white border-rose-100 dark:border-rose-800' : 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-600 hover:text-white border-emerald-100 dark:border-emerald-800'}`}><Power size={14} /></button>
-                                                <button onClick={() => openModal('delete', business)} className="p-2.5 text-slate-400 bg-slate-50 dark:bg-slate-900/20 hover:bg-red-600 hover:text-white rounded-xl transition-all border border-slate-200 dark:border-slate-800 shadow-sm hover:border-red-600"><Trash2 size={14} /></button>
+                                                <button onClick={() => navigate(`/business/${business.id}`)} className="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white rounded-lg transition-all border border-blue-100 dark:border-blue-800 shadow-sm"><Eye size={12} /></button>
+                                                <button onClick={() => openModal('edit', business)} className="p-2 text-amber-600 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-600 hover:text-white rounded-lg transition-all border border-amber-100 dark:border-amber-800 shadow-sm"><Edit size={12} /></button>
+                                                <button onClick={() => openModal('plan', business)} className="p-2 text-purple-600 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-600 hover:text-white rounded-lg transition-all border border-purple-100 dark:border-purple-800 shadow-sm"><CreditCard size={12} /></button>
+                                                <button onClick={() => openModal('status', business)} className={`p-2 rounded-lg transition-all border shadow-sm ${business.isActive ? 'text-rose-600 bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-600 hover:text-white border-rose-100 dark:border-rose-800' : 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-600 hover:text-white border-emerald-100 dark:border-emerald-800'}`}><Power size={12} /></button>
+                                                <button onClick={() => openModal('delete', business)} className="p-2 text-slate-400 bg-slate-50 dark:bg-slate-900/20 hover:bg-red-600 hover:text-white rounded-lg transition-all border border-slate-200 dark:border-slate-800 shadow-sm hover:border-red-600"><Trash2 size={12} /></button>
                                             </div>
                                         </td>
                                     </tr>

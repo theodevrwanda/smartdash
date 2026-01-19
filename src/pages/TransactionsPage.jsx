@@ -96,79 +96,74 @@ const PaymentsPage = () => {
 
             <div className="flex-1 bg-white dark:bg-slate-950 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col">
                 <div className="overflow-x-auto">
-                    <table className="w-full min-w-[1600px] border-collapse">
+                    <table className="w-full min-w-[1400px] border-collapse">
                         <thead>
-                            <tr className="bg-slate-50/80 dark:bg-slate-900/50 backdrop-blur-xl">
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Ref ID</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Amount</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Business Entity</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Method</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Plan</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Status</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Contact</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Manual</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-center">Timestamp</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-right">Actions</th>
+                            <tr className="bg-slate-100 dark:bg-slate-900">
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">#</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Entity</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Reference ID</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Type</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-left">Gateway</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Volume</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Execution Date</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
-                            {transactions.map((txn) => (
-                                <tr key={txn.id} className="group hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-all duration-300">
-                                    <td className="px-6 py-4">
-                                        <span className="text-[10px] font-black text-slate-400 font-mono tracking-tighter uppercase">#{txn.id?.substring(0, 8)}</span>
+                            {transactions.map((txn, index) => (
+                                <tr key={txn.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/30 dark:even:bg-slate-900/10">
+                                    <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
+                                        <span className="text-xs font-black text-slate-400">{String(index + 1).padStart(2, '0')}</span>
                                     </td>
-                                    <td className="px-6 py-4">
+                                    <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-black text-slate-900 dark:text-white">
-                                                {new Intl.NumberFormat('en-RW', { style: 'currency', currency: txn.currency || 'RWF' }).format(txn.amount || 0)}
-                                            </span>
-                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{txn.type || 'subscription'}</span>
+                                            <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{txn.businessName}</span>
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase">{txn.ownerName}</span>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
-                                        <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{txn.businessName || '-'}</span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full w-fit">
-                                            <span className="text-[10px] font-black uppercase tracking-tighter text-slate-600 dark:text-slate-300">{txn.method || '-'}</span>
+                                    <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
+                                        <div className="flex items-center gap-2 font-mono text-[10px] font-bold text-slate-500">
+                                            <Hash size={10} />
+                                            {txn.id.toUpperCase()}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 text-sm font-medium text-slate-600 dark:text-slate-400 capitalize">
-                                        {txn.plan || 'Standard'}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <Badge variant={txn.status === 'approved' ? 'success' : txn.status === 'pending' ? 'warning' : 'default'}>
-                                            {txn.status || 'pending'}
-                                        </Badge>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex flex-col gap-0.5">
-                                            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{txn.ownerName || '-'}</span>
-                                            <span className="text-[10px] text-slate-500">{txn.email || '-'}</span>
+                                    <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`p-1 rounded-md ${txn.type === 'subscription' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'}`}>
+                                                {txn.type === 'subscription' ? <CreditCard size={10} /> : <ShoppingCart size={10} />}
+                                            </div>
+                                            <span className="text-[10px] font-black uppercase tracking-tighter text-slate-700 dark:text-slate-300">{txn.type}</span>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
-                                        <span className={`text-[10px] font-black uppercase tracking-widest ${txn.isManualVerification ? 'text-amber-600' : 'text-slate-400'}`}>
-                                            {txn.isManualVerification ? 'Manual' : 'System'}
-                                        </span>
+                                    <td className="px-4 py-3 border border-slate-100 dark:border-slate-800">
+                                        <span className="text-[10px] font-black text-slate-400 uppercase">{txn.gateway || 'System'}</span>
                                     </td>
-                                    <td className="px-6 py-4 text-center">
-                                        <div className="flex flex-col items-center leading-none gap-1">
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">SECURE</span>
-                                            <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400">
+                                    <td className="px-4 py-3 border border-slate-100 dark:border-slate-800 text-right">
+                                        <div className="flex flex-col items-end">
+                                            <span className="text-sm font-black text-slate-900 dark:text-white">{txn.amount?.toLocaleString()} {txn.currency}</span>
+                                            <span className="text-[9px] font-bold text-slate-400">NET TRANSACTION</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-4 py-3 border border-slate-100 dark:border-slate-800 text-center">
+                                        <div className="flex flex-col items-center">
+                                            <span className="text-xs font-black text-slate-700 dark:text-slate-300">
                                                 {txn.createdAt ? (typeof txn.createdAt === 'object' && txn.createdAt.toDate ? txn.createdAt.toDate().toLocaleDateString() : new Date(txn.createdAt).toLocaleDateString()) : '-'}
                                             </span>
+                                            <span className="text-[9px] font-bold text-slate-400">
+                                                {txn.createdAt ? (typeof txn.createdAt === 'object' && txn.createdAt.toDate ? txn.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : new Date(txn.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) : '-'}
+                                            </span>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 text-right">
+                                    <td className="px-4 py-3 border border-slate-100 dark:border-slate-800 text-center">
+                                        <Badge variant={txn.status === 'approved' ? 'success' : txn.status === 'pending' ? 'warning' : 'error'}>
+                                            {txn.status}
+                                        </Badge>
+                                    </td>
+                                    <td className="px-4 py-3 border border-slate-100 dark:border-slate-800 text-right">
                                         <div className="flex items-center justify-end gap-1.5">
-                                            {txn.status !== 'approved' && (
-                                                <button onClick={() => handleApprove(txn)} className="p-2.5 text-emerald-600 bg-emerald-50 hover:bg-emerald-600 hover:text-white rounded-xl transition-all border border-emerald-100 shadow-sm"><CheckCircle size={14} /></button>
-                                            )}
-                                            {txn.status === 'pending' && (
-                                                <button onClick={() => handleReject(txn)} className="p-2.5 text-rose-600 bg-rose-50 hover:bg-rose-600 hover:text-white rounded-xl transition-all border border-rose-100 shadow-sm"><XCircle size={14} /></button>
-                                            )}
-                                            <button className="p-2.5 text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white rounded-xl transition-all border border-blue-100 shadow-sm"><Eye size={14} /></button>
+                                            <button className="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white rounded-lg transition-all border border-blue-100 dark:border-blue-800 shadow-sm"><Eye size={12} /></button>
+                                            <button className="p-2 text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-600 hover:text-white rounded-lg transition-all border border-emerald-100 dark:border-emerald-800 shadow-sm"><CheckCircle size={12} /></button>
                                         </div>
                                     </td>
                                 </tr>
