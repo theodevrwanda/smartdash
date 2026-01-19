@@ -361,5 +361,29 @@ export const adminService = {
             console.error("Error deleting business:", error);
             throw error;
         }
+    },
+
+    // Generic Update
+    async updateDocument(collectionName, id, data) {
+        try {
+            const docRef = doc(db, collectionName, id);
+            await updateDoc(docRef, data);
+            return true;
+        } catch (error) {
+            console.error(`Error updating document in ${collectionName}:`, error);
+            throw error;
+        }
+    },
+
+    // Generic Delete
+    async deleteDocument(collectionName, id) {
+        try {
+            const docRef = doc(db, collectionName, id);
+            await deleteDoc(docRef);
+            return true;
+        } catch (error) {
+            console.error(`Error deleting document in ${collectionName}:`, error);
+            throw error;
+        }
     }
 };

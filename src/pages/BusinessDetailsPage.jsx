@@ -5,10 +5,35 @@ import Card from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import {
     ArrowLeft, Building2, MapPin, Users, Package, ShoppingCart,
-    History, CreditCard, Shield, User, Mail, Smartphone
+    History, CreditCard, Shield, User, Mail, Smartphone,
+    Trash2, Edit, Eye, X, Activity, Globe, Info
 } from 'lucide-react';
 import { db } from '../firebase/config';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+
+const Modal = ({ isOpen, onClose, title, children, footer, variant = 'default' }) => {
+    if (!isOpen) return null;
+    return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white dark:bg-slate-950 rounded-none shadow-2xl w-full max-w-2xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+                <div className={`flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800 ${variant === 'danger' ? 'bg-red-50/50 dark:bg-red-950/20' : variant === 'warning' ? 'bg-amber-50/50 dark:bg-amber-950/20' : ''}`}>
+                    <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight uppercase">{title}</h3>
+                    <button onClick={onClose} className="p-2 hover:bg-slate-200/50 dark:hover:bg-slate-800 rounded-none transition-colors text-slate-500">
+                        <X size={20} />
+                    </button>
+                </div>
+                <div className="p-8 overflow-y-auto flex-1">
+                    {children}
+                </div>
+                {footer && (
+                    <div className="flex items-center justify-end gap-3 p-6 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800">
+                        {footer}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
 
 const BusinessDetailsPage = () => {
     const { id } = useParams();
@@ -18,40 +43,86 @@ const BusinessDetailsPage = () => {
     const [activeTab, setActiveTab] = useState('info'); // info, users, branches, products, sales, history
     const [tabData, setTabData] = useState({ users: [], branches: [], products: [], sales: [], transactions: [] });
 
+    // Modal Control
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [itemType, setItemType] = useState(null); // 'users', 'branches', 'products'
+    const [activeModal, setActiveModal] = useState(null); // 'edit', 'delete', 'details'
+    const [formData, setFormData] = useState({});
+
+    const openModal = (type, item, modalType) => {
+        setItemType(type);
+        setSelectedItem(item);
+        setActiveModal(modalType);
+        if (modalType === 'edit') setFormData(item);
+    };
+
+    const closeModal = () => {
+        setActiveModal(null);
+        setSelectedItem(null);
+        setItemType(null);
+        setFormData({});
+    };
+
+    const loadBusiness = async () => {
+        setLoading(true);
+        try {
+            // Fetch basic business info
+            const businesses = await adminService.fetchAllBusinesses();
+            const found = businesses.find(b => b.id === id);
+            setBusiness(found);
+
+            // Load sub-collection data concurrently
+            const usersQ = query(collection(db, 'users'), where('businessId', '==', id));
+            const branchesQ = query(collection(db, 'branches'), where('businessId', '==', id));
+            const productsQ = query(collection(db, 'products'), where('businessId', '==', id));
+            const paymentsQ = query(collection(db, 'payments'), where('businessId', '==', id));
+
+            const [uSnap, bSnap, pSnap, paySnap] = await Promise.all([
+                getDocs(usersQ),
+                getDocs(branchesQ),
+                getDocs(productsQ),
+                getDocs(paymentsQ)
+            ]);
+
+            setTabData({
+                users: uSnap.docs.map(d => ({ id: d.id, ...d.data() })),
+                branches: bSnap.docs.map(d => ({ id: d.id, ...d.data() })),
+                products: pSnap.docs.map(d => ({ id: d.id, ...d.data() })),
+                transactions: paySnap.docs.map(d => ({ id: d.id, ...d.data() }))
+            });
+
+        } catch (error) {
+            console.error("Failed to load business details", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!selectedItem || !itemType) return;
+        try {
+            await adminService.deleteDocument(itemType, selectedItem.id);
+            await loadBusiness();
+            closeModal();
+        } catch (error) {
+            alert("Deletion failed: " + error.message);
+        }
+    };
+
+    const handleUpdate = async () => {
+        if (!selectedItem || !itemType) return;
+        try {
+            // Filter out internal state or IDs if necessary
+            const { id, ...updateData } = formData;
+            await adminService.updateDocument(itemType, selectedItem.id, updateData);
+            await loadBusiness();
+            closeModal();
+        } catch (error) {
+            alert("Update failed: " + error.message);
+        }
+    };
+
     useEffect(() => {
-        const loadBusiness = async () => {
-            try {
-                // Fetch basic business info
-                const businesses = await adminService.fetchAllBusinesses();
-                const found = businesses.find(b => b.id === id);
-                setBusiness(found);
-
-                // Load sub-collection data concurrently
-                const usersQ = query(collection(db, 'users'), where('businessId', '==', id));
-                const branchesQ = query(collection(db, 'branches'), where('businessId', '==', id));
-                const productsQ = query(collection(db, 'products'), where('businessId', '==', id));
-                const paymentsQ = query(collection(db, 'payments'), where('businessId', '==', id));
-
-                const [uSnap, bSnap, pSnap, paySnap] = await Promise.all([
-                    getDocs(usersQ),
-                    getDocs(branchesQ),
-                    getDocs(productsQ),
-                    getDocs(paymentsQ)
-                ]);
-
-                setTabData({
-                    users: uSnap.docs.map(d => ({ id: d.id, ...d.data() })),
-                    branches: bSnap.docs.map(d => ({ id: d.id, ...d.data() })),
-                    products: pSnap.docs.map(d => ({ id: d.id, ...d.data() })),
-                    transactions: paySnap.docs.map(d => ({ id: d.id, ...d.data() }))
-                });
-
-            } catch (error) {
-                console.error("Failed to load business details", error);
-            } finally {
-                setLoading(false);
-            }
-        };
         if (id) loadBusiness();
     }, [id]);
 
@@ -78,11 +149,17 @@ const BusinessDetailsPage = () => {
 
     const tabs = [
         { id: 'info', label: 'Overview', icon: Building2 },
-        { id: 'users', label: 'Personnel', icon: Users, count: tabData.users.length },
-        { id: 'branches', label: 'Nodes', icon: MapPin, count: tabData.branches.length },
-        { id: 'products', label: 'Inventory', icon: Package, count: tabData.products.length },
-        { id: 'history', label: 'Ledger', icon: History, count: tabData.transactions.length },
+        { id: 'users', label: 'Users', icon: Users, count: tabData.users.length },
+        { id: 'branches', label: 'Branches', icon: MapPin, count: tabData.branches.length },
+        { id: 'products', label: 'Products', icon: Package, count: tabData.products.length },
+        { id: 'history', label: 'Payment History', icon: History, count: tabData.transactions.length },
     ];
+
+    const productStats = tabData.products.reduce((acc, p) => {
+        const status = p.status || 'store';
+        acc[status] = (acc[status] || 0) + 1;
+        return acc;
+    }, { store: 0, sold: 0, restored: 0, deleted: 0 });
 
     return (
         <div className="flex flex-col gap-8 animate-fade-in py-6">
@@ -120,6 +197,20 @@ const BusinessDetailsPage = () => {
                     </div>
                 </div>
             </div>
+            {/* Product Stats Bar */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {[
+                    { label: 'In Store', count: productStats.store, color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/20' },
+                    { label: 'Sold', count: productStats.sold, color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-900/20' },
+                    { label: 'Restored', count: productStats.restored, color: 'text-amber-600', bg: 'bg-amber-50 dark:bg-amber-900/20' },
+                    { label: 'Deleted', count: productStats.deleted, color: 'text-rose-600', bg: 'bg-rose-50 dark:bg-rose-900/20' },
+                ].map((stat, i) => (
+                    <div key={i} className={`p-4 ${stat.bg} border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center`}>
+                        <span className={`text-2xl font-black ${stat.color}`}>{stat.count}</span>
+                        <span className="text-[10px] font-black uppercase text-slate-500 tracking-widest">{stat.label}</span>
+                    </div>
+                ))}
+            </div>
 
             {/* Navigation Tabs */}
             <div className="flex flex-wrap gap-2 p-1 bg-slate-100 dark:bg-slate-900 rounded-none w-fit">
@@ -151,10 +242,12 @@ const BusinessDetailsPage = () => {
                         <Card className="md:col-span-2 p-8 space-y-8 bg-white dark:bg-slate-950 rounded-none border-slate-200 dark:border-slate-800">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                                 <div className="space-y-6">
-                                    <h3 className="text-xs font-black text-blue-600 uppercase tracking-[0.2em]">Deployment Details</h3>
+                                    <h3 className="text-xs font-black text-blue-600 uppercase tracking-[0.2em]">Operational Overview</h3>
                                     <div className="space-y-4">
                                         {[
-                                            { label: 'Business Entity', val: business.businessName },
+                                            { label: 'Business Status', val: business.isActive ? 'Validated / Active' : 'Suspended' },
+                                            { label: 'Total Users', val: tabData.users.length },
+                                            { label: 'Active Branches', val: tabData.branches.length },
                                             { label: 'System District', val: business.district },
                                             { label: 'Regional Sector', val: business.sector },
                                             { label: 'Deployment Date', val: business.createdAt ? new Date(business.createdAt).toLocaleDateString() : 'Historical' }
@@ -170,7 +263,7 @@ const BusinessDetailsPage = () => {
                                     <h3 className="text-xs font-black text-purple-600 uppercase tracking-[0.2em]">Subscription Matrix</h3>
                                     <div className="space-y-4">
                                         {[
-                                            { label: 'Active Plan', val: business.plan, color: 'text-purple-600' },
+                                            { label: 'Active Plan', val: business.plan || business.subscription?.plan, color: 'text-purple-600' },
                                             { label: 'License Status', val: business.subscription?.status },
                                             { label: 'Renewal Date', val: business.subscription?.endDate ? new Date(business.subscription.endDate).toLocaleDateString() : '-' },
                                             { label: 'Verification', val: business.isActive ? 'Validated' : 'Pending' }
@@ -189,8 +282,8 @@ const BusinessDetailsPage = () => {
                             <div className="w-20 h-20 bg-blue-600 rounded-none mx-auto flex items-center justify-center text-3xl font-black text-white shadow-2xl mb-6">
                                 {business.businessName?.charAt(0)}
                             </div>
-                            <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase mb-2">Network ID</h4>
-                            <p className="font-mono text-xs text-slate-400 break-all bg-white dark:bg-slate-950 p-4 rounded-none border border-slate-200 dark:border-slate-800">{id}</p>
+                            <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase mb-2">{business.businessName}</h4>
+                            <p className="font-mono text-[10px] text-slate-400 break-all bg-white dark:bg-slate-950 p-4 rounded-none border border-slate-200 dark:border-slate-800">REF_{id.toUpperCase()}</p>
                         </Card>
                     </div>
                 )}
@@ -205,6 +298,7 @@ const BusinessDetailsPage = () => {
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Role</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Phone</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
@@ -217,6 +311,13 @@ const BusinessDetailsPage = () => {
                                             <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 font-bold text-xs">{u.phone}</td>
                                             <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
                                                 <Badge variant={u.isActive ? 'success' : 'error'} className="rounded-none uppercase text-[9px]">{u.isActive ? 'Active' : 'Banned'}</Badge>
+                                            </td>
+                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
+                                                <div className="flex justify-end gap-1">
+                                                    <button onClick={() => openModal('users', u, 'details')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-600 transition-colors"><Eye size={14} /></button>
+                                                    <button onClick={() => openModal('users', u, 'edit')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-600 transition-colors"><Edit size={14} /></button>
+                                                    <button onClick={() => openModal('users', u, 'delete')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
@@ -232,19 +333,25 @@ const BusinessDetailsPage = () => {
                             <table className="w-full text-sm text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-100 dark:bg-slate-900">
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Node Name</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Branch Name</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Context</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">System Hash</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
                                     {tabData.branches.map(b => (
                                         <tr key={b.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10">
                                             <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{b.branchName || 'Alpha Node'}</td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 font-bold text-xs uppercase">{b.sector}, {b.district}</td>
+                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 font-bold text-xs uppercase">{b.village || 'N/A'}, {b.sector}, {b.district}</td>
                                             <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black uppercase text-emerald-600">ONLINE</td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-mono text-[10px] text-slate-400">NODE_{b.id.substring(0, 12).toUpperCase()}</td>
+                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
+                                                <div className="flex justify-end gap-1">
+                                                    <button onClick={() => openModal('branches', b, 'details')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-600 transition-colors"><Eye size={14} /></button>
+                                                    <button onClick={() => openModal('branches', b, 'edit')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-600 transition-colors"><Edit size={14} /></button>
+                                                    <button onClick={() => openModal('branches', b, 'delete')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -259,19 +366,36 @@ const BusinessDetailsPage = () => {
                             <table className="w-full text-sm text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-100 dark:bg-slate-900">
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Inventory Item</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Model / Name</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Category</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Volume</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Unit Value</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Value (RWF)</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
                                     {tabData.products.map(p => (
                                         <tr key={p.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10">
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{p.productName}</td>
+                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                                <div className="flex flex-col">
+                                                    <span className="font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{p.productName}</span>
+                                                    <span className="text-[9px] font-bold text-slate-400">{p.model}</span>
+                                                </div>
+                                            </td>
                                             <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 font-bold text-xs uppercase">{p.category}</td>
                                             <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right text-xs font-bold text-slate-700 dark:text-slate-300">{p.quantity} {p.unit}</td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right text-xs font-black text-blue-600">{p.sellingPrice?.toLocaleString()} RWF</td>
+                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right text-xs font-black text-blue-600">{p.sellingPrice?.toLocaleString()}</td>
+                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
+                                                <span className={`px-2 py-0.5 text-[9px] font-black uppercase ${p.status === 'sold' ? 'text-emerald-600 bg-emerald-50' : 'text-blue-600 bg-blue-50'}`}>{p.status || 'store'}</span>
+                                            </td>
+                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
+                                                <div className="flex justify-end gap-1">
+                                                    <button onClick={() => openModal('products', p, 'details')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-600 transition-colors"><Eye size={14} /></button>
+                                                    <button onClick={() => openModal('products', p, 'edit')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-600 transition-colors"><Edit size={14} /></button>
+                                                    <button onClick={() => openModal('products', p, 'delete')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -287,9 +411,9 @@ const BusinessDetailsPage = () => {
                                 <thead>
                                     <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 uppercase tracking-widest text-left">
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800">Timestamp</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800">Entry Type</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">Credit/Debit</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">Protocol</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800">Method</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">Amount</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
@@ -298,8 +422,13 @@ const BusinessDetailsPage = () => {
                                             <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 font-mono text-[10px] uppercase">
                                                 {t.createdAt ? (typeof t.createdAt === 'object' && t.createdAt.toDate ? t.createdAt.toDate().toLocaleString() : new Date(t.createdAt).toLocaleString()) : '-'}
                                             </td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 font-black uppercase text-slate-700 dark:text-slate-300 tracking-tighter text-xs">{t.type}</td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-slate-900 dark:text-white text-xs">{t.amount?.toLocaleString()} {t.currency}</td>
+                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 font-black uppercase text-slate-700 dark:text-slate-300 tracking-tighter text-xs">
+                                                <div className="flex flex-col">
+                                                    <span>{t.method || t.type}</span>
+                                                    <span className="text-[9px] text-slate-400 font-bold">{t.phoneNumber}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-slate-900 dark:text-white text-xs whitespace-nowrap">{t.amount?.toLocaleString()} {t.currency}</td>
                                             <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
                                                 <Badge variant={t.status === 'approved' ? 'success' : 'warning'} className="uppercase text-[9px] font-black rounded-none">
                                                     {t.status}
@@ -313,6 +442,78 @@ const BusinessDetailsPage = () => {
                     </div>
                 )}
             </div>
+            {/* Modals Implementation */}
+            {/* View Details Modal */}
+            <Modal
+                isOpen={activeModal === 'details'}
+                onClose={closeModal}
+                title={`${itemType?.slice(0, -1)} Intelligence Archive`}
+                footer={<button onClick={closeModal} className="px-8 py-3 bg-slate-900 text-white font-black uppercase text-xs">Acknowledge</button>}
+            >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {selectedItem && Object.entries(selectedItem).map(([key, val]) => (
+                        <div key={key} className="p-4 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{key.replace(/([A-Z])/g, ' $1')}</p>
+                            <p className="text-sm font-bold text-slate-800 dark:text-slate-200 break-all">
+                                {typeof val === 'object' ? JSON.stringify(val) : String(val)}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </Modal>
+
+            {/* Edit Modal */}
+            <Modal
+                isOpen={activeModal === 'edit'}
+                onClose={closeModal}
+                title={`Modify ${itemType?.slice(0, -1)} Parameters`}
+                footer={
+                    <>
+                        <button onClick={closeModal} className="px-6 py-2 font-bold text-slate-500 uppercase text-xs">Cancel</button>
+                        <button onClick={handleUpdate} className="px-8 py-3 bg-blue-600 text-white font-black uppercase text-xs shadow-xl shadow-blue-200">Commit Changes</button>
+                    </>
+                }
+            >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {selectedItem && Object.keys(selectedItem).filter(k => k !== 'id' && k !== 'createdAt' && k !== 'businessId').map(key => (
+                        <div key={key} className="space-y-1.5">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{key.replace(/([A-Z])/g, ' $1')}</label>
+                            <input
+                                type="text"
+                                value={formData[key] || ''}
+                                onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none outline-none focus:border-blue-500 font-bold text-sm"
+                            />
+                        </div>
+                    ))}
+                </div>
+            </Modal>
+
+            {/* Delete Modal */}
+            <Modal
+                isOpen={activeModal === 'delete'}
+                onClose={closeModal}
+                title="Protocol Termination"
+                variant="danger"
+                footer={
+                    <>
+                        <button onClick={closeModal} className="px-6 py-2 font-bold text-slate-500 uppercase text-xs">Abort</button>
+                        <button onClick={handleDelete} className="px-8 py-3 bg-rose-600 text-white font-black uppercase text-xs shadow-xl shadow-rose-200">Execute Purege</button>
+                    </>
+                }
+            >
+                <div className="flex flex-col items-center text-center gap-6 py-4">
+                    <div className="w-20 h-20 bg-rose-100 text-rose-600 flex items-center justify-center animate-pulse">
+                        <Trash2 size={40} />
+                    </div>
+                    <div className="space-y-2">
+                        <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase italic">Irreversible Data Purge</h4>
+                        <p className="text-slate-500 text-sm leading-relaxed max-w-sm font-medium">
+                            You are about to disconnect this <span className="text-rose-600 font-black uppercase">{itemType?.slice(0, -1)}</span> from the neural network. All associated telemetry will be archived or lost.
+                        </p>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 };
