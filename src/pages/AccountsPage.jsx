@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useParams as useRouterParams, useNavigate as useRouterNavigate } from 'react-router-dom';
 import Card from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Trash2, CheckCircle, Eye, CreditCard, X, Edit, MapPin, Mail, User, Calendar, Clock, AlertTriangle, Power, ShieldCheck, ShieldAlert } from 'lucide-react';
@@ -29,13 +31,13 @@ const Modal = ({ isOpen, onClose, title, children, footer, variant = 'default' }
 };
 
 const AccountsPage = () => {
+    const navigate = useNavigate();
     const [businesses, setBusinesses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedBusiness, setSelectedBusiness] = useState(null);
 
     // Modals state
     const [modals, setModals] = useState({
-        view: false,
         edit: false,
         plan: false,
         delete: false,
@@ -86,7 +88,7 @@ const AccountsPage = () => {
 
     const closeModal = (type) => {
         setModals(prev => ({ ...prev, [type]: false }));
-        if (type === 'view' || type === 'edit' || type === 'plan' || type === 'delete' || type === 'status') {
+        if (type === 'edit' || type === 'plan' || type === 'delete' || type === 'status') {
             setTimeout(() => setSelectedBusiness(null), 200);
         }
     };
@@ -180,13 +182,12 @@ const AccountsPage = () => {
 
             <div className="flex-1 bg-white dark:bg-slate-950 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col">
                 <div className="overflow-x-auto">
-                    <table className="w-full min-w-[1800px] border-separate border-spacing-0">
+                    <table className="w-full min-w-[1700px] border-separate border-spacing-0">
                         <thead>
                             <tr className="bg-slate-50/80 dark:bg-slate-900/50 backdrop-blur-xl">
                                 <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">#</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Name</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Owner</th>
-                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Email</th>
+                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Entity Name</th>
+                                <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Identified Owner</th>
                                 <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">District</th>
                                 <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Sector</th>
                                 <th className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-left">Plan</th>
@@ -209,11 +210,11 @@ const AccountsPage = () => {
                                         <td className="px-6 py-4">
                                             <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{business.businessName || 'Unnamed'}</span>
                                         </td>
-                                        <td className="px-6 py-4 text-sm font-semibold text-slate-700 dark:text-slate-300">
-                                            {business.ownerName || '-'}
-                                        </td>
-                                        <td className="px-6 py-4 text-xs font-medium text-slate-500 dark:text-slate-400">
-                                            {business.email || business.ownerEmail || '-'}
+                                        <td className="px-6 py-4">
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-tighter leading-tight">{business.ownerName || '-'}</span>
+                                                <span className="text-[10px] font-bold text-slate-400 leading-tight">{business.email || business.ownerEmail || '-'}</span>
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <Badge variant="outline" className="font-bold border-slate-200 dark:border-slate-800 whitespace-nowrap">
@@ -258,7 +259,7 @@ const AccountsPage = () => {
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-1.5">
-                                                <button onClick={() => openModal('view', business)} className="p-2.5 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white rounded-xl transition-all border border-blue-100 dark:border-blue-800 shadow-sm"><Eye size={14} /></button>
+                                                <button onClick={() => navigate(`/business/${business.id}`)} className="p-2.5 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white rounded-xl transition-all border border-blue-100 dark:border-blue-800 shadow-sm"><Eye size={14} /></button>
                                                 <button onClick={() => openModal('edit', business)} className="p-2.5 text-amber-600 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-600 hover:text-white rounded-xl transition-all border border-amber-100 dark:border-amber-800 shadow-sm"><Edit size={14} /></button>
                                                 <button onClick={() => openModal('plan', business)} className="p-2.5 text-purple-600 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-600 hover:text-white rounded-xl transition-all border border-purple-100 dark:border-purple-800 shadow-sm"><CreditCard size={14} /></button>
                                                 <button onClick={() => openModal('status', business)} className={`p-2.5 rounded-xl transition-all border shadow-sm ${business.isActive ? 'text-rose-600 bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-600 hover:text-white border-rose-100 dark:border-rose-800' : 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-600 hover:text-white border-emerald-100 dark:border-emerald-800'}`}><Power size={14} /></button>
@@ -272,45 +273,6 @@ const AccountsPage = () => {
                     </table>
                 </div>
             </div>
-
-            {/* View Modal */}
-            <Modal isOpen={modals.view} onClose={() => closeModal('view')} title="Business Profile">
-                {selectedBusiness && (
-                    <div className="space-y-8">
-                        <div className="flex items-center gap-6 p-6 bg-slate-900 rounded-[2rem] text-white overflow-hidden relative">
-                            <div className="absolute top-0 right-0 p-8 opacity-10">
-                                <ShieldCheck size={120} />
-                            </div>
-                            <div className="w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center text-3xl font-black shadow-2xl">
-                                {selectedBusiness.businessName?.charAt(0) || 'B'}
-                            </div>
-                            <div>
-                                <h4 className="text-2xl font-black uppercase tracking-tight mb-1">{selectedBusiness.businessName}</h4>
-                                <div className="px-3 py-1 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest w-fit border border-white/20">
-                                    ID: {selectedBusiness.id}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-6">
-                            {[
-                                { label: 'Owner', val: selectedBusiness.ownerName, icon: User },
-                                { label: 'Email', val: selectedBusiness.email || selectedBusiness.ownerEmail, icon: Mail },
-                                { label: 'Location', val: `${selectedBusiness.district}, ${selectedBusiness.sector}`, icon: MapPin },
-                                { label: 'Plan', val: selectedBusiness.plan, icon: CreditCard, color: 'text-purple-600' }
-                            ].map((item, i) => (
-                                <div key={i} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
-                                    <div className="flex items-center gap-2 mb-2 text-slate-400">
-                                        <item.icon size={12} />
-                                        <span className="text-[9px] font-black uppercase tracking-widest">{item.label}</span>
-                                    </div>
-                                    <p className={`font-bold truncate ${item.color || 'text-slate-900 dark:text-slate-100'}`}>{item.val || 'N/A'}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-            </Modal>
 
             {/* Status Modal */}
             <Modal
