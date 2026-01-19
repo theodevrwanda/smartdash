@@ -13,6 +13,7 @@ import BusinessDetailsPage from './pages/BusinessDetailsPage';
 import SettingsPage from './pages/SettingsPage';
 import ProfilePage from './pages/ProfilePage';
 import PaymentDetailsPage from './pages/PaymentDetailsPage';
+import BranchDetailsPage from './pages/BranchDetailsPage';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="transactions" element={<TransactionsPage />} />
         <Route path="transactions/:id" element={<PaymentDetailsPage />} />
         <Route path="branches" element={<BranchesPage />} />
+        <Route path="branch/:id" element={<BranchDetailsPage />} />
         <Route path="employees" element={<EmployeesPage />} />
         <Route path="business/:id" element={<BusinessDetailsPage />} />
         <Route path="settings" element={<SettingsPage />} />
