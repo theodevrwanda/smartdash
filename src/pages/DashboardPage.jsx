@@ -42,7 +42,7 @@ const DashboardPage = () => {
     const planData = [
         { name: 'Free', value: businessStats.byPlan.free },
         { name: 'Monthly', value: businessStats.byPlan.monthly },
-        { name: 'Annually', value: businessStats.byPlan.annually || businessStats.byPlan.yearly },
+        { name: 'Annually', value: businessStats.byPlan.annually },
         { name: 'Forever', value: businessStats.byPlan.forever },
     ];
 
