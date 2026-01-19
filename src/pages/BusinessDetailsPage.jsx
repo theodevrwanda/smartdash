@@ -366,38 +366,63 @@ const BusinessDetailsPage = () => {
                             <table className="w-full text-sm text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-100 dark:bg-slate-900">
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Model / Name</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Product / Identity</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Branch Context</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">Category</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Volume</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Value (RWF)</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Unit Cost</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Selling Price</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Total Equity</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Timeline</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
-                                    {tabData.products.map(p => (
-                                        <tr key={p.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10">
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                                <div className="flex flex-col">
-                                                    <span className="font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{p.productName}</span>
-                                                    <span className="text-[9px] font-bold text-slate-400">{p.model}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 font-bold text-xs uppercase">{p.category}</td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right text-xs font-bold text-slate-700 dark:text-slate-300">{p.quantity} {p.unit}</td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right text-xs font-black text-blue-600">{p.sellingPrice?.toLocaleString()}</td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
-                                                <span className={`px-2 py-0.5 text-[9px] font-black uppercase ${p.status === 'sold' ? 'text-emerald-600 bg-emerald-50' : 'text-blue-600 bg-blue-50'}`}>{p.status || 'store'}</span>
-                                            </td>
-                                            <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
-                                                <div className="flex justify-end gap-1">
-                                                    <button onClick={() => openModal('products', p, 'details')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-600 transition-colors"><Eye size={14} /></button>
-                                                    <button onClick={() => openModal('products', p, 'edit')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-600 transition-colors"><Edit size={14} /></button>
-                                                    <button onClick={() => openModal('products', p, 'delete')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {tabData.products.map(p => {
+                                        const branchName = tabData.branches.find(b => b.id === p.branch)?.branchName || 'Alpha Node';
+                                        const totalEquity = (Number(p.costPricePerUnit) || 0) * (Number(p.quantity) || 0);
+                                        return (
+                                            <tr key={p.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                                    <div className="flex flex-col">
+                                                        <span className="font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{p.productName}</span>
+                                                        <span className="text-[9px] font-bold text-slate-400">{p.model}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-600 uppercase tracking-tighter">
+                                                    {branchName}
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 font-bold text-xs uppercase">{p.category}</td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right text-xs font-bold text-slate-700 dark:text-slate-300">{p.quantity} {p.unit}</td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-emerald-600 text-xs">
+                                                    {p.costPricePerUnit?.toLocaleString()}
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-blue-600 text-xs">
+                                                    {p.sellingPrice?.toLocaleString()}
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-slate-900 dark:text-white text-xs">
+                                                    {totalEquity.toLocaleString()}
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                                    <div className="flex flex-col items-center">
+                                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em]">Added: {p.addedDate ? new Date(p.addedDate).toLocaleDateString() : '-'}</span>
+                                                        <span className="text-[9px] font-black text-rose-500 uppercase tracking-[0.1em]">Exp: {p.expiryDate || p.deadline || '-'}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
+                                                    <span className={`px-2 py-0.5 text-[9px] font-black uppercase ${p.status === 'sold' ? 'text-emerald-600 bg-emerald-50' : 'text-blue-600 bg-blue-50'}`}>{p.status || 'store'}</span>
+                                                </td>
+                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
+                                                    <div className="flex justify-end gap-1">
+                                                        <button onClick={() => openModal('products', p, 'details')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-600 transition-colors"><Eye size={14} /></button>
+                                                        <button onClick={() => openModal('products', p, 'edit')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-600 transition-colors"><Edit size={14} /></button>
+                                                        <button onClick={() => openModal('products', p, 'delete')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </div>
@@ -478,12 +503,25 @@ const BusinessDetailsPage = () => {
                     {selectedItem && Object.keys(selectedItem).filter(k => k !== 'id' && k !== 'createdAt' && k !== 'businessId').map(key => (
                         <div key={key} className="space-y-1.5">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{key.replace(/([A-Z])/g, ' $1')}</label>
-                            <input
-                                type="text"
-                                value={formData[key] || ''}
-                                onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none outline-none focus:border-blue-500 font-bold text-sm"
-                            />
+                            {itemType === 'products' && key === 'branch' ? (
+                                <select
+                                    value={formData[key] || ''}
+                                    onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none outline-none focus:border-blue-500 font-bold text-sm uppercase"
+                                >
+                                    <option value="">Select Branch</option>
+                                    {tabData.branches.map(b => (
+                                        <option key={b.id} value={b.id}>{b.branchName}</option>
+                                    ))}
+                                </select>
+                            ) : (
+                                <input
+                                    type="text"
+                                    value={formData[key] || ''}
+                                    onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none outline-none focus:border-blue-500 font-bold text-sm"
+                                />
+                            )}
                         </div>
                     ))}
                 </div>
