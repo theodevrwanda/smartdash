@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-    Check, Globe, Mail, Lock, Github, CheckCircle, 
-    ArrowRight, MessageSquare, BookOpen, Code2 
+import {
+    Check, Globe, Mail, Lock, Github, CheckCircle,
+    ArrowRight, MessageSquare, BookOpen, Code2
 } from 'lucide-react';
 import { auth } from '../firebase/config';
 import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
@@ -54,18 +54,16 @@ const LoginPage = () => {
 
     return (
         <div className="min-h-screen w-full flex font-sans bg-white dark:bg-slate-950">
-            
+
             {/* Left Panel - Green Section */}
             <div className="hidden lg:flex w-5/12 bg-[#2ea043] flex-col justify-between p-12 text-white relative overflow-hidden">
                 {/* Pattern Overlay (Subtle) */}
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
-                
+
                 {/* Header/Logo Area */}
                 <div className="z-10 flex items-center gap-3">
-                    <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm border border-white/20">
-                        <Code2 className="text-white" size={24} />
-                    </div>
-                    <span className="text-2xl font-bold tracking-tight">SmartDash</span>
+                    <img src="/smartstock.png" alt="SmartStock Logo" className="w-10 h-10 object-contain" />
+                    <span className="text-2xl font-bold tracking-tight">SmartStock</span>
                 </div>
 
                 {/* Central Illustration Area */}
@@ -82,7 +80,7 @@ const LoginPage = () => {
                                 <div className="h-4 bg-white/10 rounded w-1/2"></div>
                                 <div className="h-4 bg-white/10 rounded w-5/6"></div>
                             </div>
-                            
+
                             {/* Floating Elements */}
                             <div className="absolute -right-8 -top-8 bg-green-500 p-4 rounded-xl shadow-lg border border-white/20 animate-bounce delay-700">
                                 <BookOpen className="text-white" size={24} />
@@ -126,7 +124,7 @@ const LoginPage = () => {
 
             {/* Right Panel - Login Form */}
             <div className="w-full lg:w-7/12 flex items-center justify-center p-8 lg:p-12 bg-white dark:bg-slate-950 relative">
-                
+
                 {/* Mobile pattern gutter (hidden on large) */}
                 <div className="lg:hidden absolute top-0 left-0 w-full h-2 bg-[#2ea043]"></div>
 
@@ -212,7 +210,7 @@ const LoginPage = () => {
                             <Github size={20} className="text-slate-800 dark:text-white" />
                             <span className="text-sm font-medium text-slate-700 dark:text-white">Github</span>
                         </button>
-                        <button 
+                        <button
                             onClick={handleGoogleLogin}
                             disabled={loading}
                             className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm"
@@ -222,8 +220,8 @@ const LoginPage = () => {
                         </button>
                         {/* Microsoft Button - Placeholder */}
                         <button className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm">
-                             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoft/microsoft-original.svg" alt="M" className="w-5 h-5" />
-                             <span className="text-sm font-medium text-slate-700 dark:text-white">Microsoft</span>
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoft/microsoft-original.svg" alt="M" className="w-5 h-5" />
+                            <span className="text-sm font-medium text-slate-700 dark:text-white">Microsoft</span>
                         </button>
                     </div>
                 </div>
