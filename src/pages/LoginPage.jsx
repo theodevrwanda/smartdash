@@ -206,35 +206,36 @@ const LoginPage = () => {
                         </div>
                     </div>
 
-                    <div className="flex gap-4 justify-center">
-                        <div className="relative group">
-                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="relative group w-full">
+                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                                 Coming Soon
                             </div>
                             <button
-                                className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm"
+                                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm"
                             >
                                 <Github size={20} className="text-slate-800 dark:text-white" />
                                 <span className="text-sm font-medium text-slate-700 dark:text-white">Github</span>
                             </button>
                         </div>
+
                         <button
                             onClick={handleGoogleLogin}
                             disabled={loading}
-                            className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm"
+                            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm"
                         >
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="G" className="w-5 h-5" />
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="G" className="w-5 h-5 flex-shrink-0" />
                             <span className="text-sm font-medium text-slate-700 dark:text-white">Google</span>
                         </button>
-                        <div className="relative group">
-                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+
+                        <div className="relative group w-full">
+                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                                 Coming Soon
                             </div>
-                            {/* Microsoft Button - Fixed Icon */}
                             <button
-                                className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm"
+                                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm"
                             >
-                                <svg viewBox="0 0 23 23" className="w-5 h-5">
+                                <svg viewBox="0 0 23 23" className="w-5 h-5 flex-shrink-0">
                                     <path fill="#f3f3f3" d="M0 0h23v23H0z" />
                                     <path fill="#f35325" d="M1 1h10v10H1z" />
                                     <path fill="#81bc06" d="M12 1h10v10H12z" />
