@@ -55,8 +55,8 @@ const LoginPage = () => {
     return (
         <div className="min-h-screen w-full flex font-sans bg-white dark:bg-slate-950">
 
-            {/* Left Panel - Green Section */}
-            <div className="hidden lg:flex w-5/12 bg-[#2ea043] flex-col justify-between p-12 text-white relative overflow-hidden">
+            {/* Left Panel - Indigo Section */}
+            <div className="hidden lg:flex w-5/12 bg-indigo-600 flex-col justify-between p-12 text-white relative overflow-hidden">
                 {/* Pattern Overlay (Subtle) */}
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
 
@@ -82,7 +82,7 @@ const LoginPage = () => {
                             </div>
 
                             {/* Floating Elements */}
-                            <div className="absolute -right-8 -top-8 bg-green-500 p-4 rounded-xl shadow-lg border border-white/20 animate-bounce delay-700">
+                            <div className="absolute -right-8 -top-8 bg-indigo-500 p-4 rounded-xl shadow-lg border border-white/20 animate-bounce delay-700">
                                 <BookOpen className="text-white" size={24} />
                             </div>
                             <div className="absolute -left-6 bottom-8 bg-blue-500 p-3 rounded-lg shadow-lg border border-white/20 animate-bounce delay-1000">
@@ -96,8 +96,8 @@ const LoginPage = () => {
                 <div className="z-10 space-y-8">
                     <div className="space-y-4">
                         <h2 className="text-3xl font-light">Documentation</h2>
-                        <p className="text-green-50 opacity-90 text-sm leading-relaxed max-w-sm">
-                            Explore our guides, references and examples to integrate SmartDash seamlessly.
+                        <p className="text-indigo-50 opacity-90 text-sm leading-relaxed max-w-sm">
+                            Explore our guides, references and examples to integrate SmartStock seamlessly.
                         </p>
                     </div>
 
@@ -123,10 +123,10 @@ const LoginPage = () => {
             </div>
 
             {/* Right Panel - Login Form */}
-            <div className="w-full lg:w-7/12 flex items-center justify-center p-8 lg:p-12 bg-white dark:bg-slate-950 relative">
+            <div className="w-full lg:w-7/12 flex items-center justify-center p-8 lg:p-12 bg-slate-50 dark:bg-slate-950 relative">
 
                 {/* Mobile pattern gutter (hidden on large) */}
-                <div className="lg:hidden absolute top-0 left-0 w-full h-2 bg-[#2ea043]"></div>
+                <div className="lg:hidden absolute top-0 left-0 w-full h-2 bg-indigo-600"></div>
 
                 <div className="w-full max-w-[440px] space-y-8">
                     <div className="text-center lg:text-left">
@@ -146,7 +146,7 @@ const LoginPage = () => {
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2ea043]/20 focus:border-[#2ea043] transition-all text-slate-800 dark:text-white placeholder-slate-400 text-sm"
+                                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all text-slate-800 dark:text-white placeholder-slate-400 text-sm"
                                         placeholder="Email"
                                         required
                                     />
@@ -163,7 +163,7 @@ const LoginPage = () => {
                                         type="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2ea043]/20 focus:border-[#2ea043] transition-all text-slate-800 dark:text-white placeholder-slate-400 text-sm"
+                                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all text-slate-800 dark:text-white placeholder-slate-400 text-sm"
                                         placeholder="Password"
                                         required
                                     />
@@ -181,16 +181,13 @@ const LoginPage = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[#2ea043] hover:bg-[#268a39] text-white h-12 rounded-lg font-bold transition-all shadow-sm hover:shadow-md disabled:opacity-70 disabled:cursor-not-allowed text-sm"
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white h-12 rounded-lg font-bold transition-all shadow-sm hover:shadow-md disabled:opacity-70 disabled:cursor-not-allowed text-sm"
                         >
                             {loading ? 'Logging In...' : 'Log In'}
                         </button>
 
                         <div className="flex flex-col gap-4 text-center text-sm">
-                            <p className="text-slate-500 dark:text-slate-400">
-                                Don't have an account yet? <button type="button" className="text-[#2ea043] font-bold hover:underline">Register</button>
-                            </p>
-                            <button type="button" className="text-[#2ea043] font-medium hover:underline text-xs">
+                            <button type="button" className="text-indigo-600 font-medium hover:underline text-xs">
                                 Forgot your password?
                             </button>
                         </div>
@@ -201,34 +198,46 @@ const LoginPage = () => {
                             <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
                         </div>
                         <div className="relative flex justify-center text-xs">
-                            <span className="px-4 bg-white dark:bg-slate-950 text-slate-500 dark:text-slate-400 font-medium">Or login with...</span>
+                            <span className="px-4 bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 font-medium">Or login with...</span>
                         </div>
                     </div>
 
                     <div className="flex gap-4 justify-center">
-                        <button className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm">
+                        <button className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm">
                             <Github size={20} className="text-slate-800 dark:text-white" />
                             <span className="text-sm font-medium text-slate-700 dark:text-white">Github</span>
                         </button>
                         <button
                             onClick={handleGoogleLogin}
                             disabled={loading}
-                            className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm"
+                            className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm"
                         >
                             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="G" className="w-5 h-5" />
                             <span className="text-sm font-medium text-slate-700 dark:text-white">Google</span>
                         </button>
-                        {/* Microsoft Button - Placeholder */}
-                        <button className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoft/microsoft-original.svg" alt="M" className="w-5 h-5" />
+                        {/* Microsoft Button - Fixed Icon */}
+                        <button className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm">
+                            <svg viewBox="0 0 23 23" className="w-5 h-5">
+                                <path fill="#f3f3f3" d="M0 0h23v23H0z" />
+                                <path fill="#f35325" d="M1 1h10v10H1z" />
+                                <path fill="#81bc06" d="M12 1h10v10H12z" />
+                                <path fill="#05a6f0" d="M1 12h10v10H1z" />
+                                <path fill="#ffba08" d="M12 12h10v10H12z" />
+                            </svg>
                             <span className="text-sm font-medium text-slate-700 dark:text-white">Microsoft</span>
                         </button>
                     </div>
                 </div>
 
-                {/* Chat Widget Icon Placeholder */}
-                <div className="absolute bottom-6 right-6">
-                    <button className="w-12 h-12 bg-[#2ea043] rounded-full flex items-center justify-center text-white shadow-lg hover:scale-105 transition-transform">
+                {/* WhatsApp Chat Widget */}
+                <div className="absolute bottom-6 right-6 group">
+                    <div className="absolute bottom-14 right-0 bg-slate-900 text-white text-[10px] py-1 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                        WhatsApp Message
+                    </div>
+                    <button
+                        onClick={() => window.open('https://wa.me/250785160898?text=Hello,%20I%20would%20like%20to%20request%20to%20be%20an%20admin%20or%20collaborator%20for%20SmartStock.', '_blank')}
+                        className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform active:scale-95"
+                    >
                         <MessageSquare size={24} />
                     </button>
                 </div>
