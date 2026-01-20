@@ -42,14 +42,6 @@ const DocumentationPage = () => {
             <main className="pt-24 md:pt-32 pb-16 md:pb-24 px-4 md:px-6">
                 <div className="max-w-4xl mx-auto space-y-16 md:space-y-24">
 
-                    {/* Header Banner */}
-                    <div className="w-full rounded-2xl md:rounded-[32px] overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800">
-                        <img
-                            src="https://github.com/AWESOME04/AWESOME04/assets/102630199/a446339b-c8b5-4756-bbe4-ad39c50eae89"
-                            alt="Theogene Iradukunda Banner"
-                            className="w-full object-cover"
-                        />
-                    </div>
 
                     {/* Hero Section */}
                     <section className="text-center space-y-4 md:space-y-6">
@@ -248,11 +240,23 @@ const DocumentationPage = () => {
                             <div className="w-full overflow-x-auto pb-4 custom-scrollbar">
                                 <div className="min-w-[800px]">
                                     <img
-                                        src={`https://github-contributions-api.deno.dev/theodevrwanda.svg?year=${selectedYear}&scheme=github`}
+                                        src={`https://github-contributions-api.deno.dev/theodevrwanda.svg?year=${selectedYear}&scheme=green&t=${new Date().getTime()}`}
                                         alt={`theodevrwanda's Github Chart for ${selectedYear}`}
                                         className="w-full filter dark:brightness-110 dark:contrast-125 transition-opacity duration-300"
                                     />
                                 </div>
+                            </div>
+
+                            <div className="flex flex-wrap items-center justify-center gap-6 text-[10px] md:text-xs font-semibold uppercase tracking-wider">
+                                <span className="text-slate-400 dark:text-slate-500">Less</span>
+                                <div className="flex gap-1.5">
+                                    <div className="w-3.5 h-3.5 rounded-sm bg-slate-100 dark:bg-slate-800"></div>
+                                    <div className="w-3.5 h-3.5 rounded-sm bg-emerald-200"></div>
+                                    <div className="w-3.5 h-3.5 rounded-sm bg-emerald-400"></div>
+                                    <div className="w-3.5 h-3.5 rounded-sm bg-emerald-600"></div>
+                                    <div className="w-3.5 h-3.5 rounded-sm bg-emerald-800"></div>
+                                </div>
+                                <span className="text-slate-400 dark:text-slate-500">More</span>
                             </div>
 
                             {/* GitHub Stats Grid */}
