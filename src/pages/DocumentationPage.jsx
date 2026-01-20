@@ -15,7 +15,7 @@ const DocumentationPage = () => {
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <img src="/smartstock.png" alt="Logo" className="w-8 h-8 object-contain" />
-                        <span className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">SmartStock Docs</span>
+                        <span className="text-xl font-bold text-slate-900 dark:text-white tracking-tight hidden sm:block">SmartStock Docs</span>
                     </div>
                     <button
                         onClick={() => navigate('/login')}
