@@ -95,17 +95,18 @@ const LoginPage = () => {
                 {/* Bottom Content */}
                 <div className="z-10 space-y-8">
                     <div className="space-y-4">
-                        <h2 className="text-3xl font-light">Documentation</h2>
+                        <h2 className="text-3xl font-light">SmartDash Control Center</h2>
                         <p className="text-indigo-50 opacity-90 text-sm leading-relaxed max-w-sm">
-                            Explore our guides, references and examples to integrate SmartStock seamlessly.
+                            SmartDash is the powerful administrative engine designed to manage and monitor the SmartStock application ecosystem with precision.
                         </p>
                     </div>
 
                     <div className="space-y-3">
                         {[
-                            'Interactive tutorials with IDE-like experience',
-                            'Guided product walkthroughs',
-                            'Easily accessible code samples'
+                            'Full administrative control over SmartStock',
+                            'Become a collaborator or platform admin',
+                            'Real-time business performance monitoring',
+                            'Secure infrastructure by RwandaScratch'
                         ].map((item, i) => (
                             <div key={i} className="flex items-center gap-3">
                                 <Check className="text-white/80" size={18} />
@@ -114,9 +115,28 @@ const LoginPage = () => {
                         ))}
                     </div>
 
-                    <div className="pt-4">
-                        <button className="flex items-center gap-2 text-sm font-bold hover:gap-3 transition-all">
-                            Check it out <ArrowRight size={16} />
+                    {/* Developer Card */}
+                    <div
+                        onClick={() => window.open('https://wa.me/250792734752?text=Hello,%20I%20want%20to%20know%20more%20about%20becoming%20a%20collaborator%20for%20SmartDash.', '_blank')}
+                        className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex items-center gap-4 hover:bg-white/20 transition-all cursor-pointer group w-fit pr-8"
+                    >
+                        <div className="w-12 h-12 rounded-xl overflow-hidden border-2 border-white/30 shadow-lg">
+                            <img src="/theodev.png" alt="Author" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-sm font-bold tracking-tight">Theodev</span>
+                            <span className="text-[10px] text-white/70">theodevrwanda@gmail.com</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest mt-1 text-indigo-200">RwandaScratch</span>
+                        </div>
+                        <ArrowRight size={14} className="ml-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    </div>
+
+                    <div className="pt-2">
+                        <button
+                            onClick={() => window.open('https://wa.me/250792734752?text=I%20would%20like%20to%20request%20access%20to%20the%20SmartDash%20documentation.', '_blank')}
+                            className="flex items-center gap-2 text-sm font-bold hover:gap-3 transition-all"
+                        >
+                            Explore Documentation <ArrowRight size={16} />
                         </button>
                     </div>
                 </div>
