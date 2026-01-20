@@ -43,8 +43,8 @@ const Sidebar = ({ isDesktopOpen, setIsDesktopOpen, isMobileOpen, setIsMobileOpe
                     <div className={clsx("flex items-center mb-8 px-6", isDesktopOpen ? "justify-between" : "justify-center")}>
                         {isDesktopOpen && (
                             <div className="flex items-center gap-3">
-                                <img src="/smartstock.png" alt="SmartStock Logo" className="w-10 h-10 object-contain" />
-                                <span className="text-xl font-bold text-slate-800 dark:text-white tracking-tight whitespace-nowrap">SmartStock</span>
+                                <img src="/smartstock.png" alt="SmartDash Logo" className="w-10 h-10 object-contain" />
+                                <span className="text-xl font-bold text-slate-800 dark:text-white tracking-tight whitespace-nowrap">SmartDash</span>
                             </div>
                         )}
 

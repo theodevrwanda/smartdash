@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Check, Globe, Mail, Lock, Github, CheckCircle,
-    ArrowRight, MessageSquare, BookOpen, Code2
+    ArrowRight, MessageSquare, BookOpen, Code2, Sun, Moon
 } from 'lucide-react';
 import { auth } from '../firebase/config';
 import {
@@ -10,10 +10,12 @@ import {
     signInWithEmailAndPassword, sendPasswordResetEmail
 } from 'firebase/auth';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 const LoginPage = () => {
     const navigate = useNavigate();
     const { user, loading: authLoading } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -86,9 +88,9 @@ const LoginPage = () => {
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
 
                 {/* Header/Logo Area */}
-                <div className="z-10 flex items-center gap-3">
-                    <img src="/smartstock.png" alt="SmartStock Logo" className="w-10 h-10 object-contain" />
-                    <span className="text-2xl font-bold tracking-tight">SmartStock</span>
+                <div className="flex items-center gap-3 mb-12">
+                    <img src="/smartstock.png" alt="SmartDash Logo" className="w-10 h-10 object-contain" />
+                    <span className="text-2xl font-bold tracking-tight">SmartDash</span>
                 </div>
 
                 {/* Central Illustration Area */}
@@ -153,6 +155,14 @@ const LoginPage = () => {
 
             {/* Right Panel - Login Form */}
             <div className="w-full lg:w-7/12 flex items-center justify-center p-8 lg:p-12 bg-slate-50 dark:bg-slate-950 relative">
+
+                {/* Theme Toggle */}
+                <button
+                    onClick={toggleTheme}
+                    className="absolute top-8 right-8 p-3 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-white transition-all hover:scale-110 active:scale-95 shadow-md flex items-center justify-center"
+                >
+                    {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                </button>
 
                 {/* Mobile pattern gutter (hidden on large) */}
                 <div className="lg:hidden absolute top-0 left-0 w-full h-2 bg-indigo-600"></div>
