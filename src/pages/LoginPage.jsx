@@ -203,10 +203,17 @@ const LoginPage = () => {
                     </div>
 
                     <div className="flex gap-4 justify-center">
-                        <button className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm">
-                            <Github size={20} className="text-slate-800 dark:text-white" />
-                            <span className="text-sm font-medium text-slate-700 dark:text-white">Github</span>
-                        </button>
+                        <div className="relative group">
+                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                Coming Soon
+                            </div>
+                            <button
+                                className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm"
+                            >
+                                <Github size={20} className="text-slate-800 dark:text-white" />
+                                <span className="text-sm font-medium text-slate-700 dark:text-white">Github</span>
+                            </button>
+                        </div>
                         <button
                             onClick={handleGoogleLogin}
                             disabled={loading}
@@ -215,17 +222,24 @@ const LoginPage = () => {
                             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="G" className="w-5 h-5" />
                             <span className="text-sm font-medium text-slate-700 dark:text-white">Google</span>
                         </button>
-                        {/* Microsoft Button - Fixed Icon */}
-                        <button className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm">
-                            <svg viewBox="0 0 23 23" className="w-5 h-5">
-                                <path fill="#f3f3f3" d="M0 0h23v23H0z" />
-                                <path fill="#f35325" d="M1 1h10v10H1z" />
-                                <path fill="#81bc06" d="M12 1h10v10H12z" />
-                                <path fill="#05a6f0" d="M1 12h10v10H1z" />
-                                <path fill="#ffba08" d="M12 12h10v10H12z" />
-                            </svg>
-                            <span className="text-sm font-medium text-slate-700 dark:text-white">Microsoft</span>
-                        </button>
+                        <div className="relative group">
+                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                Coming Soon
+                            </div>
+                            {/* Microsoft Button - Fixed Icon */}
+                            <button
+                                className="flex items-center gap-2 px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 shadow-sm"
+                            >
+                                <svg viewBox="0 0 23 23" className="w-5 h-5">
+                                    <path fill="#f3f3f3" d="M0 0h23v23H0z" />
+                                    <path fill="#f35325" d="M1 1h10v10H1z" />
+                                    <path fill="#81bc06" d="M12 1h10v10H12z" />
+                                    <path fill="#05a6f0" d="M1 12h10v10H1z" />
+                                    <path fill="#ffba08" d="M12 12h10v10H12z" />
+                                </svg>
+                                <span className="text-sm font-medium text-slate-700 dark:text-white">Microsoft</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -235,7 +249,7 @@ const LoginPage = () => {
                         WhatsApp Message
                     </div>
                     <button
-                        onClick={() => window.open('https://wa.me/250785160898?text=Hello,%20I%20would%20like%20to%20request%20to%20be%20an%20admin%20or%20collaborator%20for%20SmartStock.', '_blank')}
+                        onClick={() => window.open('https://wa.me/250792734752?text=Hello,%20I%20would%20like%20to%20request%20to%20be%20an%20admin%20or%20collaborator%20for%20SmartStock.', '_blank')}
                         className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform active:scale-95"
                     >
                         <MessageSquare size={24} />
