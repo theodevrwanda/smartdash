@@ -16,6 +16,7 @@ import PaymentDetailsPage from './pages/PaymentDetailsPage';
 import BranchDetailsPage from './pages/BranchDetailsPage';
 import UserDetailsPage from './pages/UserDetailsPage';
 import LogDetailsPage from './pages/LogDetailsPage';
+import DocumentationPage from './pages/DocumentationPage';
 
 import RequireAuth from './components/auth/RequireAuth';
 
@@ -24,6 +25,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/documentation" element={<DocumentationPage />} />
 
       <Route path="/" element={
         <RequireAuth>
