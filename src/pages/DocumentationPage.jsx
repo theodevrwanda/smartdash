@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     ArrowLeft, Check, Mail, Building2, User2, Github,
     Code2, Shield, Rocket, MessageSquare, Globe, Sun, Moon,
-    Calendar
+    Calendar, LayoutDashboard, Users, CreditCard, History, Settings, FileText
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
@@ -80,6 +80,32 @@ const DocumentationPage = () => {
                             </p>
                         </div>
                     </section>
+                    {/* System Modules List */}
+                    <section className="space-y-8">
+                        <div className="text-center">
+                            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">System Modules</h2>
+                            <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mt-2">Comprehensive overview of the administrative ecosystem.</p>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                            {[
+                                { icon: <LayoutDashboard size={20} />, title: 'Dashboard', desc: 'Real-time analytics and KPI tracking.', color: 'indigo' },
+                                { icon: <Building2 size={20} />, title: 'Accounts', desc: 'Manage business registrations and approvals.', color: 'blue' },
+                                { icon: <CreditCard size={20} />, title: 'Transactions', desc: 'Monitor payments and subscription logs.', color: 'emerald' },
+                                { icon: <Users size={20} />, title: 'Human Resources', desc: 'Employee and collaborator management.', color: 'purple' },
+                                { icon: <History size={20} />, title: 'Audit Logs', desc: 'System-wide activity tracking and security.', color: 'rose' },
+                                { icon: <Settings size={20} />, title: 'Configuration', desc: 'Global settings and system parameters.', color: 'slate' }
+                            ].map((module, i) => (
+                                <div key={i} className="flex flex-col p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:shadow-xl hover:shadow-indigo-500/5 transition-all group">
+                                    <div className={`w-10 h-10 rounded-2xl bg-${module.color}-100 dark:bg-${module.color}-900/30 flex items-center justify-center text-${module.color}-600 dark:text-${module.color}-400 mb-4 group-hover:scale-110 transition-transform`}>
+                                        {module.icon}
+                                    </div>
+                                    <h4 className="font-bold text-slate-900 dark:text-white mb-1">{module.title}</h4>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{module.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
 
                     {/* Author & Company Section */}
                     <section className="rounded-3xl md:rounded-[40px] bg-slate-900 dark:bg-white p-6 md:p-12 text-white dark:text-slate-900 relative overflow-hidden">
