@@ -40,7 +40,7 @@ Ensure you have **Node.js** (v18 or higher) and **npm** installed.
 ### 2. Installation
 Clone the repository and install the dependencies:
 ```bash
-git clone <repository-url>
+git clone https://github.com/theodevrwanda/smartdash.git
 cd smartdash
 npm install
 ```
