@@ -475,7 +475,9 @@ const BusinessDetailsPage = () => {
                                             <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Volume</th>
                                             <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Unit Cost</th>
                                             <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Selling Price</th>
-                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Total Equity</th>
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">
+                                                {productFilter === 'sold' ? 'Total Revenue' : 'Total Equity'}
+                                            </th>
                                             <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Timeline</th>
                                             <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Status</th>
                                             <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Actions</th>
@@ -515,7 +517,12 @@ const BusinessDetailsPage = () => {
                                                             {p.sellingPrice?.toLocaleString()}
                                                         </td>
                                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-slate-900 dark:text-white text-xs">
-                                                            {totalEquity.toLocaleString()}
+                                                            <div className="flex flex-col items-end">
+                                                                <span>{totalEquity.toLocaleString()}</span>
+                                                                <span className="text-[8px] text-slate-400 font-bold uppercase tracking-tighter">
+                                                                    {p.status === 'sold' ? 'Revenue' : 'Equity'}
+                                                                </span>
+                                                            </div>
                                                         </td>
                                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                                             <div className="flex flex-col items-center">
