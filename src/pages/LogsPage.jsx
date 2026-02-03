@@ -24,6 +24,8 @@ const LogsPage = ({ limit }) => {
     // Search & Sort State
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'timestamp', direction: 'desc' });
+    const [selectedLogs, setSelectedLogs] = useState([]);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         const initFilters = async () => {
@@ -170,6 +172,54 @@ const LogsPage = ({ limit }) => {
         return 'bg-slate-50 text-slate-600 dark:bg-slate-900/20 dark:text-slate-400 border-slate-100 dark:border-slate-800';
     };
 
+    const handleSelectLog = (logId) => {
+        setSelectedLogs(prev =>
+            prev.includes(logId)
+                ? prev.filter(id => id !== logId)
+                : [...prev, logId]
+        );
+    };
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            setSelectedLogs(processedLogs.map(log => log.id));
+        } else {
+            setSelectedLogs([]);
+        }
+    };
+
+    const handleDeleteLog = async (logId) => {
+        if (window.confirm('Are you sure you want to permanently delete this log entry? This action cannot be undone.')) {
+            setIsDeleting(true);
+            try {
+                await adminService.deleteLog(logId);
+                setLogs(prev => prev.filter(log => log.id !== logId));
+                setSelectedLogs(prev => prev.filter(id => id !== logId));
+            } catch (error) {
+                console.error("Failed to delete log:", error);
+                alert("Failed to delete log entry");
+            } finally {
+                setIsDeleting(false);
+            }
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        if (window.confirm(`Are you sure you want to permanently delete ${selectedLogs.length} selected log entries? This action cannot be undone.`)) {
+            setIsDeleting(true);
+            try {
+                await adminService.deleteLogs(selectedLogs);
+                setLogs(prev => prev.filter(log => !selectedLogs.includes(log.id)));
+                setSelectedLogs([]);
+            } catch (error) {
+                console.error("Failed to delete logs:", error);
+                alert("Failed to delete selected log entries");
+            } finally {
+                setIsDeleting(false);
+            }
+        }
+    };
+
     if (isInitialLoad) {
         return <Loading message="Initializing Matrix" />;
     }
@@ -199,6 +249,26 @@ const LogsPage = ({ limit }) => {
                             <span className="text-white dark:text-slate-900 text-sm font-black uppercase tracking-wider">Sync Matrix</span>
                         </button>
                     </div>
+
+                    {selectedLogs.length > 0 && (
+                        <div className="flex items-center justify-between bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900 p-4 animate-slide-up">
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 bg-rose-600 rounded-none flex items-center justify-center">
+                                    <Trash2 className="w-4 h-4 text-white" />
+                                </div>
+                                <span className="text-xs font-black text-rose-600 uppercase tracking-widest">
+                                    {selectedLogs.length} Records Marked for Purge
+                                </span>
+                            </div>
+                            <button
+                                onClick={handleBulkDelete}
+                                disabled={isDeleting}
+                                className="px-6 py-2 bg-rose-600 text-white text-[10px] font-black uppercase tracking-widest hover:bg-rose-700 transition-colors disabled:opacity-50"
+                            >
+                                {isDeleting ? 'Purging...' : 'Execute Batch Purge'}
+                            </button>
+                        </div>
+                    )}
 
                     {/* Filters & Search */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 dark:bg-slate-900/50 p-6 border border-slate-200 dark:border-slate-800">
@@ -276,6 +346,14 @@ const LogsPage = ({ limit }) => {
                         <table className="w-full min-w-[1500px] border-collapse">
                             <thead>
                                 <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 dark:text-white uppercase tracking-widest text-left">
+                                    <th className="px-4 py-4 border border-slate-200 dark:border-slate-800 w-10 text-center">
+                                        <input
+                                            type="checkbox"
+                                            onChange={handleSelectAll}
+                                            checked={processedLogs.length > 0 && selectedLogs.length === processedLogs.length}
+                                            className="w-4 h-4 accent-blue-600 cursor-pointer"
+                                        />
+                                    </th>
                                     <th className="px-4 py-4 border border-slate-200 dark:border-slate-800">#</th>
                                     <th onClick={() => requestSort('transactionType')} className="px-4 py-4 border border-slate-200 dark:border-slate-800 cursor-pointer hover:bg-slate-200/50 transition-colors group">
                                         <div className="flex items-center">Operational Type <SortIcon column="transactionType" /></div>
@@ -297,7 +375,15 @@ const LogsPage = ({ limit }) => {
                             </thead>
                             <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
                                 {processedLogs.map((log, index) => (
-                                    <tr key={log.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
+                                    <tr key={log.id} className={`group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 ${selectedLogs.includes(log.id) ? 'bg-blue-50/80 dark:bg-blue-900/40' : 'even:bg-slate-50/50 dark:even:bg-slate-900/10'} whitespace-nowrap`}>
+                                        <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedLogs.includes(log.id)}
+                                                onChange={() => handleSelectLog(log.id)}
+                                                className="w-4 h-4 accent-blue-600 cursor-pointer"
+                                            />
+                                        </td>
                                         <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
                                             <span className="text-xs font-black text-slate-400 dark:text-white">{String(index + 1).padStart(2, '0')}</span>
                                         </td>
@@ -357,13 +443,23 @@ const LogsPage = ({ limit }) => {
                                             </div>
                                         </td>
                                         <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-right">
-                                            <button
-                                                onClick={() => navigate(`/logs/${log.id}`)}
-                                                className="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800"
-                                                title="Open Vector Dossier"
-                                            >
-                                                <Eye size={16} />
-                                            </button>
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button
+                                                    onClick={() => navigate(`/logs/${log.id}`)}
+                                                    className="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-600 hover:text-white transition-all border border-blue-100 dark:border-blue-800"
+                                                    title="Open Vector Dossier"
+                                                >
+                                                    <Eye size={16} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteLog(log.id)}
+                                                    disabled={isDeleting}
+                                                    className="p-2 text-rose-600 bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-600 hover:text-white transition-all border border-rose-100 dark:border-rose-800 disabled:opacity-50"
+                                                    title="Purge Record"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

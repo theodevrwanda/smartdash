@@ -8,15 +8,17 @@ import {
     ArrowLeft, Activity, ShieldCheck, Mail, User, Clock,
     Hash, Info, Building2, MapPin, Tag, DollarSign,
     Package, BarChart3, Layers, UserCircle, Briefcase,
-    FileText, AlertTriangle
+    FileText, AlertTriangle, Trash2
 } from 'lucide-react';
 import Loading from '../components/ui/Loading';
+import { adminService } from '../services/adminService';
 
 const LogDetailsPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [log, setLog] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         loadLogData();
@@ -35,6 +37,21 @@ const LogDetailsPage = () => {
             console.error("Error loading high-resolution log data:", error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (window.confirm('Are you sure you want to permanently delete this log entry? This action cannot be undone.')) {
+            setIsDeleting(true);
+            try {
+                await adminService.deleteLog(id);
+                navigate('/logs');
+            } catch (error) {
+                console.error("Failed to delete log:", error);
+                alert("Failed to delete log entry");
+            } finally {
+                setIsDeleting(false);
+            }
         }
     };
 
@@ -133,6 +150,14 @@ const LogDetailsPage = () => {
                     <div className={`px-6 py-2 border font-black text-xs uppercase tracking-widest ${log.severity === 'error' ? 'bg-rose-50 text-rose-700 border-rose-100' : 'bg-emerald-50 text-emerald-700 border-emerald-100'}`}>
                         {log.severity || 'Information Signal'}
                     </div>
+                    <button
+                        onClick={handleDelete}
+                        disabled={isDeleting}
+                        className="p-3 bg-rose-50 dark:bg-rose-950/20 text-rose-600 border border-rose-100 dark:border-rose-900 hover:bg-rose-600 hover:text-white transition-all disabled:opacity-50"
+                        title="Purge Record"
+                    >
+                        {isDeleting ? '...' : <Trash2 size={20} />}
+                    </button>
                 </div>
             </div>
 
@@ -179,9 +204,17 @@ const LogDetailsPage = () => {
             <div className="flex items-center gap-4 pt-12 border-t border-slate-100 dark:border-slate-900">
                 <button
                     onClick={() => navigate('/logs')}
-                    className="px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black uppercase text-xs tracking-widest hover:bg-slate-800 transition-all border-none"
+                    className="px-8 py-4 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white font-black uppercase text-xs tracking-widest hover:bg-slate-200 dark:hover:bg-slate-800 transition-all border border-slate-200 dark:border-slate-800"
                 >
                     Return to Audit Registry
+                </button>
+                <button
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                    className="px-8 py-4 bg-rose-600 text-white font-black uppercase text-xs tracking-widest hover:bg-rose-700 transition-all border-none disabled:opacity-50 flex items-center gap-2"
+                >
+                    <Trash2 size={16} />
+                    {isDeleting ? 'Purging Matrix...' : 'Permanent Record Purge'}
                 </button>
             </div>
         </div>

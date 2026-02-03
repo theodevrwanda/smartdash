@@ -1,6 +1,6 @@
 
 import { db } from '../firebase/config';
-import { collection, getDocs, doc, updateDoc, query, where, orderBy, getDoc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, query, where, orderBy, getDoc, deleteDoc, writeBatch } from 'firebase/firestore';
 
 export const adminService = {
     // Fetch Audit Logs (Transactions collection)
@@ -542,6 +542,25 @@ export const adminService = {
             return true;
         } catch (error) {
             console.error("Error assigning user to branch:", error);
+            throw error;
+        }
+    },
+
+    async deleteLog(logId) {
+        return this.deleteDocument('transactions', logId);
+    },
+
+    async deleteLogs(logIds) {
+        try {
+            const batch = writeBatch(db);
+            logIds.forEach(id => {
+                const docRef = doc(db, 'transactions', id);
+                batch.delete(docRef);
+            });
+            await batch.commit();
+            return true;
+        } catch (error) {
+            console.error("Error deleting multiple logs:", error);
             throw error;
         }
     }
