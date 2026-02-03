@@ -292,11 +292,11 @@ const BusinessDetailsPage = () => {
                             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-50 dark:border-slate-900">
                                 <div>
                                     <p className="text-[8px] font-black text-emerald-600 uppercase tracking-tighter">Net Profits</p>
-                                    <p className="text-sm font-black text-slate-800 dark:text-white">+{period.stats.profit.toLocaleString()}</p>
+                                    <p className="text-sm font-black text-slate-800 dark:text-white">{period.stats.profit.toLocaleString()}</p>
                                 </div>
                                 <div>
                                     <p className="text-[8px] font-black text-rose-600 uppercase tracking-tighter">Inventory Loss</p>
-                                    <p className="text-sm font-black text-slate-800 dark:text-white">-{period.stats.loss.toLocaleString()}</p>
+                                    <p className="text-sm font-black text-slate-800 dark:text-white">{period.stats.loss.toLocaleString()}</p>
                                 </div>
                             </div>
                         </div>
