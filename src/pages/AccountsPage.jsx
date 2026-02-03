@@ -249,7 +249,10 @@ const AccountsPage = () => {
                                         </td>
                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                             {remain !== null ? (
-                                                <div className={`text-center py-0.5 border font-black text-[10px] min-w-[36px] ${remain <= 7 ? 'bg-red-600 text-white border-red-500' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-white border-slate-200 dark:border-slate-800'}`}>
+                                                <div className={`text-center py-0.5 border font-black text-[10px] min-w-[36px] 
+                                                    ${remain <= 1 ? 'bg-red-600 text-white border-red-500' :
+                                                        remain <= 7 ? 'bg-amber-500 text-white border-amber-400' :
+                                                            'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-white border-slate-200 dark:border-slate-800'}`}>
                                                     {remain} <span className="text-[8px] opacity-70">D</span>
                                                 </div>
                                             ) : '-'}

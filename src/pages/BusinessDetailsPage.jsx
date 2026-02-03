@@ -6,7 +6,8 @@ import { Badge } from '../components/ui/Badge';
 import {
     ArrowLeft, Building2, MapPin, Users, Package, ShoppingCart,
     History, CreditCard, Shield, User, Mail, Smartphone,
-    Trash2, Edit, Eye, X, Activity, Globe, Info, Search
+    Trash2, Edit, Eye, X, Activity, Globe, Info, Search,
+    TrendingUp, TrendingDown, DollarSign, Calendar, Clock
 } from 'lucide-react';
 import { db } from '../firebase/config';
 import { collection, query, where, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
@@ -44,7 +45,10 @@ const BusinessDetailsPage = () => {
     const [activeTab, setActiveTab] = useState('info'); // info, users, branches, products, sales, history
     const [tabData, setTabData] = useState({ users: [], branches: [], products: [], sales: [], transactions: [] });
     const [productFilter, setProductFilter] = useState('all');
+    const [timeFilter, setTimeFilter] = useState('all'); // all, today, week, year
     const [productSearch, setProductSearch] = useState('');
+    const [customDate, setCustomDate] = useState('');
+    const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
 
     // Modal Control
     const [selectedItem, setSelectedItem] = useState(null);
@@ -129,6 +133,64 @@ const BusinessDetailsPage = () => {
         if (id) loadBusiness();
     }, [id]);
 
+    const financialStats = React.useMemo(() => {
+        const now = new Date();
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        const tempNowForWeek = new Date();
+        const day = tempNowForWeek.getDay();
+        const diff = tempNowForWeek.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+        const startOfCurrentWeek = new Date(tempNowForWeek.setDate(diff));
+        startOfCurrentWeek.setHours(0, 0, 0, 0);
+
+        const startOfYear = new Date(now.getFullYear(), 0, 1);
+
+        const periods = {
+            today: { revenue: 0, profit: 0, loss: 0 },
+            week: { revenue: 0, profit: 0, loss: 0 },
+            year: { revenue: 0, profit: 0, loss: 0 }
+        };
+
+        tabData.products.forEach(p => {
+            const dateStr = p.soldDate || p.updatedAt || p.addedDate;
+            if (!dateStr) return;
+
+            const pDate = new Date(dateStr);
+            const qty = Number(p.quantity) || 0;
+            const sellPrice = Number(p.sellingPrice) || 0;
+            const costPrice = Number(p.costPricePerUnit) || 0;
+
+            const updatePeriod = (period) => {
+                if (p.status === 'sold') {
+                    periods[period].revenue += sellPrice * qty;
+                    periods[period].profit += (sellPrice - costPrice) * qty;
+                } else if (p.status === 'deleted') {
+                    periods[period].loss += costPrice * qty;
+                }
+            };
+
+            if (pDate >= startOfToday) updatePeriod('today');
+            if (pDate >= startOfCurrentWeek) updatePeriod('week');
+            if (pDate >= startOfYear) updatePeriod('year');
+        });
+
+        return periods;
+    }, [tabData.products]);
+
+    const productStats = tabData.products.reduce((acc, p) => {
+        const status = p.status || 'store';
+        acc[status] = (acc[status] || 0) + 1;
+        return acc;
+    }, { store: 0, sold: 0, restored: 0, deleted: 0 });
+
+    const tabs = [
+        { id: 'info', label: 'Overview', icon: Building2 },
+        { id: 'users', label: 'Users', icon: Users, count: tabData.users.length },
+        { id: 'branches', label: 'Branches', icon: MapPin, count: tabData.branches.length },
+        { id: 'products', label: 'Products', icon: Package, count: tabData.products.length },
+        { id: 'history', label: 'Payment History', icon: History, count: tabData.transactions.length },
+    ];
+
     if (loading) {
         return <Loading message="Compiling Intelligence" />;
     }
@@ -142,20 +204,6 @@ const BusinessDetailsPage = () => {
             </div>
         );
     }
-
-    const tabs = [
-        { id: 'info', label: 'Overview', icon: Building2 },
-        { id: 'users', label: 'Users', icon: Users, count: tabData.users.length },
-        { id: 'branches', label: 'Branches', icon: MapPin, count: tabData.branches.length },
-        { id: 'products', label: 'Products', icon: Package, count: tabData.products.length },
-        { id: 'history', label: 'Payment History', icon: History, count: tabData.transactions.length },
-    ];
-
-    const productStats = tabData.products.reduce((acc, p) => {
-        const status = p.status || 'store';
-        acc[status] = (acc[status] || 0) + 1;
-        return acc;
-    }, { store: 0, sold: 0, restored: 0, deleted: 0 });
 
     return (
         <div className="flex flex-col gap-8 animate-fade-in py-6">
@@ -200,6 +248,62 @@ const BusinessDetailsPage = () => {
                     </div>
                 </div>
             </div>
+            {/* Financial Pulse - Big Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                {[
+                    { id: 'today', label: 'Today', stats: financialStats.today, icon: Clock, color: 'blue' },
+                    { id: 'week', label: 'This Week', stats: financialStats.week, icon: Calendar, color: 'emerald' },
+                    { id: 'year', label: 'This Year', stats: financialStats.year, icon: TrendingUp, color: 'purple' },
+                ].map((period) => (
+                    <div
+                        key={period.id}
+                        onClick={() => {
+                            setTimeFilter(period.id);
+                            setActiveTab('products');
+                            if (productFilter === 'all') setProductFilter('sold');
+                        }}
+                        className={`bg-white dark:bg-slate-950 border-2 p-6 cursor-pointer transition-all hover:scale-[1.02] active:scale-95 group
+                            ${timeFilter === period.id
+                                ? period.id === 'today' ? 'border-blue-600 ring-4 ring-blue-500/10'
+                                    : period.id === 'week' ? 'border-emerald-600 ring-4 ring-emerald-500/10'
+                                        : 'border-purple-600 ring-4 ring-purple-500/10'
+                                : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'}
+                        `}
+                    >
+                        <div className="flex justify-between items-start mb-6">
+                            <div className={`p-3 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 transition-colors group-hover:bg-slate-100`}>
+                                <period.icon className={
+                                    period.id === 'today' ? 'text-blue-600' :
+                                        period.id === 'week' ? 'text-emerald-600' :
+                                            'text-purple-600'
+                                } size={24} />
+                            </div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Inventory Pulse</span>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div>
+                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{period.label} Revenue</p>
+                                <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">
+                                    {period.stats.revenue.toLocaleString()} <span className="text-xs opacity-40">RWF</span>
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-50 dark:border-slate-900">
+                                <div>
+                                    <p className="text-[8px] font-black text-emerald-600 uppercase tracking-tighter">Net Profits</p>
+                                    <p className="text-sm font-black text-slate-800 dark:text-white">+{period.stats.profit.toLocaleString()}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[8px] font-black text-rose-600 uppercase tracking-tighter">Inventory Loss</p>
+                                    <p className="text-sm font-black text-slate-800 dark:text-white">-{period.stats.loss.toLocaleString()}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
             {/* Product Stats Bar */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {[
@@ -320,74 +424,80 @@ const BusinessDetailsPage = () => {
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Sector</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Cell</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Village</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Timeline</th>
+                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => setSortConfig({ key: 'date', direction: sortConfig.direction === 'desc' ? 'asc' : 'desc' })}>Timeline {sortConfig.direction === 'desc' ? '▼' : '▲'}</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Status</th>
                                         <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
-                                    {tabData.users.map(u => {
-                                        const branchName = tabData.branches.find(b => b.id === u.branch)?.branchName || 'Alpha Node';
-                                        return (
-                                            <tr key={u.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-8 h-8 bg-slate-100 flex-shrink-0 border border-slate-200 overflow-hidden">
-                                                            {(u.profileImage || u.imagephoto) ? (
-                                                                <img src={u.profileImage || u.imagephoto} alt="" className="w-full h-full object-cover" />
-                                                            ) : (
-                                                                <User className="w-full h-full p-1.5 text-slate-400" />
-                                                            )}
+                                    {tabData.users
+                                        .sort((a, b) => {
+                                            const dateA = new Date(a.createdAt);
+                                            const dateB = new Date(b.createdAt);
+                                            return sortConfig.direction === 'desc' ? dateB - dateA : dateA - dateB;
+                                        })
+                                        .map(u => {
+                                            const branchName = tabData.branches.find(b => b.id === u.branch)?.branchName || 'Alpha Node';
+                                            return (
+                                                <tr key={u.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
+                                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-8 h-8 bg-slate-100 flex-shrink-0 border border-slate-200 overflow-hidden">
+                                                                {(u.profileImage || u.imagephoto) ? (
+                                                                    <img src={u.profileImage || u.imagephoto} alt="" className="w-full h-full object-cover" />
+                                                                ) : (
+                                                                    <User className="w-full h-full p-1.5 text-slate-400" />
+                                                                )}
+                                                            </div>
+                                                            <div className="flex flex-col">
+                                                                <span className="font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{u.fullName || `${u.firstName} ${u.lastName}`}</span>
+                                                                <span className="text-[9px] font-bold text-slate-400">@{u.username || 'unknown'}</span>
+                                                            </div>
                                                         </div>
+                                                    </td>
+                                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
                                                         <div className="flex flex-col">
-                                                            <span className="font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{u.fullName || `${u.firstName} ${u.lastName}`}</span>
-                                                            <span className="text-[9px] font-bold text-slate-400">@{u.username || 'unknown'}</span>
+                                                            <span className="text-xs font-bold text-slate-700 dark:text-white">{u.email}</span>
+                                                            <span className="text-[9px] font-black text-slate-400 dark:text-white">{u.phone}</span>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                                    <div className="flex flex-col">
-                                                        <span className="text-xs font-bold text-slate-700 dark:text-white">{u.email}</span>
-                                                        <span className="text-[9px] font-black text-slate-400 dark:text-white">{u.phone}</span>
-                                                    </div>
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                                    <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 text-[9px] font-black uppercase rounded-none w-fit border border-blue-100 dark:border-blue-800/50">{u.role}</span>
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[9px] font-black text-slate-500 dark:text-white uppercase tracking-tighter italic">
-                                                    {branchName}
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
-                                                    {u.district}
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
-                                                    {u.sector}
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
-                                                    {u.cell}
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
-                                                    {u.village}
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
-                                                    <div className="flex flex-col items-center">
-                                                        <span className="text-[9px] font-black text-slate-400 dark:text-white uppercase tracking-widest">Registered</span>
-                                                        <span className="text-[10px] font-bold text-slate-700 dark:text-white">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</span>
-                                                    </div>
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
-                                                    <Badge variant={u.isActive ? 'success' : 'error'} className="rounded-none uppercase text-[9px] font-black">{u.isActive ? 'Active' : 'Banned'}</Badge>
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
-                                                    <div className="flex justify-end gap-1">
-                                                        <button onClick={() => openModal('users', u, 'details')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-600 transition-colors"><Eye size={14} /></button>
-                                                        <button onClick={() => openModal('users', u, 'edit')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-600 transition-colors"><Edit size={14} /></button>
-                                                        <button onClick={() => openModal('users', u, 'delete')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
+                                                    </td>
+                                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                                        <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 text-[9px] font-black uppercase rounded-none w-fit border border-blue-100 dark:border-blue-800/50">{u.role}</span>
+                                                    </td>
+                                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[9px] font-black text-slate-500 dark:text-white uppercase tracking-tighter italic">
+                                                        {branchName}
+                                                    </td>
+                                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
+                                                        {u.district}
+                                                    </td>
+                                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
+                                                        {u.sector}
+                                                    </td>
+                                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
+                                                        {u.cell}
+                                                    </td>
+                                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
+                                                        {u.village}
+                                                    </td>
+                                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
+                                                        <div className="flex flex-col items-center">
+                                                            <span className="text-[9px] font-black text-slate-400 dark:text-white uppercase tracking-widest">Registered</span>
+                                                            <span className="text-[10px] font-bold text-slate-700 dark:text-white">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
+                                                        <Badge variant={u.isActive ? 'success' : 'error'} className="rounded-none uppercase text-[9px] font-black">{u.isActive ? 'Active' : 'Banned'}</Badge>
+                                                    </td>
+                                                    <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
+                                                        <div className="flex justify-end gap-1">
+                                                            <button onClick={() => openModal('users', u, 'details')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-600 transition-colors"><Eye size={14} /></button>
+                                                            <button onClick={() => openModal('users', u, 'edit')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-600 transition-colors"><Edit size={14} /></button>
+                                                            <button onClick={() => openModal('users', u, 'delete')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
                                 </tbody>
                             </table>
                         </div>
@@ -452,15 +562,37 @@ const BusinessDetailsPage = () => {
                                     </button>
                                 ))}
                             </div>
-                            <div className="relative w-full md:w-80">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-                                <input
-                                    type="text"
-                                    placeholder="SEARCH ASSET INVENTORY..."
-                                    value={productSearch}
-                                    onChange={(e) => setProductSearch(e.target.value)}
-                                    className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-2.5 pl-10 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors dark:text-white"
-                                />
+                            <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
+                                <div className="relative w-full md:w-48 group">
+                                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" size={14} />
+                                    <input
+                                        type="date"
+                                        value={customDate}
+                                        onChange={(e) => setCustomDate(e.target.value)}
+                                        className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-2.5 pl-10 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors dark:text-white"
+                                    />
+                                </div>
+                                <div className="relative w-full md:w-72 group">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" size={14} />
+                                    <input
+                                        type="text"
+                                        placeholder="SEARCH ASSET INVENTORY..."
+                                        value={productSearch}
+                                        onChange={(e) => setProductSearch(e.target.value)}
+                                        className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-2.5 pl-10 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors dark:text-white"
+                                    />
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        setTimeFilter('all');
+                                        setProductFilter('all');
+                                        setProductSearch('');
+                                        setCustomDate('');
+                                    }}
+                                    className="px-4 py-2.5 bg-slate-100 dark:bg-slate-900 text-slate-500 text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-800 transition-all border border-slate-200 dark:border-slate-800"
+                                >
+                                    Reset
+                                </button>
                             </div>
                         </div>
 
@@ -478,7 +610,7 @@ const BusinessDetailsPage = () => {
                                             <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">
                                                 {productFilter === 'sold' ? 'Total Revenue' : 'Total Equity'}
                                             </th>
-                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Timeline</th>
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => setSortConfig({ key: 'date', direction: sortConfig.direction === 'desc' ? 'asc' : 'desc' })}>Timeline {sortConfig.direction === 'desc' ? '▼' : '▲'}</th>
                                             <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Status</th>
                                             <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Actions</th>
                                         </tr>
@@ -487,11 +619,41 @@ const BusinessDetailsPage = () => {
                                         {tabData.products
                                             .filter(p => {
                                                 const matchesStatus = productFilter === 'all' || (p.status || 'store') === productFilter;
+
+                                                // Time filtering logic
+                                                let matchesTime = true;
+                                                if (timeFilter !== 'all') {
+                                                    const pDate = new Date(p.soldDate || p.updatedAt || p.addedDate);
+                                                    const now = new Date();
+                                                    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+                                                    const tempNowForWeek = new Date();
+                                                    const day = tempNowForWeek.getDay();
+                                                    const diff = tempNowForWeek.getDate() - day + (day === 0 ? -6 : 1);
+                                                    const startOfCurrentWeek = new Date(tempNowForWeek.setDate(diff));
+                                                    startOfCurrentWeek.setHours(0, 0, 0, 0);
+
+                                                    const startOfYear = new Date(now.getFullYear(), 0, 1);
+
+                                                    if (timeFilter === 'today') matchesTime = pDate >= startOfToday;
+                                                    else if (timeFilter === 'week') matchesTime = pDate >= startOfCurrentWeek;
+                                                    else if (timeFilter === 'year') matchesTime = pDate >= startOfYear;
+                                                }
+
                                                 const matchesSearch = !productSearch ||
                                                     p.productName?.toLowerCase().includes(productSearch.toLowerCase()) ||
                                                     p.model?.toLowerCase().includes(productSearch.toLowerCase()) ||
                                                     p.category?.toLowerCase().includes(productSearch.toLowerCase());
-                                                return matchesStatus && matchesSearch;
+
+                                                const matchesCustomDate = !customDate ||
+                                                    (p.soldDate || p.updatedAt || p.addedDate)?.startsWith(customDate);
+
+                                                return matchesStatus && matchesTime && matchesSearch && matchesCustomDate;
+                                            })
+                                            .sort((a, b) => {
+                                                const dateA = new Date(a.soldDate || a.updatedAt || a.addedDate);
+                                                const dateB = new Date(b.soldDate || b.updatedAt || b.addedDate);
+                                                return sortConfig.direction === 'desc' ? dateB - dateA : dateA - dateB;
                                             })
                                             .map(p => {
                                                 const branchName = tabData.branches.find(b => b.id === p.branch)?.branchName || 'Alpha Node';
