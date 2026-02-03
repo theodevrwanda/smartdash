@@ -6,7 +6,7 @@ import { Badge } from '../components/ui/Badge';
 import {
     ArrowLeft, Building2, MapPin, Users, Package, ShoppingCart,
     History, CreditCard, Shield, User, Mail, Smartphone,
-    Trash2, Edit, Eye, X, Activity, Globe, Info
+    Trash2, Edit, Eye, X, Activity, Globe, Info, Search
 } from 'lucide-react';
 import { db } from '../firebase/config';
 import { collection, query, where, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
@@ -43,6 +43,8 @@ const BusinessDetailsPage = () => {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('info'); // info, users, branches, products, sales, history
     const [tabData, setTabData] = useState({ users: [], branches: [], products: [], sales: [], transactions: [] });
+    const [productFilter, setProductFilter] = useState('all');
+    const [productSearch, setProductSearch] = useState('');
 
     // Modal Control
     const [selectedItem, setSelectedItem] = useState(null);
@@ -201,15 +203,21 @@ const BusinessDetailsPage = () => {
             {/* Product Stats Bar */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {[
-                    { label: 'In Store', count: productStats.store, color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/20' },
-                    { label: 'Sold', count: productStats.sold, color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-900/20' },
-                    { label: 'Restored', count: productStats.restored, color: 'text-amber-600', bg: 'bg-amber-50 dark:bg-amber-900/20' },
-                    { label: 'Deleted', count: productStats.deleted, color: 'text-rose-600', bg: 'bg-rose-50 dark:bg-rose-900/20' },
+                    { id: 'store', label: 'In Store', count: productStats.store, color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/20', hover: 'hover:bg-blue-100 dark:hover:bg-blue-900/40' },
+                    { id: 'sold', label: 'Sold', count: productStats.sold, color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-900/20', hover: 'hover:bg-emerald-100 dark:hover:bg-emerald-900/40' },
+                    { id: 'restored', label: 'Restored', count: productStats.restored, color: 'text-amber-600', bg: 'bg-amber-50 dark:bg-amber-900/20', hover: 'hover:bg-amber-100 dark:hover:bg-amber-900/40' },
+                    { id: 'deleted', label: 'Deleted', count: productStats.deleted, color: 'text-rose-600', bg: 'bg-rose-50 dark:bg-rose-900/20', hover: 'hover:bg-rose-100 dark:hover:bg-rose-900/40' },
                 ].map((stat, i) => (
-                    <div key={i} className={`p-4 ${stat.bg} border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center`}>
-                        <span className={`text-2xl font-black ${stat.color}`}>{stat.count}</span>
+                    <button
+                        key={i}
+                        onClick={() => { setProductFilter(stat.id); setActiveTab('products'); }}
+                        className={`p-4 ${stat.bg} ${stat.hover} border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center transition-all cursor-pointer group
+                            ${productFilter === stat.id && activeTab === 'products' ? 'ring-2 ring-inset ring-blue-600 border-transparent' : ''}
+                        `}
+                    >
+                        <span className={`text-2xl font-black ${stat.color} group-hover:scale-110 transition-transform`}>{stat.count}</span>
                         <span className="text-[10px] font-black uppercase text-slate-500 dark:text-white tracking-widest">{stat.label}</span>
-                    </div>
+                    </button>
                 ))}
             </div>
 
@@ -420,70 +428,118 @@ const BusinessDetailsPage = () => {
                 )}
 
                 {activeTab === 'products' && (
-                    <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden rounded-none">
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm text-left border-collapse">
-                                <thead>
-                                    <tr className="bg-slate-100 dark:bg-slate-900">
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Product / Identity</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Branch Context</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Category</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Volume</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Unit Cost</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Selling Price</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Total Equity</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Timeline</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Status</th>
-                                        <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
-                                    {tabData.products.map(p => {
-                                        const branchName = tabData.branches.find(b => b.id === p.branch)?.branchName || 'Alpha Node';
-                                        const totalEquity = (Number(p.costPricePerUnit) || 0) * (Number(p.quantity) || 0);
-                                        return (
-                                            <tr key={p.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                                    <div className="flex flex-col">
-                                                        <span className="font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{p.productName}</span>
-                                                        <span className="text-[9px] font-bold text-slate-400 dark:text-white">{p.model}</span>
-                                                    </div>
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
-                                                    {branchName}
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-white font-bold text-xs uppercase">{p.category}</td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right text-xs font-bold text-slate-700 dark:text-white">{p.quantity} {p.unit}</td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-emerald-600 text-xs">
-                                                    {p.costPricePerUnit?.toLocaleString()}
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-blue-600 text-xs">
-                                                    {p.sellingPrice?.toLocaleString()}
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-slate-900 dark:text-white text-xs">
-                                                    {totalEquity.toLocaleString()}
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
-                                                    <div className="flex flex-col items-center">
-                                                        <span className="text-[9px] font-black text-slate-400 dark:text-white uppercase tracking-[0.1em]">Added: {p.addedDate ? new Date(p.addedDate).toLocaleDateString() : '-'}</span>
-                                                        <span className="text-[9px] font-black text-rose-500 uppercase tracking-[0.1em]">Exp: {p.expiryDate || p.deadline || '-'}</span>
-                                                    </div>
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
-                                                    <span className={`px-2 py-0.5 text-[9px] font-black uppercase ${p.status === 'sold' ? 'text-emerald-600 bg-emerald-50' : 'text-blue-600 bg-blue-50'}`}>{p.status || 'store'}</span>
-                                                </td>
-                                                <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
-                                                    <div className="flex justify-end gap-1">
-                                                        <button onClick={() => openModal('products', p, 'details')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-600 transition-colors"><Eye size={14} /></button>
-                                                        <button onClick={() => openModal('products', p, 'edit')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-600 transition-colors"><Edit size={14} /></button>
-                                                        <button onClick={() => openModal('products', p, 'delete')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
+                    <div className="flex flex-col gap-4">
+                        {/* Product Filters & Search */}
+                        <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-slate-50 dark:bg-slate-900/50 p-4 border border-slate-200 dark:border-slate-800">
+                            <div className="flex flex-wrap gap-2">
+                                {[
+                                    { id: 'all', label: 'All Matrix' },
+                                    { id: 'store', label: 'In Store' },
+                                    { id: 'sold', label: 'Sold' },
+                                    { id: 'restored', label: 'Restored' },
+                                    { id: 'deleted', label: 'Deleted' }
+                                ].map(f => (
+                                    <button
+                                        key={f.id}
+                                        onClick={() => setProductFilter(f.id)}
+                                        className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all border
+                                            ${productFilter === f.id
+                                                ? 'bg-blue-600 text-white border-blue-600'
+                                                : 'bg-white dark:bg-slate-950 text-slate-500 border-slate-200 dark:border-slate-800 hover:border-blue-600'}
+                                        `}
+                                    >
+                                        {f.label}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="relative w-full md:w-80">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                                <input
+                                    type="text"
+                                    placeholder="SEARCH ASSET INVENTORY..."
+                                    value={productSearch}
+                                    onChange={(e) => setProductSearch(e.target.value)}
+                                    className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-2.5 pl-10 text-[11px] font-black uppercase tracking-tight outline-none focus:border-blue-600 transition-colors dark:text-white"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden rounded-none">
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm text-left border-collapse">
+                                    <thead>
+                                        <tr className="bg-slate-100 dark:bg-slate-900">
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Product / Identity</th>
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Branch Context</th>
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest">Category</th>
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Volume</th>
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Unit Cost</th>
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Selling Price</th>
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Total Equity</th>
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Timeline</th>
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-center">Status</th>
+                                            <th className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-black text-slate-500 dark:text-white uppercase tracking-widest text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
+                                        {tabData.products
+                                            .filter(p => {
+                                                const matchesStatus = productFilter === 'all' || (p.status || 'store') === productFilter;
+                                                const matchesSearch = !productSearch ||
+                                                    p.productName?.toLowerCase().includes(productSearch.toLowerCase()) ||
+                                                    p.model?.toLowerCase().includes(productSearch.toLowerCase()) ||
+                                                    p.category?.toLowerCase().includes(productSearch.toLowerCase());
+                                                return matchesStatus && matchesSearch;
+                                            })
+                                            .map(p => {
+                                                const branchName = tabData.branches.find(b => b.id === p.branch)?.branchName || 'Alpha Node';
+                                                const totalEquity = (Number(p.costPricePerUnit) || 0) * (Number(p.quantity) || 0);
+                                                return (
+                                                    <tr key={p.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
+                                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                                            <div className="flex flex-col">
+                                                                <span className="font-black text-slate-900 dark:text-white uppercase tracking-tight text-xs">{p.productName}</span>
+                                                                <span className="text-[9px] font-bold text-slate-400 dark:text-white">{p.model}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-600 dark:text-white uppercase tracking-tighter">
+                                                            {branchName}
+                                                        </td>
+                                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-white font-bold text-xs uppercase">{p.category}</td>
+                                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right text-xs font-bold text-slate-700 dark:text-white">{p.quantity} {p.unit}</td>
+                                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-emerald-600 text-xs">
+                                                            {p.costPricePerUnit?.toLocaleString()}
+                                                        </td>
+                                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-blue-600 text-xs">
+                                                            {p.sellingPrice?.toLocaleString()}
+                                                        </td>
+                                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right font-black text-slate-900 dark:text-white text-xs">
+                                                            {totalEquity.toLocaleString()}
+                                                        </td>
+                                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
+                                                            <div className="flex flex-col items-center">
+                                                                <span className="text-[9px] font-black text-slate-400 dark:text-white uppercase tracking-[0.1em]">Added: {p.addedDate ? new Date(p.addedDate).toLocaleDateString() : '-'}</span>
+                                                                <span className="text-[9px] font-black text-rose-500 uppercase tracking-[0.1em]">Exp: {p.expiryDate || p.deadline || '-'}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-center">
+                                                            <span className={`px-2 py-0.5 text-[9px] font-black uppercase ${p.status === 'sold' ? 'text-emerald-600 bg-emerald-50' : p.status === 'deleted' ? 'text-rose-600 bg-rose-50' : p.status === 'restored' ? 'text-amber-600 bg-amber-50' : 'text-blue-600 bg-blue-50'}`}>
+                                                                {p.status || 'store'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-right">
+                                                            <div className="flex justify-end gap-1">
+                                                                <button onClick={() => openModal('products', p, 'details')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-600 transition-colors"><Eye size={14} /></button>
+                                                                <button onClick={() => openModal('products', p, 'edit')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-600 transition-colors"><Edit size={14} /></button>
+                                                                <button onClick={() => openModal('products', p, 'delete')} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -526,6 +582,7 @@ const BusinessDetailsPage = () => {
                     </div>
                 )}
             </div>
+
             {/* Modals Implementation */}
             {/* View Details Modal */}
             <Modal
