@@ -493,7 +493,8 @@ const BusinessDetailsPage = () => {
                                             })
                                             .map(p => {
                                                 const branchName = tabData.branches.find(b => b.id === p.branch)?.branchName || 'Alpha Node';
-                                                const totalEquity = (Number(p.costPricePerUnit) || 0) * (Number(p.quantity) || 0);
+                                                const priceForEquity = p.status === 'sold' ? (Number(p.sellingPrice) || 0) : (Number(p.costPricePerUnit) || 0);
+                                                const totalEquity = priceForEquity * (Number(p.quantity) || 0);
                                                 return (
                                                     <tr key={p.id} className="hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
                                                         <td className="px-3 py-2 border border-slate-200 dark:border-slate-800">
