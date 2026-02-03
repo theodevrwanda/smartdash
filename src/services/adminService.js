@@ -563,5 +563,20 @@ export const adminService = {
             console.error("Error deleting multiple logs:", error);
             throw error;
         }
+    },
+
+    async deletePayments(paymentIds) {
+        try {
+            const batch = writeBatch(db);
+            paymentIds.forEach(id => {
+                const docRef = doc(db, 'payments', id);
+                batch.delete(docRef);
+            });
+            await batch.commit();
+            return true;
+        } catch (error) {
+            console.error("Error deleting multiple payments:", error);
+            throw error;
+        }
     }
 };

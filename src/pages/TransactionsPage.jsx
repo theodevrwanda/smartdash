@@ -10,6 +10,7 @@ const PaymentsPage = () => {
     const navigate = useNavigate();
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedTxns, setSelectedTxns] = useState([]);
 
     useEffect(() => {
         loadTransactions();
@@ -55,6 +56,47 @@ const PaymentsPage = () => {
         }
     };
 
+    const handleDelete = async (txnId) => {
+        if (confirm("Permanently purge this financial record from the ledger?")) {
+            try {
+                await adminService.deleteDocument('payments', txnId);
+                loadTransactions();
+            } catch (error) {
+                alert("Deletion failed");
+            }
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        if (selectedTxns.length === 0) return;
+        if (confirm(`Execute mass purge of ${selectedTxns.length} records? This cannot be undone.`)) {
+            try {
+                setLoading(true);
+                await adminService.deletePayments(selectedTxns);
+                setSelectedTxns([]);
+                await loadTransactions();
+            } catch (error) {
+                alert("Bulk deletion failed");
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
+    const toggleSelection = (id) => {
+        setSelectedTxns(prev =>
+            prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+        );
+    };
+
+    const toggleAll = () => {
+        if (selectedTxns.length === transactions.length) {
+            setSelectedTxns([]);
+        } else {
+            setSelectedTxns(transactions.map(t => t.id));
+        }
+    };
+
     if (loading) {
         return <Loading message="Processing Ledger Data" />;
     }
@@ -72,6 +114,14 @@ const PaymentsPage = () => {
                     </h1>
                 </div>
                 <div className="flex items-center gap-3">
+                    {selectedTxns.length > 0 && (
+                        <button
+                            onClick={handleBulkDelete}
+                            className="flex items-center gap-2 px-5 py-2.5 bg-rose-600 text-white rounded-2xl text-xs font-black uppercase tracking-wider hover:bg-rose-700 transition-all active:scale-95 shadow-lg shadow-rose-500/20"
+                        >
+                            <Trash2 size={14} /> Purge Selected ({selectedTxns.length})
+                        </button>
+                    )}
                     <button className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-white rounded-2xl text-xs font-black uppercase tracking-wider hover:bg-slate-50 transition-all">
                         <Filter size={14} /> Filter
                     </button>
@@ -92,7 +142,15 @@ const PaymentsPage = () => {
                     <table className="w-full min-w-[2000px] border-collapse">
                         <thead>
                             <tr className="bg-slate-100 dark:bg-slate-900 font-black text-[10px] text-slate-500 dark:text-white uppercase tracking-widest text-left whitespace-nowrap">
-                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">No</th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 w-10 text-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedTxns.length === transactions.length && transactions.length > 0}
+                                        onChange={toggleAll}
+                                        className="w-4 h-4 rounded-none border-slate-300 text-blue-600 focus:ring-blue-500"
+                                    />
+                                </th>
+                                <th className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">No</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Business Name</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Business ID</th>
                                 <th className="px-4 py-3 border border-slate-200 dark:border-slate-800">Owner Name</th>
@@ -110,8 +168,16 @@ const PaymentsPage = () => {
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
                             {transactions.map((txn, index) => (
-                                <tr key={txn.id} className="group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 even:bg-slate-50/50 dark:even:bg-slate-900/10 whitespace-nowrap">
-                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
+                                <tr key={txn.id} className={`group hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300 ${selectedTxns.includes(txn.id) ? 'bg-blue-50/30' : 'even:bg-slate-50/50 dark:even:bg-slate-900/10'} whitespace-nowrap`}>
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedTxns.includes(txn.id)}
+                                            onChange={() => toggleSelection(txn.id)}
+                                            className="w-4 h-4 rounded-none border-slate-300 text-blue-600 focus:ring-blue-500"
+                                        />
+                                    </td>
+                                    <td className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-center">
                                         <span className="text-xs font-black text-slate-400 dark:text-white">{String(index + 1).padStart(2, '0')}</span>
                                     </td>
                                     <td className="px-4 py-3 border border-slate-200 dark:border-slate-800">
@@ -177,6 +243,13 @@ const PaymentsPage = () => {
                                                 title="View Ledger Detail"
                                             >
                                                 <Eye size={12} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(txn.id)}
+                                                className="p-1.5 text-rose-600 bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-600 hover:text-white transition-all border border-rose-100 dark:border-rose-800"
+                                                title="Purge Record"
+                                            >
+                                                <Trash2 size={12} />
                                             </button>
                                             {txn.status === 'pending' && (
                                                 <>
